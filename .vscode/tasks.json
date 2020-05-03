@@ -1,0 +1,33 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "C/C++: g++.exe build active file",
+			"command": "F:\\Development\\programs\\bin\\g++.exe",
+			"args": [
+				"-g",
+				"F:\\Development\\repos\\SG2\\main.cpp",
+				"-o",
+				"F:\\Development\\repos\\SG2\\SG2.exe",
+				"-IF:\\Development\\External Libraries\\SFML-2.5.1\\include",
+				"-IF:\\Development\\repos\\SG2",
+				"-LF:\\Development\\External Libraries\\SFML-2.5.1\\lib",
+				"-lsfml-graphics-d",
+				"-lsfml-system-d",
+				"-lsfml-window-d",
+				"-ftime-report"
+			],
+			"options": {
+				"cwd": "F:\\Development\\programs\\bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
