@@ -10,16 +10,17 @@ namespace SG::Node
     using SG::Primitive::Visible;
 
     class Wall :  
-        virtual protected Node
+        virtual public Node,
+        virtual public Visible
     {
         public:
-        Wall(Visible* visible)
+        Wall(sf::Texture* texture)
         {
-            this->visible = visible;
+            this->zLevel = 6;
+            this->sprite.setTexture( *texture );
         }
-        ~Wall() {}
+        virtual ~Wall() {}
         protected:
-        Visible* visible;
         
 
     };

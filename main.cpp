@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <ctime>
+
 #include <SFML/Graphics.hpp>
 
 #include <src/Manager/Screen.hpp>
@@ -9,6 +12,8 @@
 #include <test/layout.hpp>
 int main()
 {
+    std::srand(std::time(nullptr));
+    
     SG::Manager::Screen screenM;
     SG::Manager::Resource resourceM;
     SG::Manager::Object objectM( &screenM );

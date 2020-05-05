@@ -9,14 +9,14 @@
 #include <src/Primitive/Visible.hpp>
 #include <src/Primitive/Variable.hpp>
 
-using std::vector;
-using std::is_convertible;
-using SG::Manager::Screen;
-using SG::Primitive::Visible;
-using SG::Primitive::Variable;
-
 namespace SG::Manager
 {
+    using std::vector;
+    using std::is_convertible;
+    using SG::Manager::Screen;
+    using SG::Primitive::Visible;
+    using SG::Primitive::Variable;
+    
     class Object
     {
         public:
@@ -28,6 +28,10 @@ namespace SG::Manager
                 itr->update();
             }
             this->removeVariables();
+        }
+        void addVisible(Visible* visible)
+        {
+
         }
         void addVariable(Variable* variable)
         {
