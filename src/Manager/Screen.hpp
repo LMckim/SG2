@@ -2,6 +2,8 @@
 #define SG_MANAGER_SCREEN
 
 #include <map>
+#include <iostream>
+
 #include <vector>
 
 #include <SFML/Graphics.hpp>
@@ -45,6 +47,7 @@ namespace SG::Manager
                 while( itrZ != itr->second.end() )
                 {
                     (*itrZ)->draw( *this->window );
+                    itrZ++;
                 }
                 itr++;
             }

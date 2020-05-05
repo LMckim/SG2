@@ -38,7 +38,7 @@ namespace SG::Primitive
         Node* top = NULL;
         Node* bottom = NULL;
 
-        void setPosition( int x, int y ) { this->position.x = x; this->position.y = y; }
+        virtual void setPosition( int x, int y ) { this->position.x = x; this->position.y = y; }
         void setRightNode(Node* node) { this->right = node; }
         void setLeftNode(Node* node) { this->left = node; }
         void setTopNode(Node* node) { this->top = node; }

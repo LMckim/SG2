@@ -19,6 +19,10 @@ namespace SG::Node
             this->zLevel = 6;
             this->sprite.setTexture( *texture );
         }
+        virtual void setPosition(int x, int y) override
+        {
+            this->sprite.setPosition(x,y);
+        }
         virtual ~Door() {}
         protected:
     };

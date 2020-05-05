@@ -40,7 +40,7 @@ namespace SG::Generator
 
         void generateLayout(sf::Image* layout)
         {
-            if( this->assets.find( TILE::SPACE ) == this->assets.end() 
+            if( this->assets.find( TILE::DOOR ) == this->assets.end() 
             ||  this->assets.find( TILE::FLOOR ) == this->assets.end()
             ||  this->assets.find( TILE::WALL ) == this->assets.end() )
             { throw "Not enough assets to generate layout"; }
@@ -50,6 +50,7 @@ namespace SG::Generator
 
             for( size_t y=0; y < yS; y++)
             {   
+                this->nodes.push_back(vector< Node* >());
                 for(size_t x=0; x < xS; x++)
                 {
                     // add nodes to our grid
@@ -58,20 +59,23 @@ namespace SG::Generator
                     {
                         case FLOOR:
                             newNode = new Floor(this->assets[ FLOOR ][ (std::rand() % this->assets[ FLOOR ].size()) ]);
-                            this->objectM->addVisible( dynamic_cast< Visible* >(newNode) );
                         break;
                         case WALL:
                             newNode = new Wall(this->assets[ WALL ][ (std::rand() % this->assets[ WALL ].size()) ]);
-                            this->objectM->addVisible( dynamic_cast< Visible* >(newNode) );
                         break;
                         case DOOR:
                             newNode = new Door(this->assets[ DOOR ][ (std::rand() % this->assets[ DOOR ].size()) ]);
-                            this->objectM->addVisible( dynamic_cast< Visible* >(newNode) );
                         break;
                         default:
                             newNode = new Space();
                     }
-                    newNode->setPosition(x * TILE_SIZE, y * TILE_SIZE );
+                    // if its a visible node then add it to the screen
+                    if(Visible* visible = dynamic_cast< Visible* >(newNode))
+                    {
+                        this->objectM->addVisible( visible );
+                    }
+                    newNode->setPosition( x * TILE_SIZE, y * TILE_SIZE );
+                    this->nodes[y].push_back( newNode );
                     if(x > 0) newNode->link( Node::LINKS::LEFT, this->nodes[y][x-1] );
                     if(y > 0) newNode->link( Node::LINKS::TOP, this->nodes[y-1][x] );
                 }

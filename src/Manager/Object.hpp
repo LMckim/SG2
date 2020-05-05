@@ -16,7 +16,7 @@ namespace SG::Manager
     using SG::Manager::Screen;
     using SG::Primitive::Visible;
     using SG::Primitive::Variable;
-    
+
     class Object
     {
         public:
@@ -31,7 +31,7 @@ namespace SG::Manager
         }
         void addVisible(Visible* visible)
         {
-
+            this->screenM->addVisible( visible );
         }
         void addVariable(Variable* variable)
         {
