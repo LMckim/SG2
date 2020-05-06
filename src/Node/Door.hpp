@@ -17,6 +17,10 @@ namespace SG::Node
         }
         virtual ~Door() {}
         protected:
+        enum DIRECTION { VERTICAL, HORIZONTAL };
+        bool locked = false;
+        bool open = false;
+        bool opening = false;
     };
 }
 #endif

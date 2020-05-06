@@ -5,10 +5,10 @@
 
 #include <src/Manager/Screen.hpp>
 #include <src/Primitive/Active.hpp>
-using SG::Primitive::Active;
 
 namespace SG::Manager
 {
+    using SG::Primitive::Active;
     using SG::Manager::Screen;
     class Event
     {
@@ -23,11 +23,11 @@ namespace SG::Manager
             while( window->pollEvent(event) )
             {
                 if( event.type == sf::Event::Closed ) window->close();
-                else if(event.mouseWheel.delta == 1 && this->scrolls < 30)
+                else if(event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1 && this->scrolls < 30)
                 {
                     this->scrolls++;
                     view->zoom( this->zoomInPerc );
-                }else if(event.mouseWheel.delta == -1 && this->scrolls > -10)
+                }else if(event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1 && this->scrolls > -10)
                 {
                     this->scrolls--;
                     view->zoom( this->zoomOutPerc );

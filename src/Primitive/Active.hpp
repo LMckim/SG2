@@ -16,6 +16,7 @@ namespace SG::Primitive
         ~Active() {}
         
         protected:
+        bool selected = false;
         virtual void handleInput() = 0;
     };
 }

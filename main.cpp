@@ -29,7 +29,7 @@ int main()
     
     floorT->loadFromImage( floor, sf::IntRect(0,16,16,16) );
     doorT->loadFromImage(  floor, sf::IntRect(16,0,16,16) );
-    wallT->loadFromImage(  floor, sf::IntRect(16,16,16,16) );
+    wallT->loadFromImage(  floor, sf::IntRect(0,0,16,16) );
     lay.addAsset(SG::Generator::Layout::FLOOR, floorT);
     lay.addAsset(SG::Generator::Layout::DOOR, doorT);
     lay.addAsset(SG::Generator::Layout::WALL, wallT);
