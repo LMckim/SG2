@@ -1,35 +1,23 @@
 #ifndef SG_NODE_FLOOR
 #define SG_NODE_FLOOR
 
-#include <src/Primitive/Node.hpp>
-#include <src/Primitive/Visible.hpp>
+#include <src/Node/Base/VisibleNode.hpp>
 
 namespace SG::Node
 {
-    using SG::Primitive::Node;
-    using SG::Primitive::Visible;
+    using SG::Node::Base::VisibleNode;
 
     class Floor :  
-        virtual public Node,
-        virtual public Visible
+        virtual public VisibleNode
     {
         public:
-        Floor(sf::Texture* texture)
+        Floor(sf::Texture* texture) : VisibleNode( texture )
         {
             this->allowMove = true;
             this->allowPlace = true;
-            
-            this->zLevel = 5;
-            this->sprite.setTexture( *texture );
-        }
-        virtual void setPosition(int x, int y) override
-        {
-            this->sprite.setPosition(x,y);
         }
         virtual ~Floor() {}
         protected:
-        
-
     };
 }
 #endif

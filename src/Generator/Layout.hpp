@@ -2,13 +2,14 @@
 #define SG_GENERATOR
 
 #include <map>
-#include <iostream>
 #include <src/Primitive/Generator.hpp>
 
 #include <src/Node/Wall.hpp>
 #include <src/Node/Floor.hpp>
 #include <src/Node/Door.hpp>
 #include <src/Node/Space.hpp>
+
+#include <src/Tool/Debug.hpp>
 
 namespace SG::Generator
 {
@@ -40,10 +41,12 @@ namespace SG::Generator
 
         void generateLayout(sf::Image* layout)
         {
+            // we need graphical 
             if( this->assets.find( TILE::DOOR ) == this->assets.end() 
             ||  this->assets.find( TILE::FLOOR ) == this->assets.end()
             ||  this->assets.find( TILE::WALL ) == this->assets.end() )
             { throw "Not enough assets to generate layout"; }
+
 
             int yS = layout->getSize().y;
             int xS = layout->getSize().x;
@@ -81,6 +84,17 @@ namespace SG::Generator
                 }
             }
         }
+        void shiftPosition(int xOffset, int yOffset)
+        {
+            if(this->nodes.size() == 0) throw "Nodes have not been generated\n";
+            for(size_t x=0; x < this->nodes.size(); x++)
+            {
+                for(size_t y=0; y < this->nodes[x].size(); y++)
+                {
+                    this->nodes[x][y]->move( xOffset, yOffset );
+                }
+            }
+        }
         protected:
         map< TILE, vector< sf::Texture* >> assets;
         vector< vector< Node* >> nodes;
@@ -98,7 +112,7 @@ namespace SG::Generator
             }else if(color.r == 0 && color.g == 0 && color.b == 0 && color.a == 0){
                 return SPACE;
             // red
-            }else if(color.r == 0 && color.g == 255 && color.b == 255 && color.a == 255){
+            }else if(color.r == 255 && color.g == 0 && color.b == 0 && color.a == 255){
                 return DOOR;
             // default to space node
             }else{

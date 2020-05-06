@@ -44,6 +44,12 @@ namespace SG::Primitive
         void setTopNode(Node* node) { this->top = node; }
         void setBottomNode(Node* node) { this->bottom = node; }
 
+        virtual void move(int x, int y)
+        {
+            this->position.x += x;
+            this->position.y += y;
+        }
+
         void link(LINKS direction, Node* linkNode)
         {
             switch(direction)

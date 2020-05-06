@@ -1,27 +1,19 @@
 #ifndef SG_NODE_DOOR
 #define SG_NODE_DOOR
 
-#include <src/Primitive/Node.hpp>
-#include <src/Primitive/Visible.hpp>
+#include <src/Node/Base/VisibleNode.hpp>
 
 namespace SG::Node
 {
-    using SG::Primitive::Node;
-    using SG::Primitive::Visible;
+    using SG::Node::Base::VisibleNode;
 
     class Door :  
-        virtual public Node,
-        virtual public Visible
+        virtual public VisibleNode
     {
         public:
-        Door(sf::Texture* texture)
+        Door(sf::Texture* texture) : VisibleNode( texture )
         {
-            this->zLevel = 6;
-            this->sprite.setTexture( *texture );
-        }
-        virtual void setPosition(int x, int y) override
-        {
-            this->sprite.setPosition(x,y);
+            this->allowMove = true;
         }
         virtual ~Door() {}
         protected:
