@@ -8,6 +8,7 @@
 #include <src/Manager/Screen.hpp>
 #include <src/Primitive/Visible.hpp>
 #include <src/Primitive/Variable.hpp>
+#include <src/Primitive/Active.hpp>
 
 namespace SG::Manager
 {
@@ -16,6 +17,7 @@ namespace SG::Manager
     using SG::Manager::Screen;
     using SG::Primitive::Visible;
     using SG::Primitive::Variable;
+    using SG::Primitive::Active;
 
     class Object
     {
@@ -40,6 +42,10 @@ namespace SG::Manager
             {
                 this->screenM->addVisible( visible );
             }
+            if(Active* active = dynamic_cast<Active*>( variable ))
+            {
+                this->actives.push_back( active );
+            }
         }
         void removeVariables()
         {
@@ -61,7 +67,8 @@ namespace SG::Manager
         }
         private:
         Screen* screenM;
-        vector< Variable* > variables; 
+        vector< Variable* > variables;
+        vector< Active* > actives;
         
     };
 }

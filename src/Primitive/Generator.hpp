@@ -13,7 +13,7 @@ namespace SG::Primitive
     {
         public:
         Generator(Object* objectM) : objectM{ objectM } {}
-        ~Generator() {}
+        virtual ~Generator() {}
         protected:
         Object* objectM;
         

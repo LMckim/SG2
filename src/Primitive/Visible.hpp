@@ -15,7 +15,7 @@ namespace SG::Primitive
         friend class SG::Manager::Screen;
         public:
         uint8_t zLevel = 0;
-        ~Visible() {}
+        virtual ~Visible() {}
         protected:
         sf::Sprite sprite;
         virtual void draw(sf::RenderTarget& target)

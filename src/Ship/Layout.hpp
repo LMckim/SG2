@@ -1,0 +1,68 @@
+#ifndef SG_OBJECT_LAYOUT
+#define SG_OBJECT_LAYOUT
+
+#include <vector>
+#include <src/Primitive/Node.hpp>
+
+#include <src/Node/Floor.hpp>
+#include <src/Node/Door.hpp>
+#include <src/Node/Wall.hpp>
+
+
+namespace SG::Ship
+{
+    using std::vector;
+    using SG::Primitive::Node;
+
+    using SG::Node::Floor;
+    using SG::Node::Door;
+    using SG::Node::Wall;
+
+    class Layout
+    {
+        public:
+        Layout( vector< vector< Node* >> nodes ) : nodes{ nodes } {}
+        virtual ~Layout() {}
+        Node* getCenterNode()
+        {
+            return this->nodes[ MAX_HEIGHT / 2 ][ MAX_WIDTH / 2];
+        }
+        Floor* getRandomFloorNode()
+        {
+            Floor* inCase = NULL;
+            for(size_t x=0; x < this->nodes.size(); x++)
+            {
+                for(size_t y=0; y < this->nodes[x].size(); y++)
+                {
+                    if(Floor* floor = dynamic_cast<Floor*>( this->nodes[x][y] ))
+                    {
+                        if(std::rand() % 5 == 0 && floor->occupied == false) return floor;
+                        else inCase = floor;
+                    }
+                }
+            }
+            return inCase;
+        }
+        void shiftPosition(int xOffset, int yOffset)
+        {
+            if(this->nodes.size() == 0) throw "Nodes have not been generated\n";
+            for(size_t x=0; x < this->nodes.size(); x++)
+            {
+                for(size_t y=0; y < this->nodes[x].size(); y++)
+                {
+                    this->nodes[x][y]->move( xOffset, yOffset );
+                }
+            }
+        }
+        protected:
+        const int MAX_WIDTH = 120;
+        const int MAX_HEIGHT = 68;
+        Node* centerNode;
+        vector< vector< Node* >> nodes;
+
+        private:
+    };
+}
+
+
+#endif

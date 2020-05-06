@@ -9,6 +9,7 @@
 #include <src/Manager/Event.hpp>
 
 #include <src/Generator/Layout.hpp>
+#include <src/Ship/BaseShip.hpp>
 // TESTS (remove before PROD)
 int main()
 {
@@ -17,7 +18,7 @@ int main()
     SG::Manager::Screen screenM;
     SG::Manager::Resource resourceM;
     SG::Manager::Object objectM( &screenM );
-    SG::Manager::Event eventM( &screenM );
+    SG::Manager::Event eventM( &screenM, &objectM );
 
     SG::Generator::Layout lay( &objectM );
     sf::Image test, floor;
@@ -34,9 +35,14 @@ int main()
     lay.addAsset(SG::Generator::Layout::DOOR, doorT);
     lay.addAsset(SG::Generator::Layout::WALL, wallT);
     lay.generateLayout(&test);
-    lay.shiftPosition(-250,0);
 
+    sf::Texture* ship = new sf::Texture();
+    ship->loadFromFile("assets\\graphics\\ship_cargo_full.png");
+    SG::Ship::BaseShip shipBase( &objectM, ship, lay.generateLayout(&test) );
+    objectM.addVisible( &shipBase );
 
+    shipBase.generateCrew();
+    
     while(screenM.window->isOpen())
     {
         eventM.handleEvents();

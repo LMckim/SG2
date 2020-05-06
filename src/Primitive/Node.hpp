@@ -6,11 +6,20 @@
 namespace SG::Generator{
     class Layout;
 }
+namespace SG::Crew{
+    class Base;
+}
+namespace SG::Ship{
+    class Layout;
+}
 namespace SG::Primitive
 {
     class Node
     {
         friend class SG::Generator::Layout;
+        friend class SG::Crew::Base;
+        friend class SG::Ship::Layout;
+        
         struct Position{
             int x;
             int y;
@@ -18,6 +27,11 @@ namespace SG::Primitive
 
         public:
         virtual ~Node() {};
+        bool canMoveTo()
+        {
+            if(this->allowMove && this->occupied == false) return true;
+            else return false;
+        }
         Node* getRightNode() { return this->right; }
         Node* getLeftNode() { return this->left; }
         Node* getTopNode() { return this->top; }

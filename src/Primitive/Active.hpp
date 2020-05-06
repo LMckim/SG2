@@ -13,10 +13,12 @@ namespace SG::Primitive
     {
         friend class SG::Manager::Object;
         public:
-        ~Active() {}
+        virtual ~Active() {}
         
         protected:
         bool selected = false;
+        bool groupselect = false;
+        virtual void onSelect() {};
         virtual void handleInput() = 0;
     };
 }

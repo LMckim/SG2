@@ -3,6 +3,7 @@
 
 #include <map>
 #include <src/Primitive/Generator.hpp>
+#include <src/Ship/Layout.hpp>
 
 #include <src/Node/Wall.hpp>
 #include <src/Node/Floor.hpp>
@@ -24,6 +25,7 @@ namespace SG::Generator
     using SG::Node::Door;
     using SG::Node::Space;
 
+
     class Layout :
         protected Generator
     {
@@ -39,7 +41,7 @@ namespace SG::Generator
             this->assets[tile].push_back(asset);
         }
 
-        void generateLayout(sf::Image* layout)
+        SG::Ship::Layout generateLayout(sf::Image* layout)
         {
             // we need graphical 
             if( this->assets.find( TILE::DOOR ) == this->assets.end() 
@@ -61,13 +63,13 @@ namespace SG::Generator
                     switch( this->checkColor( layout->getPixel(x,y) ))
                     {
                         case FLOOR:
-                            newNode = new Floor(this->assets[ FLOOR ][ (std::rand() % this->assets[ FLOOR ].size()) ]);
+                            newNode = new Floor(this->assets[ FLOOR ][ ( std::rand() % this->assets[ FLOOR ].size() ) ]);
                         break;
                         case WALL:
-                            newNode = new Wall(this->assets[ WALL ][ (std::rand() % this->assets[ WALL ].size()) ]);
+                            newNode = new Wall(this->assets[ WALL ][ ( std::rand() % this->assets[ WALL ].size() ) ]);
                         break;
                         case DOOR:
-                            newNode = new Door(this->assets[ DOOR ][ (std::rand() % this->assets[ DOOR ].size()) ]);
+                            newNode = new Door(this->assets[ DOOR ][ ( std::rand() % this->assets[ DOOR ].size() ) ]);
                         break;
                         default:
                             newNode = new Space();
@@ -83,17 +85,7 @@ namespace SG::Generator
                     if(y > 0) newNode->link( Node::LINKS::TOP, this->nodes[y-1][x] );
                 }
             }
-        }
-        void shiftPosition(int xOffset, int yOffset)
-        {
-            if(this->nodes.size() == 0) throw "Nodes have not been generated\n";
-            for(size_t x=0; x < this->nodes.size(); x++)
-            {
-                for(size_t y=0; y < this->nodes[x].size(); y++)
-                {
-                    this->nodes[x][y]->move( xOffset, yOffset );
-                }
-            }
+            return SG::Ship::Layout(this->nodes);
         }
         protected:
         map< TILE, vector< sf::Texture* >> assets;

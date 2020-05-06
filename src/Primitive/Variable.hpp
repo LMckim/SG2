@@ -14,7 +14,8 @@ namespace SG::Primitive
     {
         friend class SG::Manager::Object;
         public:
-        ~Variable() {}
+        virtual ~Variable() {}
+
         protected:
         bool destroy = false;
         virtual void update() = 0;

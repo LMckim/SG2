@@ -4,16 +4,19 @@
 #include <SFML/Graphics.hpp>
 
 #include <src/Manager/Screen.hpp>
+#include <src/Manager/Object.hpp>
 #include <src/Primitive/Active.hpp>
 
 namespace SG::Manager
 {
     using SG::Primitive::Active;
     using SG::Manager::Screen;
+    using SG::Manager::Object;
     class Event
     {
         public:
-        Event( Screen* screenM) : screenM{ screenM } {}
+        Event( Screen* screenM ) : screenM{ screenM } {}
+        Event( Screen* screenM, Object* objectM ) : screenM{ screenM}, objectM{ objectM } {}
         void handleEvents()
         {
             sf::RenderWindow* window = this->screenM->window;
@@ -23,30 +26,36 @@ namespace SG::Manager
             while( window->pollEvent(event) )
             {
                 if( event.type == sf::Event::Closed ) window->close();
-                else if(event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1 && this->scrolls < 30)
+                // handles zooming in and out
+                else if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1 && this->scrolls < 30 )
                 {
                     this->scrolls++;
                     view->zoom( this->zoomInPerc );
-                }else if(event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1 && this->scrolls > -10)
+                }else if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1 && this->scrolls > -10 )
                 {
                     this->scrolls--;
                     view->zoom( this->zoomOutPerc );
-                }else if(sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ){
+
+                // handles shifting around the ship map using the middle mouse button
+                }else if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ){
                     
-                    // handles shifting around the ship map
-                    if(sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 100){
+                    if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 100 ){
                         view->move( this->shiftAmount, 0);
                         this->shiftedAmount.x++;
-                    }else if(sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -100){
+                    }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -100 ){
                         view->move( -this->shiftAmount, 0);
                         this->shiftedAmount.x--;
-                    }else if(sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.x < 100){
+                    }
+                    
+                    if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.x < 100 ){
                         view->move( 0, this->shiftAmount);
                         this->shiftedAmount.y++;
-                    }else if(sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.x > -100){
+                    }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.x > -100 ){
                         view->move( 0, -this->shiftAmount);
                         this->shiftedAmount.y--;
                     }
+                }else if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
+
                 }
             }
             this->prevMousePos = sf::Mouse::getPosition( *window );
@@ -60,6 +69,7 @@ namespace SG::Manager
         sf::Vector2i prevMousePos;
         sf::Vector2i shiftedAmount = sf::Vector2i(0,0);
         Screen* screenM;
+        Object* objectM;
         Active* active;
     };
 }
