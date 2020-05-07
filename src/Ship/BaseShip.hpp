@@ -45,10 +45,13 @@ namespace SG::Ship
         }
         void generateCrew(int count = 1)
         {
+            // TESTING SHIT
             sf::Image cImg;
             cImg.loadFromFile("assets\\graphics\\personnel_luke_sheet.png");
             sf::Texture* cTex = new sf::Texture();
             cTex->loadFromImage(cImg, sf::IntRect(0,0,16,16));
+            
+            // this may stay
             for(size_t crew = 0; crew < count; crew++)
             {
                 BaseCrew* guy = new BaseCrew(cTex, this->layout.getRandomFloorNode());

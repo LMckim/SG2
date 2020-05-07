@@ -2,14 +2,16 @@
 #define SG_PRIMITIVE_ACTIVE
 
 #include <SFML/Graphics.hpp>
-
+#include <src/Primitive/Visible.hpp>
 namespace SG::Manager{
     class Object;
 }
 
 namespace SG::Primitive
 {
-    class Active
+    using SG::Primitive::Visible;
+    class Active :
+        virtual public Visible
     {
         friend class SG::Manager::Object;
         public:
@@ -18,7 +20,7 @@ namespace SG::Primitive
         protected:
         bool selected = false;
         bool groupselect = false;
-        virtual void onSelect() {};
+        virtual void select() {};
         virtual void handleInput() = 0;
     };
 }

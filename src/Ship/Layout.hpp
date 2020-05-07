@@ -36,7 +36,7 @@ namespace SG::Ship
                 {
                     if(Floor* floor = dynamic_cast<Floor*>( this->nodes[x][y] ))
                     {
-                        if(std::rand() % 5 == 0 && floor->occupied == false) return floor;
+                        if(std::rand() % 77 == 0 && floor->occupied == false) return floor;
                         else inCase = floor;
                     }
                 }

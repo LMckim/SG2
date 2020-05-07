@@ -65,10 +65,33 @@ namespace SG::Manager
                 }else itr++;
             }
         }
+        void checkClicked(sf::Vector2f mPos)
+        {
+            // TODO: Problems with selection will occur HERE, fix when ready
+            for(auto &itr : this->actives)
+            {
+                if(itr->sprite.getGlobalBounds().contains( mPos ))
+                {
+                    itr->select();
+                    this->selected.push_back( itr );
+                }else{
+                    itr->selected = false;
+                    this->selected.clear();
+                }
+            }
+        }
+        void moveSelected()
+        {
+            for(auto &itr : this->selected)
+            {
+
+            }
+        }
         private:
         Screen* screenM;
         vector< Variable* > variables;
         vector< Active* > actives;
+        vector< Active* > selected;
         
     };
 }

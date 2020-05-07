@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <src/Primitive/Visible.hpp>
 
@@ -33,6 +34,9 @@ namespace SG::Manager
                 ) 
             );
             this->window->setView( *this->view );
+
+            this->clock = sf::Clock();
+            this->time = this->clock.getElapsedTime();
         }
         void render()
         {
@@ -65,6 +69,10 @@ namespace SG::Manager
             }
             
             this->window->display();
+            this->window->setView( *this->view );
+            this->time = this->clock.getElapsedTime();
+            // std::cout << this->time.asMicroseconds() << std::endl;
+            this->clock.restart();
         }
         void addVisible(Visible* visible)
         {
@@ -93,6 +101,8 @@ namespace SG::Manager
             }
         }
         private:
+        sf::Clock clock;
+        sf::Time time;
         map< uint8_t, vector< Visible* > > visible;
         map< uint8_t, vector< Visible* > > ui;
 

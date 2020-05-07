@@ -45,12 +45,19 @@ namespace SG::Crew
             this->sprite.setTexture(*spriteSheet);
             this->sprite.setPosition(spawn->getPosition()->x, spawn->getPosition()->y );
             spawn->occupied = true;
+
+            this->createBox(spriteSheet);
         }
         virtual ~Base() {}
 
         virtual void setDestination( Node* destination ) { this->destination = destination; }
         virtual void update() {}
         protected:
+        bool showbox = true;
+        const sf::Color OUTLINE_PLAIN = sf::Color::Red;
+        const sf::Color OUTLINE_SELECTED = sf::Color::Magenta;
+        const float OUTLINE_WIDTH = 0.75f;
+
         bool alive = true;
         float oxygen = 100;
         float health = 100;
@@ -60,14 +67,16 @@ namespace SG::Crew
         float radiation = 0;
 
         enum FACING { LEFT, RIGHT, TOP, DOWN };
-        const float SPEED_WALK = 5;
+        const float SPEED_WALK = 5.f;
         Node* currentNode;
         Node* destination;
 
-        virtual void onSelect()
+        sf::RectangleShape box;
+
+        virtual void select()
         {
             this->selected = true;
-            std::cout << name << std::endl;
+            std::cout << "My name is: " << this->name << std::endl;
         }
         virtual void handleInput() {}
         vector< Node* > findPath(vector< Node* > path)
@@ -86,6 +95,27 @@ namespace SG::Crew
             // recursively find path
             if( path[ path.size() ] == dest ) return path;
             else return this->findPath( path );
+        }
+        void createBox(sf::Texture* tex)
+        {
+            this->box = sf::RectangleShape();
+            this->box.setSize(
+                sf::Vector2f(
+                    tex->getSize().x,
+                    tex->getSize().y
+                )
+            );
+            this->box.setFillColor( sf::Color::Transparent );
+            this->box.setOutlineColor( OUTLINE_PLAIN );
+            this->box.setOutlineThickness( OUTLINE_WIDTH );
+            this->box.setPosition( this->sprite.getPosition() );
+        }
+        virtual void draw(sf::RenderTarget& target)
+        {
+            SG::Primitive::Visible::draw(target);
+            if(this->selected) this->box.setOutlineColor( OUTLINE_SELECTED );
+            else this->box.setOutlineColor( OUTLINE_PLAIN );
+            if(this->showbox) target.draw( this->box );
         }
     };
 }

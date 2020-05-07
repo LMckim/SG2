@@ -62,13 +62,12 @@ namespace SG::Node::Base
             target.draw( this->sprite );
             // draw the box ON TOP OF the sprite
             if(this->showBox){
-                if(this->occupied) this->box.setOutlineColor( OUTLINE_OCCUPIED );
-                else( this->box.setOutlineColor( OUTLINE_PLAIN ) );
+                if(this->occupied) {
+                    this->box.setOutlineColor( OUTLINE_OCCUPIED );
+                }else this->box.setOutlineColor( OUTLINE_PLAIN );
                 target.draw( this->box );
             }
-
         }
-
     };
 }
 #endif

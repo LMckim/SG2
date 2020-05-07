@@ -55,7 +55,8 @@ namespace SG::Manager
                         this->shiftedAmount.y--;
                     }
                 }else if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
-
+                    sf::Vector2f mPos = window->mapPixelToCoords(sf::Mouse::getPosition( *window ));
+                    this->objectM->checkClicked( mPos );
                 }
             }
             this->prevMousePos = sf::Mouse::getPosition( *window );
