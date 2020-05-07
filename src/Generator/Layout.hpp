@@ -49,7 +49,6 @@ namespace SG::Generator
             ||  this->assets.find( TILE::WALL ) == this->assets.end() )
             { throw "Not enough assets to generate layout"; }
 
-
             int yS = layout->getSize().y;
             int xS = layout->getSize().x;
 

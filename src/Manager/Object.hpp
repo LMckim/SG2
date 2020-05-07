@@ -9,6 +9,8 @@
 #include <src/Primitive/Visible.hpp>
 #include <src/Primitive/Variable.hpp>
 #include <src/Primitive/Active.hpp>
+#include <src/Ship/Layout.hpp>
+#include <src/Primitive/Node.hpp>
 
 namespace SG::Manager
 {
@@ -18,6 +20,8 @@ namespace SG::Manager
     using SG::Primitive::Visible;
     using SG::Primitive::Variable;
     using SG::Primitive::Active;
+    using SG::Ship::Layout;
+    using SG::Primitive::Node;
 
     class Object
     {
@@ -47,6 +51,10 @@ namespace SG::Manager
                 this->actives.push_back( active );
             }
         }
+        void registerLayout(Layout* layout)
+        {
+            this->layout = layout;
+        }
         void removeVariables()
         {
             auto itr = this->variables.begin();
@@ -70,7 +78,7 @@ namespace SG::Manager
             // TODO: Problems with selection will occur HERE, fix when ready
             for(auto &itr : this->actives)
             {
-                if(itr->sprite.getGlobalBounds().contains( mPos ))
+                if( itr->sprite.getGlobalBounds().contains( mPos ) )
                 {
                     itr->select();
                     this->selected.push_back( itr );
@@ -80,15 +88,20 @@ namespace SG::Manager
                 }
             }
         }
-        void moveSelected()
+        void rightClicked(sf::Vector2f mPos)
         {
-            for(auto &itr : this->selected)
+            Node* dest = this->layout->findClosestNode( mPos );
+            if(dest == nullptr) throw "Could not find Node!";
+            
+            for(auto &itr : this->actives)
             {
-
+                itr->rightClick( dest );
             }
+
         }
         private:
         Screen* screenM;
+        Layout* layout;
         vector< Variable* > variables;
         vector< Active* > actives;
         vector< Active* > selected;

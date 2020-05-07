@@ -54,10 +54,17 @@ namespace SG::Manager
                         view->move( 0, -this->shiftAmount);
                         this->shiftedAmount.y--;
                     }
-                }else if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
+                }
+                // left click actions
+                if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
                     sf::Vector2f mPos = window->mapPixelToCoords(sf::Mouse::getPosition( *window ));
                     this->objectM->checkClicked( mPos );
                 }
+                if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) ){
+                    sf::Vector2f mPos = window->mapPixelToCoords(sf::Mouse::getPosition( *window ));
+                    this->objectM->rightClicked( mPos );
+                }
+
             }
             this->prevMousePos = sf::Mouse::getPosition( *window );
         }

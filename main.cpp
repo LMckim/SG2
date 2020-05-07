@@ -10,6 +10,7 @@
 
 #include <src/Generator/Layout.hpp>
 #include <src/Ship/BaseShip.hpp>
+#include <src/Ship/Layout.hpp>
 // TESTS (remove before PROD)
 int main()
 {
@@ -20,6 +21,7 @@ int main()
     SG::Manager::Object objectM( &screenM );
     SG::Manager::Event eventM( &screenM, &objectM );
 
+    // EVERYTHING UNDER HERE IS TEMPORARY
     SG::Generator::Layout lay( &objectM );
     sf::Image test, floor;
     test.loadFromFile("assets\\Layouts\\Layout_test.png");
@@ -34,15 +36,16 @@ int main()
     lay.addAsset(SG::Generator::Layout::FLOOR, floorT);
     lay.addAsset(SG::Generator::Layout::DOOR, doorT);
     lay.addAsset(SG::Generator::Layout::WALL, wallT);
-    lay.generateLayout(&test);
 
+    SG::Ship::Layout layout = lay.generateLayout( &test );
+    objectM.registerLayout( &layout );
     sf::Texture* ship = new sf::Texture();
     ship->loadFromFile("assets\\graphics\\ship_cargo_full.png");
-    SG::Ship::BaseShip shipBase( &objectM, ship, lay.generateLayout(&test) );
+    SG::Ship::BaseShip shipBase( &objectM, ship, layout);
     objectM.addVisible( &shipBase );
 
     shipBase.generateCrew();
-    
+    // HERES THE HEART
     while(screenM.window->isOpen())
     {
         eventM.handleEvents();

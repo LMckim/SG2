@@ -54,7 +54,28 @@ namespace SG::Ship
                 }
             }
         }
+        Node* findClosestNode( sf::Vector2f pos)
+        {
+            bool found = false;
+            for(size_t y = 0; y < this->nodes.size(); y++)
+            {
+                for(size_t x = 0; x < this->nodes[y].size(); x++)
+                {
+                    Node* curr = this->nodes[y][x];
+                    if( 
+                    // if were within our bounds
+                    (curr->position.y >= pos.y && curr->position.y <= (pos.y + NODE_SIZE) )
+                    && (curr->position.x >= pos.x && curr->position.x <= (pos.x + NODE_SIZE) ) )
+                    {
+                        return curr;
+                    }
+                }
+            }
+            // rare occasion?
+            return nullptr;
+        }
         protected:
+        const int NODE_SIZE = 16;
         const int MAX_WIDTH = 120;
         const int MAX_HEIGHT = 68;
         Node* centerNode;

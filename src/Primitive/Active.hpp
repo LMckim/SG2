@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <src/Primitive/Visible.hpp>
+#include <src/Primitive/Node.hpp>
+
 namespace SG::Manager{
     class Object;
 }
@@ -10,6 +12,7 @@ namespace SG::Manager{
 namespace SG::Primitive
 {
     using SG::Primitive::Visible;
+    using SG::Primitive::Node;
     class Active :
         virtual public Visible
     {
@@ -21,6 +24,10 @@ namespace SG::Primitive
         bool selected = false;
         bool groupselect = false;
         virtual void select() {};
+        // for non-context sensitive right-click actions
+        virtual void rightClick() {};
+        // for destination or context sensitive right-click actions
+        virtual void rightClick(Node* node) {};
         virtual void handleInput() = 0;
     };
 }

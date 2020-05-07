@@ -52,6 +52,7 @@ namespace SG::Crew
 
         virtual void setDestination( Node* destination ) { this->destination = destination; }
         virtual void update() {}
+
         protected:
         bool showbox = true;
         const sf::Color OUTLINE_PLAIN = sf::Color::Red;
@@ -69,7 +70,8 @@ namespace SG::Crew
         enum FACING { LEFT, RIGHT, TOP, DOWN };
         const float SPEED_WALK = 5.f;
         Node* currentNode;
-        Node* destination;
+        Node* intermediate = nullptr;
+        Node* destination = nullptr;
 
         sf::RectangleShape box;
 
@@ -78,6 +80,12 @@ namespace SG::Crew
             this->selected = true;
             std::cout << "My name is: " << this->name << std::endl;
         }
+
+        virtual void rightClick(Node* dest)
+        {
+            this->destination = dest;
+        }
+
         virtual void handleInput() {}
         vector< Node* > findPath(vector< Node* > path)
         {
