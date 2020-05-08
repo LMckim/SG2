@@ -58,7 +58,23 @@ namespace SG::Crew
         virtual ~Base() {}
 
         virtual void setDestination( Node* destination ) { this->destination = destination; }
-        virtual void update() {}
+        virtual void update() 
+        {
+            if(this->path.size() > 0)
+            {
+                // handle transition
+                this->currentNode->occupied = false;
+                this->currentNode = this->path.back();
+                this->sprite.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
+                this->currentNode->occupied = true;
+
+                // cleanup
+                this->path.pop_back();
+                std::cout << this->path.size() << std::endl;
+
+
+            }
+        }
 
         protected:
         bool showbox = true;
@@ -76,6 +92,7 @@ namespace SG::Crew
         float radiation = 0;
 
         enum FACING { LEFT, RIGHT, TOP, DOWN };
+        FACING facing = DOWN;
         const float SPEED_WALK = 5.f;
 
         // pathing

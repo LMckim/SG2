@@ -44,6 +44,16 @@ namespace SG::Ship
             }
             return inCase;
         }
+        void clearPathing()
+        {
+            for(size_t x=0; x < this->nodes.size(); x++)
+            {
+                for(size_t y=0; y < this->nodes[x].size(); y++)
+                {
+                    this->nodes[x][y]->pathed = false;
+                }
+            }
+        }
         void shiftPosition(int xOffset, int yOffset)
         {
             if(this->nodes.size() == 0) throw "Nodes have not been generated\n";

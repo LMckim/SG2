@@ -34,8 +34,6 @@ namespace SG::Algo
             if( y < 0 ) y *= -1;
 
             this->h = x + y;
-
-            if(this->h < 0 ) this->h = this-> h * -1;
             this->destination = destination;
         }
         ~PathNode()
@@ -58,6 +56,17 @@ namespace SG::Algo
                 adjacent.push_back( new PathNode( this->current->bottom, this, this->destination ) );
             }
             return adjacent;
+        }
+        float getTotalHeuristicCost()
+        {
+            float total = 0;
+            PathNode* pN = this;
+            while(pN->parent != nullptr)
+            {
+                total += pN->h;
+                pN = pN->parent;
+            }
+            return total;
         }
         bool operator==(const PathNode& r)
         {
@@ -106,8 +115,13 @@ namespace SG::Algo
                         delete itr;
                         continue;
                     // if its already in the open vecotr.... do. something?
-                    }else if( AStar::inVector( open, itr ) ){
-                        delete itr;
+                    }else if(PathNode* nP = AStar::inVector( open, itr ) ){
+                        // if the existing open node is worse than the current one then replace it
+                        if(nP->getTotalHeuristicCost() > itr->getTotalHeuristicCost())
+                        {
+                            AStar::removeFromVector( open, nP );
+                            open.push_back( itr );
+                        }else delete itr;
                     // add the new-found node to the open list
                     }else{ open.push_back( itr ); }
                 }
@@ -121,19 +135,20 @@ namespace SG::Algo
             return path;
         }
         private:
-        static bool inVector( vector< PathNode* > vec, PathNode* pN )
+        static PathNode* inVector( vector< PathNode* > vec, PathNode* pN )
         {
             for(auto &itr : vec)
             {
-                if(itr->current == pN->current) return true;
+                if(itr->current == pN->current) return itr;
             }
-            return false;
+            return NULL;
         }
         static void removeFromVector( vector< PathNode* >& vec, PathNode* pN )
         {
             for(size_t i=0; i < vec.size(); i++)
             {
                 if( vec[i] == pN ){
+                    // delete vec[i];
                     vec.erase( vec.begin() + i );
                     break;
                 }
@@ -145,7 +160,7 @@ namespace SG::Algo
             PathNode* lowest = list[0];
             for( auto &itr : list )
             {
-                if( lowest->h > itr->h ){
+                if( lowest->getTotalHeuristicCost() > itr->getTotalHeuristicCost() ){
                     lowest = itr;
                 }
             }

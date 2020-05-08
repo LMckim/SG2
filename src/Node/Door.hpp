@@ -24,6 +24,7 @@ namespace SG::Node
         enum DIRECTION { VERTICAL, HORIZONTAL };
         bool open = false;
         bool opening = false;
+        
     };
 }
 #endif

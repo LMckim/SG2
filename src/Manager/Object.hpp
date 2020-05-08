@@ -90,6 +90,7 @@ namespace SG::Manager
         }
         void rightClicked(sf::Vector2f mPos)
         {
+            this->layout->clearPathing();
             Node* dest = this->layout->findClosestNode( mPos );
             if(dest == nullptr) throw "Could not find Node!";
             
