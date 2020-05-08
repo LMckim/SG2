@@ -75,6 +75,10 @@ namespace SG::Manager
         }
         void checkClicked(sf::Vector2f mPos)
         {
+            this->quickClick(mPos);
+        }
+        void quickClick(sf::Vector2f mPos)
+        {
             // TODO: Problems with selection WILL occur HERE, fix when ready
             for(auto &itr : this->actives)
             {
@@ -83,7 +87,6 @@ namespace SG::Manager
                     itr->select();
                     this->selected.push_back( itr );
                 }else{
-                    std::cout  << "clear\n";
                     itr->selected = false;
                     this->selected.clear();
                 }
@@ -99,9 +102,13 @@ namespace SG::Manager
             {
                 itr->rightClick( dest );
             }
-
         }
         private:
+        bool clickedThisCycle = false;
+        bool stillClicked = false;
+        const sf::Color SELECTION_BOX_COLOR = sf::Color::Green;
+        const float SELECTION_BOX_THICKNESS = 1.f;
+
         Screen* screenM;
         Layout* layout;
         vector< Variable* > variables;

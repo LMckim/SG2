@@ -24,7 +24,7 @@ int main()
     // EVERYTHING UNDER HERE IS TEMPORARY
     SG::Generator::Layout lay( &objectM );
     sf::Image test, floor;
-    test.loadFromFile("assets\\Layouts\\Layout_test.png");
+    test.loadFromFile("assets\\Layouts\\Layout_maze.png");
     floor.loadFromFile("assets\\graphics\\floor_sheet.png");
     sf::Texture* floorT = new sf::Texture();
     sf::Texture* doorT = new sf::Texture();

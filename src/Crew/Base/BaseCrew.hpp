@@ -60,8 +60,9 @@ namespace SG::Crew
         virtual void setDestination( Node* destination ) { this->destination = destination; }
         virtual void update() 
         {
-            if(this->path.size() > 0)
+            if(this->path.size() > 0 && this->currDelay == 0)
             {
+                this->currDelay = 2;
                 // handle transition
                 if(!this->path.back()->allowMove || this->path.back()->occupied)
                 {
@@ -75,10 +76,11 @@ namespace SG::Crew
 
                 // cleanup
                 this->path.pop_back();
-            }
+            }else if( currDelay > 0 ) currDelay--;
         }
 
         protected:
+        int currDelay = 0;
         bool showbox = true;
         const sf::Color OUTLINE_PLAIN = sf::Color::Red;
         const sf::Color OUTLINE_SELECTED = sf::Color::Magenta;

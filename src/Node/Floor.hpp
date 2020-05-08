@@ -13,6 +13,7 @@ namespace SG::Node
         public:
         Floor(sf::Texture* texture) : VisibleNode( texture )
         {
+            this->showBox = true;
             this->allowMove = true;
             this->allowPlace = true;
         }
