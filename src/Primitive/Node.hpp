@@ -12,6 +12,10 @@ namespace SG::Crew{
 namespace SG::Ship{
     class Layout;
 }
+namespace SG::Algo{
+    class AStar;
+    class PathNode;
+}
 namespace SG::Primitive
 {
     class Node
@@ -19,6 +23,8 @@ namespace SG::Primitive
         friend class SG::Generator::Layout;
         friend class SG::Crew::Base;
         friend class SG::Ship::Layout;
+        friend class SG::Algo::AStar;
+        friend class SG::Algo::PathNode;
         
         struct Position{
             int x;
@@ -40,6 +46,7 @@ namespace SG::Primitive
 
         protected:
         enum LINKS { LEFT, RIGHT, TOP, BOTTOM };
+        bool pathed = false;
         bool allowMove = false;
         bool allowPlace = false;
         bool spaceSuitReq = false;

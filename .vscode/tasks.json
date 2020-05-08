@@ -16,7 +16,8 @@
 				"-lsfml-graphics-d",
 				"-lsfml-system-d",
 				"-lsfml-window-d",
-				"-ftime-report"
+				"-ftime-report",
+				"-Wall"
 			],
 			"options": {
 				"cwd": "F:\\Development\\programs\\bin"

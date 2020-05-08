@@ -75,7 +75,7 @@ namespace SG::Manager
         }
         void checkClicked(sf::Vector2f mPos)
         {
-            // TODO: Problems with selection will occur HERE, fix when ready
+            // TODO: Problems with selection WILL occur HERE, fix when ready
             for(auto &itr : this->actives)
             {
                 if( itr->sprite.getGlobalBounds().contains( mPos ) )

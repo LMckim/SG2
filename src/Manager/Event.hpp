@@ -57,11 +57,13 @@ namespace SG::Manager
                 }
                 // left click actions
                 if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
-                    sf::Vector2f mPos = window->mapPixelToCoords(sf::Mouse::getPosition( *window ));
+                    sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+                    std::cout << mPos.x << " " << mPos.y << std::endl;
                     this->objectM->checkClicked( mPos );
                 }
                 if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) ){
-                    sf::Vector2f mPos = window->mapPixelToCoords(sf::Mouse::getPosition( *window ));
+                    sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+                    std::cout << mPos.x << " " << mPos.y << std::endl;
                     this->objectM->rightClicked( mPos );
                 }
 

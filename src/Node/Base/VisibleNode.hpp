@@ -64,6 +64,8 @@ namespace SG::Node::Base
             if(this->showBox){
                 if(this->occupied) {
                     this->box.setOutlineColor( OUTLINE_OCCUPIED );
+                }else if(this->pathed){ 
+                    this->box.setOutlineColor( OUTLINE_PATHED );
                 }else this->box.setOutlineColor( OUTLINE_PLAIN );
                 target.draw( this->box );
             }

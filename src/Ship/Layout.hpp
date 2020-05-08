@@ -56,7 +56,7 @@ namespace SG::Ship
         }
         Node* findClosestNode( sf::Vector2f pos)
         {
-            bool found = false;
+            //TODO: pretty sure we can actually nail this with a tiny bit of math
             for(size_t y = 0; y < this->nodes.size(); y++)
             {
                 for(size_t x = 0; x < this->nodes[y].size(); x++)
@@ -67,7 +67,7 @@ namespace SG::Ship
                     (curr->position.y >= pos.y && curr->position.y <= (pos.y + NODE_SIZE) )
                     && (curr->position.x >= pos.x && curr->position.x <= (pos.x + NODE_SIZE) ) )
                     {
-                        return curr;
+                        return this->nodes[y-1][x-1];
                     }
                 }
             }
