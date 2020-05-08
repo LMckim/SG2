@@ -70,9 +70,6 @@ namespace SG::Crew
 
                 // cleanup
                 this->path.pop_back();
-                std::cout << this->path.size() << std::endl;
-
-
             }
         }
 
