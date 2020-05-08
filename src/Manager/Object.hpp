@@ -83,6 +83,7 @@ namespace SG::Manager
                     itr->select();
                     this->selected.push_back( itr );
                 }else{
+                    std::cout  << "clear\n";
                     itr->selected = false;
                     this->selected.clear();
                 }
@@ -94,7 +95,7 @@ namespace SG::Manager
             Node* dest = this->layout->findClosestNode( mPos );
             if(dest == nullptr) throw "Could not find Node!";
             
-            for(auto &itr : this->actives)
+            for(auto &itr : this->selected)
             {
                 itr->rightClick( dest );
             }

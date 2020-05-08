@@ -63,9 +63,14 @@ namespace SG::Crew
             if(this->path.size() > 0)
             {
                 // handle transition
+                if(!this->path.back()->allowMove || this->path.back()->occupied)
+                {
+                    this->path = AStar::findPath( this->currentNode, this->destination );
+                }
                 this->currentNode->occupied = false;
                 this->currentNode = this->path.back();
                 this->sprite.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
+                this->box.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
                 this->currentNode->occupied = true;
 
                 // cleanup

@@ -36,7 +36,7 @@ namespace SG::Node::Base
         }
         virtual ~VisibleNode() {}
         protected:
-        bool showBox = true;
+        bool showBox = false;
         const sf::Color OUTLINE_PLAIN = sf::Color::Cyan;
         const sf::Color OUTLINE_OCCUPIED = sf::Color::Magenta;
         const sf::Color OUTLINE_PATHED = sf::Color::Green;
