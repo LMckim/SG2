@@ -4,23 +4,23 @@
 		{
 			"type": "shell",
 			"label": "C/C++: g++.exe build active file",
-			"command": "F:\\Development\\programs\\bin\\g++.exe",
+			"command": "C:\\MinGW\\bin\\g++.exe",
 			"args": [
-				"-g",
-				"F:\\Development\\repos\\SG2\\main.cpp",
+				"-ggdb",
+				"C:\\Users\\luke.mckim\\Documents\\Work_Stuff\\repos\\Personal\\SG2\\main.cpp",
 				"-o",
-				"F:\\Development\\repos\\SG2\\SG2.exe",
-				"-IF:\\Development\\External Libraries\\SFML-2.5.1\\include",
-				"-IF:\\Development\\repos\\SG2",
-				"-LF:\\Development\\External Libraries\\SFML-2.5.1\\lib",
+				"C:\\Users\\luke.mckim\\Documents\\Work_Stuff\\repos\\Personal\\SG2\\SG2.exe",
+				"-IC:\\Users\\luke.mckim\\Documents\\Work_Stuff\\repos\\Personal\\Extern\\SFML-2.5.1\\include",
+				"-IC:\\Users\\luke.mckim\\Documents\\Work_Stuff\\repos\\Personal\\SG2",
+				"-LC:\\Users\\luke.mckim\\Documents\\Work_Stuff\\repos\\Personal\\Extern\\SFML-2.5.1\\lib",
 				"-lsfml-graphics-d",
 				"-lsfml-system-d",
 				"-lsfml-window-d",
 				"-ftime-report",
-				"-Wall"
+				"-Wall",
 			],
 			"options": {
-				"cwd": "F:\\Development\\programs\\bin"
+				"cwd": "C:\\MinGW\\bin"
 			},
 			"problemMatcher": [
 				"$gcc"

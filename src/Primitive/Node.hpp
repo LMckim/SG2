@@ -54,10 +54,10 @@ namespace SG::Primitive
 
         Position position;
 
-        Node* right = NULL;
-        Node* left = NULL;
-        Node* top = NULL;
-        Node* bottom = NULL;
+        Node* right = nullptr;
+        Node* left = nullptr;
+        Node* top = nullptr;
+        Node* bottom = nullptr;
 
         virtual void setPosition( int x, int y ) { this->position.x = x; this->position.y = y; }
         void setRightNode(Node* node) { this->right = node; }

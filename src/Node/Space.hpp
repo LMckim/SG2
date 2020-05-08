@@ -14,7 +14,7 @@ namespace SG::Node
         public:
         Space()
         {
-            this->allowMove = true;
+            this->allowMove = false;
             this->spaceSuitReq = true;
         }
         virtual ~Space() {}
