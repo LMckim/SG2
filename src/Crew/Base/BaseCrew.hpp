@@ -79,7 +79,7 @@ namespace SG::Crew
         const float SPEED_WALK = 5.f;
 
         // pathing
-        vector< Node* > path;
+        vector< Node* > path = vector< Node* >();
         Node* currentNode;
         Node* destination = nullptr;
 

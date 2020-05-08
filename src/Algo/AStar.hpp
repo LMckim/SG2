@@ -29,6 +29,7 @@ namespace SG::Algo
             int x = ( current->getPosition()->x - destination->getPosition()->x );
             int y = ( current->getPosition()->y - destination->getPosition()->y );
 
+            // normalize the results to always be positive
             if( x < 0 ) x *= -1;
             if( y < 0 ) y *= -1;
 
@@ -39,7 +40,7 @@ namespace SG::Algo
         }
         ~PathNode()
         {
-            std::cout << "PD\n";
+            
         }         
         vector< PathNode* > getAdjacent()
         {
@@ -102,20 +103,24 @@ namespace SG::Algo
                 {
                     // if weve already searched this node then ignore it
                     if( AStar::inVector( closed, itr ) ){
+                        delete itr;
                         continue;
                     // if its already in the open vecotr.... do. something?
                     }else if( AStar::inVector( open, itr ) ){
+                        delete itr;
                     // add the new-found node to the open list
                     }else{ open.push_back( itr ); }
                 }
                 adjacent.clear();
 
             }
+            // cleanup
+            while( !open.empty() ) delete open.back(), open.pop_back();
+            while( !closed.empty() ) delete closed.back(), closed.pop_back();
             // return the found path or empty if none found
             return path;
         }
         private:
-
         static bool inVector( vector< PathNode* > vec, PathNode* pN )
         {
             for(auto &itr : vec)

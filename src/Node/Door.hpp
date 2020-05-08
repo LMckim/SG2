@@ -16,9 +16,12 @@ namespace SG::Node
             this->allowMove = true;
         }
         virtual ~Door() {}
+        void toggleLocked()
+        {
+            this->allowMove == true ? this->allowMove = false : this->allowMove = true;
+        }
         protected:
         enum DIRECTION { VERTICAL, HORIZONTAL };
-        bool locked = false;
         bool open = false;
         bool opening = false;
     };
