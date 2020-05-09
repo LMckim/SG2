@@ -67,15 +67,16 @@ namespace SG::Crew
                 if(!this->path.back()->allowMove || this->path.back()->occupied)
                 {
                     this->path = AStar::findPath( this->currentNode, this->destination );
-                }
-                this->currentNode->occupied = false;
-                this->currentNode = this->path.back();
-                this->sprite.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
-                this->box.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
-                this->currentNode->occupied = true;
+                }else{
+                    this->currentNode->occupied = false;
+                    this->currentNode = this->path.back();
+                    this->sprite.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
+                    this->box.setPosition( this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
+                    this->currentNode->occupied = true;
 
-                // cleanup
-                this->path.pop_back();
+                    // cleanup
+                    this->path.pop_back();
+                }
             }else if( currDelay > 0 ) currDelay--;
         }
 
@@ -114,10 +115,11 @@ namespace SG::Crew
 
         virtual void rightClick(Node* dest)
         {
+            std::cout << "clicked\n";
+
             this->destination = dest;
             if(this->currentNode == dest)
             {
-                std::cout << "here\n";
             }else this->path = AStar::findPath(this->currentNode, dest);
         }
 

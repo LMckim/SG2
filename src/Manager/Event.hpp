@@ -78,11 +78,20 @@ namespace SG::Manager
                     }
 
                     sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-                    this->objectM->checkClicked( mPos );
+
+                    // hmmmm
+                    if(this->selectionbox.getSize().x < SELECTION_THRESHOLD && this->selectionbox.getSize().y < SELECTION_THRESHOLD)
+                    {
+                        this->objectM->checkClicked( mPos );
+                    }
 
                 }else{
                     leftHeld = false;
-                    this->objectM->processSelectionBox( &this->selectionbox );
+                    if(this->selectionbox.getSize().x > SELECTION_THRESHOLD && this->selectionbox.getSize().y > SELECTION_THRESHOLD)
+                    {
+                        this->objectM->processSelectionBox( &this->selectionbox );
+                    }
+        
                     this->selectionbox.setSize( sf::Vector2f(0,0) );
                     this->screenM->removeVisible( &this->selectionbox );
                 }
@@ -92,10 +101,16 @@ namespace SG::Manager
                     this->objectM->rightClicked( mPos );
                 }
 
+                if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ))
+                {
+                    this->objectM->togglePause();
+                }
+
             }
             this->prevMousePos = sf::Mouse::getPosition( *window );
         }
         private:
+        const float SELECTION_THRESHOLD = 1.f;
         bool leftHeld = true;
         sf::Vector2f selectionOrigin;
         sf::RectangleShape selectionbox;

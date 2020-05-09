@@ -27,14 +27,22 @@ namespace SG::Manager
     {
         public:
         Object(Screen* screenM) : screenM{ screenM } {}
-        
+
         void update()
         {
-            for( auto itr : this->variables )
+            if(!this->paused)
             {
-                itr->update();
+                for( auto itr : this->variables )
+                {
+                    itr->update();
+                }
+                this->removeVariables();
             }
-            this->removeVariables();
+        }
+
+        void togglePause()
+        {
+            this->paused == true ? this->paused = false : this->paused = true;
         }
 
         void addVisible(Visible* visible)
@@ -108,16 +116,36 @@ namespace SG::Manager
             
             for(auto &itr : this->selected)
             {
+                std::cout << "r clicked\n";
                 itr->rightClick( dest );
             }
         }
 
         void processSelectionBox( sf::RectangleShape* selectionBox)
         {
-
+            for( auto &itr : this->actives )
+            {
+                if( selectionBox->getGlobalBounds().contains( itr->sprite.getPosition() ) )
+                {
+                    itr->selected = true;
+                    this->selected.push_back( itr );
+                }else{
+                    itr->selected = false;
+                    for(size_t i=0; i < this->selected.size(); i++)
+                    {
+                        if( itr == this->selected[i] )
+                        {
+                            this->selected.erase( this->selected.begin() + i );   
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         private:
+        bool paused = false;
+
         bool clickedThisCycle = false;
         bool stillClicked = false;
         const sf::Color SELECTION_BOX_COLOR = sf::Color::Green;

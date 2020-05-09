@@ -44,7 +44,7 @@ int main()
     SG::Ship::BaseShip shipBase( &objectM, ship, layout);
     objectM.addVisible( &shipBase );
 
-    shipBase.generateCrew();
+    shipBase.generateCrew(3);
     // HERES THE HEART
     while(screenM.window->isOpen())
     {

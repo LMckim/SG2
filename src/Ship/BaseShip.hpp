@@ -54,7 +54,9 @@ namespace SG::Ship
             // this may stay
             for(size_t crew = 0; crew < count; crew++)
             {
-                BaseCrew* guy = new BaseCrew(cTex, this->layout.getRandomFloorNode());
+                Node* spawn = this->layout.getRandomFloorNode();
+                if(spawn->isOccupied()) continue;
+                BaseCrew* guy = new BaseCrew(cTex, spawn);
                 this->objectM->addVariable( guy );
                 this->crew.push_back( guy );
             }
