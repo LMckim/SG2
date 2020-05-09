@@ -69,6 +69,7 @@ namespace SG::Tool
             // failover
             return nullptr;
         }
+        
         Animation getAnimation( int y = 0 )
         {
             if( !this->generated ) this->generateTextures();
