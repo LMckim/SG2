@@ -42,6 +42,7 @@ namespace SG::Manager
         {
             // clear the window
             this->window->clear();
+
             // render the regular objects
             this->window->setView( *this->view );
             auto itr = this->visible.begin();
@@ -55,6 +56,13 @@ namespace SG::Manager
                 }
                 itr++;
             }
+
+            // render any sf drawable primitives 
+            for(auto &itr: this->sfPrimitives)
+            {
+                this->window->draw( *itr );
+            }
+
             // render the ui
             this->window->setView( this->window->getDefaultView() );
             itr = this->ui.begin();
@@ -71,9 +79,16 @@ namespace SG::Manager
             this->window->display();
             this->window->setView( *this->view );
             this->time = this->clock.getElapsedTime();
+
             // std::cout << this->time.asMicroseconds() << std::endl;
             this->clock.restart();
         }
+        
+        void addVisible( sf::Drawable* drawable)
+        {
+            this->sfPrimitives.push_back( drawable );
+        }
+
         void addVisible(Visible* visible)
         {
             if( this->visible.find( visible->zLevel ) != this->visible.end())
@@ -84,6 +99,19 @@ namespace SG::Manager
                 this->visible[ visible->zLevel ].push_back( visible );
             }
         }
+
+        void removeVisible(sf::Drawable* drawable)
+        {
+            for( size_t i=0; i < this->sfPrimitives.size(); i++)
+            {
+                if(this->sfPrimitives[i] == drawable)
+                {
+                    this->sfPrimitives.erase( this->sfPrimitives.begin() + i );
+                    break;
+                }
+            }
+        }
+
         void removeVisible(Visible* visible)
         {
             auto itr = this->visible.begin();
@@ -103,6 +131,7 @@ namespace SG::Manager
         private:
         sf::Clock clock;
         sf::Time time;
+        vector< sf::Drawable* > sfPrimitives;
         map< uint8_t, vector< Visible* > > visible;
         map< uint8_t, vector< Visible* > > ui;
 

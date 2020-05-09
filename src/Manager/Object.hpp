@@ -27,6 +27,7 @@ namespace SG::Manager
     {
         public:
         Object(Screen* screenM) : screenM{ screenM } {}
+        
         void update()
         {
             for( auto itr : this->variables )
@@ -35,10 +36,12 @@ namespace SG::Manager
             }
             this->removeVariables();
         }
+
         void addVisible(Visible* visible)
         {
             this->screenM->addVisible( visible );
         }
+
         void addVariable(Variable* variable)
         {
             this->variables.push_back( variable );
@@ -51,10 +54,12 @@ namespace SG::Manager
                 this->actives.push_back( active );
             }
         }
+
         void registerLayout(Layout* layout)
         {
             this->layout = layout;
         }
+
         void removeVariables()
         {
             auto itr = this->variables.begin();
@@ -73,10 +78,12 @@ namespace SG::Manager
                 }else itr++;
             }
         }
+
         void checkClicked(sf::Vector2f mPos)
         {
             this->quickClick(mPos);
         }
+
         void quickClick(sf::Vector2f mPos)
         {
             // TODO: Problems with selection WILL occur HERE, fix when ready
@@ -92,6 +99,7 @@ namespace SG::Manager
                 }
             }
         }
+
         void rightClicked(sf::Vector2f mPos)
         {
             this->layout->clearPathing();
@@ -103,6 +111,12 @@ namespace SG::Manager
                 itr->rightClick( dest );
             }
         }
+
+        void processSelectionBox( sf::RectangleShape* selectionBox)
+        {
+
+        }
+
         private:
         bool clickedThisCycle = false;
         bool stillClicked = false;

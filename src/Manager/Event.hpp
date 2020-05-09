@@ -57,13 +57,38 @@ namespace SG::Manager
                 }
                 // left click actions
                 if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
+                    // handle drawing of the selection box
+                    if(leftHeld == false)
+                    {
+                        leftHeld = true;
+                        this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+                        this->selectionbox.setPosition( selectionOrigin );
+                        this->selectionbox.setOutlineThickness( 1.f );
+                        this->selectionbox.setOutlineColor( sf::Color::Green );
+                        this->selectionbox.setFillColor( sf::Color::Transparent );
+
+                        this->screenM->addVisible( &this->selectionbox );
+                    }else{
+                        this->selectionbox.setSize(
+                            sf::Vector2f(
+                                window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,
+                                window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).y - selectionOrigin.y
+                            )
+                        );
+                    }
+
                     sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-                    std::cout << mPos.x << " " << mPos.y << std::endl;
                     this->objectM->checkClicked( mPos );
+
+                }else{
+                    leftHeld = false;
+                    this->objectM->processSelectionBox( &this->selectionbox );
+                    this->selectionbox.setSize( sf::Vector2f(0,0) );
+                    this->screenM->removeVisible( &this->selectionbox );
                 }
+
                 if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) ){
                     sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-                    std::cout << mPos.x << " " << mPos.y << std::endl;
                     this->objectM->rightClicked( mPos );
                 }
 
@@ -71,6 +96,10 @@ namespace SG::Manager
             this->prevMousePos = sf::Mouse::getPosition( *window );
         }
         private:
+        bool leftHeld = true;
+        sf::Vector2f selectionOrigin;
+        sf::RectangleShape selectionbox;
+
         const float shiftAmount = 5;
         const float zoomInPerc = 0.95f;
         const float zoomOutPerc = 1.05f;
