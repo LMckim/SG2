@@ -35,15 +35,18 @@ namespace SG::Tool
             int sectionsX = image.getSize().x / this->sectionWidth;
             int sectionsY = image.getSize().y / this->sectionHeight;
 
-            for(size_t y = 0; y < sectionsY; y += this->sectionWidth )
+            for(size_t y = 0; y < sectionsY; y++ )
             {
                 this->textureGrid.push_back( vector< sf::Texture* >() );
-                for(size_t x = 0; x < sectionsX; x += this->sectionHeight )
+                for(size_t x = 0; x < sectionsX; x++ )
                 {
                     sf::Texture* newTex = new sf::Texture();
                     newTex->loadFromImage( image, 
                         sf::IntRect(
-                            x, y, this->sectionWidth, this->sectionHeight
+                            x * this->sectionWidth,
+                            y * this->sectionHeight, 
+                            this->sectionWidth, 
+                            this->sectionHeight
                     ));
                     this->textureGrid[y].push_back( newTex );
                 }
@@ -52,8 +55,10 @@ namespace SG::Tool
             this->generated = true;
         }
 
-        sf::Texture* getTexture( int x, int y )
+        sf::Texture* getTexture( int y, int x )
         {
+            if( !this->generated ) this->generateTextures();
+
             if( this->textureGrid.size() >= y )
             {
                 if( this->textureGrid[ y ].size() >= x )
@@ -66,6 +71,8 @@ namespace SG::Tool
         }
         Animation getAnimation( int y = 0 )
         {
+            if( !this->generated ) this->generateTextures();
+            
             if( this->textureGrid.size() >= y )
             {
                 Animation animation;
