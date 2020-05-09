@@ -115,8 +115,6 @@ namespace SG::Crew
 
         virtual void rightClick(Node* dest)
         {
-            std::cout << "clicked\n";
-
             this->destination = dest;
             if(this->currentNode == dest)
             {

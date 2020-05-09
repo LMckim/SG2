@@ -116,7 +116,6 @@ namespace SG::Manager
             
             for(auto &itr : this->selected)
             {
-                std::cout << "r clicked\n";
                 itr->rightClick( dest );
             }
         }
