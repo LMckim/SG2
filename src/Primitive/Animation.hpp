@@ -1,83 +1,40 @@
 #ifndef SG_PRIMITIVE_ANIMATION
 #define SG_PRIMITIVE_ANIMATION
-#include <vector>
 
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 namespace SG::Primitive
 {
-    class Animation
+    using std::vector;
+
+    struct Animation
     {
-        public:
-        // default constructor
-        Animation() {};
-        // copy constructor
-        Animation( const Animation &original)
+        Animation() {}
+        Animation( vector< sf::Texture* > frames ){ this->frames = frames; }
+
+        int index = 0;
+        vector< sf::Texture* > frames;
+
+        int frameCount(){ return this->frames.size(); }
+        void setFrames( vector< sf::Texture* > frames ){ this->frames = frames; }
+        void addFrame( sf::Texture* frame ){ this->frames.push_back( frame ); }
+
+        sf::Texture* getFrameByIndex( int index = 0 )
         {
-            this->frames = original.frames;
-            this->totalFrames = original.totalFrames;
+            if(this->frames.size() <= index ){ return this->frames[ index ]; }
         }
-        // parameterized constructor
-        Animation(sf::Image *spriteSheet, int sectionWidth = 16, int sectionHeight = 16, int yOffset = 0)
-        {
-            this->buildAnimation(spriteSheet, sectionWidth, sectionHeight, yOffset);
-        }
-        virtual ~Animation() {};
-        sf::Texture* getTexture()
-        {
-            this->incrementAnimation();
-            return this->frames[ this->currentFrame ];
-        }
-        sf::Texture* getTexture(int frame = 0)
-        {
-            return this->frames[ frame ];
-        }
-        sf::Texture* getTextureNoIncrement()
-        {
-            return this->frames[ this->currentFrame ];
-        }
-        uint16_t getTotalFrames()
-        {
-            return this->frames.size();
-        }
-        uint16_t getCurrentFrame()
-        {
-            return this->currentFrame;
-        }
+
         sf::Texture* getRandomFrame()
         {
-            int index = std::rand() % this->frames.size();
-            return this->frames[index];
+            return this->frames[ std::rand() % this->frames.size() ];
         }
-        void addFrame(sf::Texture *tex)
+        
+        sf::Texture* getNextFrame()
         {
-            this->frames.push_back( tex ); 
-            this->totalFrames++;
-        }
-        protected:
-        uint16_t currentFrame = 0;
-        uint16_t totalFrames = 0;
-        std::vector<sf::Texture*> frames;
-        void incrementAnimation()
-        {
-            this->currentFrame++;
-            if(this->currentFrame >= this->totalFrames) this->currentFrame = 0;
-        }
-        void buildAnimation(sf::Image *spriteSheet, int sectionWidth = 32, int sectionHeight = 32, int yOffset = 0)
-        {
-            int sections = spriteSheet->getSize().x / sectionWidth;
-            this->totalFrames = sections;
-            for(size_t section = 0; section < sections; section++)
-            {
-                sf::Texture *texture = new sf::Texture();
-                texture->loadFromImage(
-                    *spriteSheet,
-                    sf::IntRect(
-                    sf::Vector2i( section * sectionWidth, sectionHeight * yOffset),
-                    sf::Vector2i( sectionWidth, sectionHeight ) )
-                );
-                this->frames.push_back( texture );
-            }
+            sf::Texture* frame = this->frames[ index ];
+            this->index >= this->frames.size() ? this->index = 0 : this->index++;
+            return frame;
         }
     };
 }

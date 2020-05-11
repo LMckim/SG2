@@ -121,6 +121,7 @@ namespace SG::Algo
                         {
                             AStar::removeFromVector( open, nP );
                             open.push_back( itr );
+                            delete nP;
                         }else delete itr;
                     // add the new-found node to the open list
                     }else{ open.push_back( itr ); }
@@ -135,7 +136,7 @@ namespace SG::Algo
             return path;
         }
         private:
-        static PathNode* inVector( vector< PathNode* > vec, PathNode* pN )
+        static PathNode* inVector(const vector< PathNode* > vec, const PathNode* pN )
         {
             for(auto &itr : vec)
             {
@@ -148,7 +149,6 @@ namespace SG::Algo
             for(size_t i=0; i < vec.size(); i++)
             {
                 if( vec[i] == pN ){
-                    // delete vec[i];
                     vec.erase( vec.begin() + i );
                     break;
                 }

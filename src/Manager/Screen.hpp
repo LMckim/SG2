@@ -38,6 +38,7 @@ namespace SG::Manager
             this->clock = sf::Clock();
             this->time = this->clock.getElapsedTime();
         }
+
         void render()
         {
             // clear the window
@@ -114,6 +115,7 @@ namespace SG::Manager
 
         void removeVisible(Visible* visible)
         {
+            // TODO: fix up here to use zlevel
             auto itr = this->visible.begin();
             while( itr != this->visible.end() )
             {
@@ -128,6 +130,7 @@ namespace SG::Manager
                 itr++;
             }
         }
+
         private:
         sf::Clock clock;
         sf::Time time;

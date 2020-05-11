@@ -60,6 +60,7 @@ namespace SG::Crew
         virtual void setDestination( Node* destination ) { this->destination = destination; }
         virtual void update() 
         {
+            // TODO: some cleanup here to deal with 2 guys vying for the same node
             if(this->path.size() > 0 && this->currDelay == 0)
             {
                 this->currDelay = 2;

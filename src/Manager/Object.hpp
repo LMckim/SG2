@@ -95,6 +95,7 @@ namespace SG::Manager
         void quickClick(sf::Vector2f mPos)
         {
             // TODO: Problems with selection WILL occur HERE, fix when ready
+            this->selected.clear();
             for(auto &itr : this->actives)
             {
                 if( itr->sprite.getGlobalBounds().contains( mPos ) )
@@ -103,7 +104,6 @@ namespace SG::Manager
                     this->selected.push_back( itr );
                 }else{
                     itr->selected = false;
-                    this->selected.clear();
                 }
             }
         }

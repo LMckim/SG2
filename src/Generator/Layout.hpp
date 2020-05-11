@@ -4,6 +4,7 @@
 #include <map>
 #include <src/Primitive/Generator.hpp>
 #include <src/Ship/Layout.hpp>
+#include <src/Tool/TextureSheet.hpp>
 
 #include <src/Node/Wall.hpp>
 #include <src/Node/Floor.hpp>
@@ -25,6 +26,7 @@ namespace SG::Generator
     using SG::Node::Door;
     using SG::Node::Space;
 
+    using SG::Tool::TextureSheet;
 
     class Layout :
         protected Generator
@@ -36,7 +38,7 @@ namespace SG::Generator
         Layout(Object* objectM) : Generator::Generator( objectM ) {}
         ~Layout() {}
 
-        void addAsset(TILE tile, sf::Texture* asset)
+        void addAsset(TILE tile, TextureSheet* asset)
         {
             this->assets[tile].push_back(asset);
         }
@@ -52,8 +54,10 @@ namespace SG::Generator
             uint16_t yS = layout->getSize().y;
             uint16_t xS = layout->getSize().x;
 
+            // each vertical row
             for( size_t y=0; y < yS; y++)
             {   
+                // each node within the horizontal row
                 this->nodes.push_back(vector< Node* >());
                 for(size_t x=0; x < xS; x++)
                 {
@@ -62,13 +66,13 @@ namespace SG::Generator
                     switch( this->checkColor( layout->getPixel(x,y) ))
                     {
                         case FLOOR:
-                            newNode = new Floor(this->assets[ FLOOR ][ ( std::rand() % this->assets[ FLOOR ].size() ) ]);
+                            newNode = generateFloorNode( layout, x, y );
                         break;
                         case WALL:
-                            newNode = new Wall(this->assets[ WALL ][ ( std::rand() % this->assets[ WALL ].size() ) ]);
+                            newNode = generateWallNode( layout, x, y );
                         break;
                         case DOOR:
-                            newNode = new Door(this->assets[ DOOR ][ ( std::rand() % this->assets[ DOOR ].size() ) ]);
+                            newNode = generateDoorNode( layout, x, y );
                         break;
                         default:
                             newNode = new Space();
@@ -87,8 +91,9 @@ namespace SG::Generator
             return SG::Ship::Layout(this->nodes);
         }
         protected:
-        map< TILE, vector< sf::Texture* >> assets;
+        map< TILE, vector< TextureSheet* >> assets;
         vector< vector< Node* >> nodes;
+
 
         private:
         TILE checkColor(const sf::Color &color)
@@ -109,6 +114,249 @@ namespace SG::Generator
             }else{
                 return SPACE;
             }
+        }
+
+        Node* generateWallNode(sf::Image* layout, int xPos, int yPos )
+        {
+            // figure out what section of wall we need and how we need to rotate it
+            TILE top = this->checkColor( layout->getPixel( xPos, yPos - 1 ) );
+            TILE left = this->checkColor( layout->getPixel( xPos - 1, yPos) );
+            TILE right = this->checkColor( layout->getPixel( xPos + 1, yPos) );
+            TILE bottom = this->checkColor( layout->getPixel( xPos, yPos + 1 ) );
+
+            // god... this. is. ugly.
+            Node* wall;
+            // surrounded by other walls
+            if(top == WALL 
+            && bottom == WALL 
+            && left == WALL 
+            && right == WALL)
+            {
+                wall = new Wall( this->assets[WALL][0]->getTexture(0,3) );
+
+            // isolated wall
+            }else if(top == FLOOR 
+                  && bottom == FLOOR 
+                  && left == FLOOR 
+                  && right == FLOOR){
+                wall = new Wall( this->assets[WALL][0]->getTexture(0,4) );
+
+            // straight up wall section
+            }else if(top == WALL
+                  && bottom == WALL
+                  && left == FLOOR
+                  && right == FLOOR){
+                wall = new Wall( this->assets[WALL][0]->getTexture(0,0) );
+
+            // straight across wall section
+            }else if(top == FLOOR
+                  && bottom == FLOOR 
+                  && left == WALL 
+                  && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(0,1) );
+
+            // tri-section down
+            }else if((top == FLOOR || top == DOOR) 
+                   && bottom == WALL 
+                   && left == WALL 
+                   && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(1,0) );
+
+            // tri-section left
+            }else if(top == WALL 
+                  && bottom == WALL 
+                  && left == WALL 
+                  && (right == FLOOR || right == DOOR) ){
+                wall = new Wall( this->assets[WALL][0]->getTexture(1,1) );
+
+            // tri-section top
+            }else if(top == WALL 
+                  && (bottom == FLOOR || bottom  == DOOR) 
+                  && left == WALL 
+                  && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(1,2) );
+
+            // tri-section right
+            }else if(top == WALL 
+                  && bottom == WALL 
+                  && (left == FLOOR || left == DOOR) 
+                  && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(1,3) );
+
+            // edge section right
+            }else if((top == DOOR || top == FLOOR) 
+                  && (bottom == DOOR || bottom == FLOOR) 
+                  && left == WALL 
+                  && (right == DOOR || right == FLOOR)){
+                wall = new Wall( this->assets[WALL][0]->getTexture(2,0) );
+
+            // edge section down
+            }else if(top == WALL 
+                 && (bottom == DOOR || bottom == FLOOR) 
+                 && (left == DOOR || left == FLOOR) 
+                 && (right == DOOR || right == FLOOR)){
+                wall = new Wall( this->assets[WALL][0]->getTexture(2,1) );
+
+            // edge section left
+            }else if((top == DOOR || top == FLOOR) 
+                  && (bottom == DOOR || bottom == FLOOR) 
+                  && (left == DOOR || left == FLOOR) 
+                  && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(2,2) );
+
+            // edge section up
+            }else if((top == DOOR || top == FLOOR) 
+                  && bottom == WALL 
+                  && (left == DOOR || left == FLOOR) 
+                  && (right == DOOR || right == FLOOR)){
+                wall = new Wall( this->assets[WALL][0]->getTexture(2,3) );
+
+            // corner bl
+            }else if(top == WALL 
+                 && (bottom == DOOR || bottom == FLOOR) 
+                 && (left == DOOR || left == FLOOR) 
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(3,0) );
+
+            // corner tl
+            }else if((top == DOOR || top == FLOOR) 
+                   && bottom == WALL 
+                   && (left == DOOR || left == FLOOR) 
+                   && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(3,1) );
+
+            // corner tr
+            }else if((top == DOOR || top == FLOOR) 
+                   && bottom == WALL 
+                   && left == WALL 
+                   && (right == DOOR || right == FLOOR)){
+                wall = new Wall( this->assets[WALL][0]->getTexture(3,2) );
+
+            // corner br
+            }else if(top == WALL 
+                 && (bottom == DOOR || bottom == FLOOR) 
+                 && left == WALL 
+                 && (right == DOOR || right == FLOOR)){
+                wall = new Wall( this->assets[WALL][0]->getTexture(3,3) );
+
+            // space vertical right wall
+            }else if(top == WALL 
+                 && bottom == WALL 
+                 && left == SPACE 
+                 && right == FLOOR){
+                wall = new Wall( this->assets[WALL][0]->getTexture(4,0) );
+
+            // space veritcal left wall
+            }else if(top == WALL 
+                 && bottom == WALL 
+                 && left == FLOOR
+                 && right == SPACE){
+                wall = new Wall( this->assets[WALL][0]->getTexture(4,3) );
+
+            // space horizontal top wall
+            }else if(top == FLOOR 
+                 && bottom == SPACE
+                 && left == WALL
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(4,1) );
+
+            // space horizontal bottom wall
+            }else if(top == SPACE 
+                 && bottom == FLOOR 
+                 && left == WALL
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(4,2) );
+
+            // space br corner
+            }else if(top == SPACE 
+                 && bottom == WALL 
+                 && left == SPACE
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(5,3) );
+
+            // space bl corner
+            }else if(top == SPACE 
+                 && bottom == WALL 
+                 && left == WALL
+                 && right == SPACE){
+                wall = new Wall( this->assets[WALL][0]->getTexture(5,2) );
+
+            // space tl corner
+            }else if(top == WALL 
+                 && bottom == SPACE 
+                 && left == WALL
+                 && right == SPACE){
+                wall = new Wall( this->assets[WALL][0]->getTexture(5,0) );
+
+            // space tr corner
+            }else if(top == WALL
+                 && bottom == SPACE 
+                 && left == SPACE
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(5,1) );
+
+            // space tri-section left
+            }else if(top == WALL
+                 && bottom == WALL 
+                 && left == WALL
+                 && right == SPACE){
+                wall = new Wall( this->assets[WALL][0]->getTexture(6,3) );
+
+            // space tri-section right
+            }else if(top == WALL
+                 && bottom == WALL 
+                 && left == SPACE
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(6,1) );
+
+            // space tri-section top
+            }else if(top == WALL
+                 && bottom == SPACE 
+                 && left == WALL
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(6,0) );
+
+            // space tri-section bottom
+            }else if(top == SPACE
+                 && bottom == WALL 
+                 && left == WALL
+                 && right == WALL){
+                wall = new Wall( this->assets[WALL][0]->getTexture(6,2) );
+
+            }else{
+                wall = new Wall( this->assets[WALL][0]->getTexture(0,3) );
+            }
+
+            return wall;
+        }
+        Node* generateDoorNode(sf::Image* layout, int xPos, int yPos )
+        {
+            TILE top = this->checkColor( layout->getPixel( xPos, yPos - 1 ) );
+            TILE left = this->checkColor( layout->getPixel( xPos - 1, yPos) );
+            TILE right = this->checkColor( layout->getPixel( xPos + 1, yPos) );
+            TILE bottom = this->checkColor( layout->getPixel( xPos, yPos + 1 ) );
+
+            Node* door;
+            if(top == FLOOR || bottom == FLOOR)
+            {
+                door = new Door( this->assets[DOOR][0]->getTexture(0,1), this->assets[FLOOR][0]->getTexture(0,0) );
+
+            }else if( top == WALL || bottom  == WALL){
+                door = new Door( this->assets[DOOR][0]->getTexture(0,0), this->assets[FLOOR][0]->getTexture(0,0) );
+
+            }else if( top == SPACE || bottom == SPACE){
+                door = new Door( this->assets[DOOR][0]->getTexture(1,1), this->assets[FLOOR][0]->getTexture(0,0) );
+
+            }else if( left == SPACE || right == SPACE){
+                door = new Door( this->assets[DOOR][0]->getTexture(1,1), this->assets[FLOOR][0]->getTexture(0,0) );
+            }else{
+                door = new Door( this->assets[DOOR][0]->getTexture(0,1), this->assets[FLOOR][0]->getTexture(0,0) );
+            }
+            return door;
+        }
+        Node* generateFloorNode(sf::Image* layout, int xPos, int yPos )
+        {
+            return new Floor( this->assets[FLOOR][0]->getTexture(0,0) );
         }
     };
 }

@@ -39,10 +39,10 @@ namespace SG::Manager
                 // handles shifting around the ship map using the middle mouse button
                 }else if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ){
                     
-                    if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 100 ){
+                    if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 200 ){
                         view->move( this->shiftAmount, 0);
                         this->shiftedAmount.x++;
-                    }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -100 ){
+                    }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -200 ){
                         view->move( -this->shiftAmount, 0);
                         this->shiftedAmount.x--;
                     }
@@ -82,8 +82,9 @@ namespace SG::Manager
                     // hmmmm
                     if(this->selectionbox.getSize().x < SELECTION_THRESHOLD && this->selectionbox.getSize().y < SELECTION_THRESHOLD)
                     {
-                        this->objectM->checkClicked( mPos );
+                        this->objectM->quickClick( mPos );
                     }
+                    
 
                 }else{
                     leftHeld = false;

@@ -43,10 +43,8 @@ namespace SG::Primitive
         Node* getTopNode() { return this->top; }
         Node* getBottomNode() { return this->bottom; }
         Position* getPosition() { return &this->position; }
-        bool isOccupied()
-        {
-            return this->occupied;
-        }
+        bool isOccupied() { return this->occupied; }
+
 
         protected:
         enum LINKS { LEFT, RIGHT, TOP, BOTTOM };

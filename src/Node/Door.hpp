@@ -11,19 +11,32 @@ namespace SG::Node
         virtual public VisibleNode
     {
         public:
-        Door(sf::Texture* texture) : VisibleNode( texture )
+        Door(sf::Texture* doorTexture, sf::Texture* floorTexture) : VisibleNode( doorTexture )
         {
             this->allowMove = true;
+            this->floor.setTexture( *floorTexture );
         }
         virtual ~Door() {}
         void toggleLocked()
         {
             this->allowMove == true ? this->allowMove = false : this->allowMove = true;
         }
+        virtual void setPosition(int x, int y)
+        {
+            SG::Node::VisibleNode::setPosition(x,y);
+            this->floor.setPosition(x,y);
+        }
         protected:
-        enum DIRECTION { VERTICAL, HORIZONTAL };
+        sf::Sprite floor = sf::Sprite();
+        enum FACING { VERTICAL, HORIZONTAL };
+        enum DIRERECTION_OF_MOVEMENT { UP, DOWN, LEFT, RIGHT };
         bool open = false;
         bool opening = false;
+        virtual void draw(sf::RenderTarget& target)
+        {
+            target.draw( this->floor );
+            SG::Node::VisibleNode::draw( target );
+        }
         
     };
 }

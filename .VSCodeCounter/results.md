@@ -1,31 +1,32 @@
 # Summary
 
-Date : 2020-05-06 22:27:31
+Date : 2020-05-08 22:49:40
 
 Directory f:\Development\repos\SG2
 
-Total : 22 files,  1134 codes, 32 comments, 162 blanks, all 1328 lines
+Total : 23 files,  1416 codes, 56 comments, 209 blanks, all 1681 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| C++ | 22 | 1,134 | 32 | 162 | 1,328 |
+| C++ | 23 | 1,416 | 56 | 209 | 1,681 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 22 | 1,134 | 32 | 162 | 1,328 |
-| src | 20 | 1,065 | 29 | 152 | 1,246 |
-| src\Crew | 1 | 111 | 1 | 21 | 133 |
-| src\Crew\Base | 1 | 111 | 1 | 21 | 133 |
+| . | 23 | 1,416 | 56 | 209 | 1,681 |
+| src | 21 | 1,347 | 53 | 199 | 1,599 |
+| src\Algo | 1 | 151 | 18 | 13 | 182 |
+| src\Crew | 1 | 123 | 3 | 25 | 151 |
+| src\Crew\Base | 1 | 123 | 3 | 25 | 151 |
 | src\Generator | 1 | 93 | 8 | 14 | 115 |
-| src\Manager | 4 | 303 | 8 | 36 | 347 |
-| src\Node | 5 | 148 | 1 | 17 | 166 |
-| src\Node\Base | 1 | 68 | 1 | 4 | 73 |
-| src\Primitive | 6 | 247 | 7 | 41 | 295 |
-| src\Ship | 2 | 150 | 4 | 19 | 173 |
+| src\Manager | 4 | 397 | 11 | 64 | 472 |
+| src\Node | 5 | 154 | 1 | 18 | 173 |
+| src\Node\Base | 1 | 70 | 1 | 4 | 75 |
+| src\Primitive | 6 | 255 | 7 | 42 | 304 |
+| src\Ship | 2 | 161 | 5 | 19 | 185 |
 | src\Tool | 1 | 13 | 0 | 4 | 17 |
 | test | 1 | 25 | 0 | 2 | 27 |
 
