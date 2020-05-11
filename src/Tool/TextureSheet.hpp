@@ -16,7 +16,7 @@ namespace SG::Tool
     class TextureSheet
     {
         public:
-        TextureSheet( string imagePath, int sectionWidth = 16, int sectionHeight = 16 )
+        TextureSheet( string imagePath, uint16_t sectionWidth = 16, uint16_t sectionHeight = 16 )
         {
             this->imagePath = imagePath;
             this->sectionWidth = sectionWidth;
@@ -32,8 +32,8 @@ namespace SG::Tool
                 throw "Section sizes are not consistent with image";    
             }
 
-            int sectionsX = image.getSize().x / this->sectionWidth;
-            int sectionsY = image.getSize().y / this->sectionHeight;
+            uint16_t sectionsX = image.getSize().x / this->sectionWidth;
+            uint16_t sectionsY = image.getSize().y / this->sectionHeight;
 
             for(size_t y = 0; y < sectionsY; y++ )
             {
@@ -55,7 +55,7 @@ namespace SG::Tool
             this->generated = true;
         }
 
-        sf::Texture* getTexture( int y, int x )
+        sf::Texture* getTexture( uint16_t y, uint16_t x )
         {
             if( !this->generated ) this->generateTextures();
 
@@ -70,7 +70,7 @@ namespace SG::Tool
             return nullptr;
         }
         
-        Animation getAnimation( int y = 0 )
+        Animation getAnimation( uint16_t y = 0 )
         {
             if( !this->generated ) this->generateTextures();
             
@@ -88,8 +88,8 @@ namespace SG::Tool
 
         private:
         bool generated = false;
-        int sectionWidth;
-        int sectionHeight;
+        uint16_t sectionWidth;
+        uint16_t sectionHeight;
         string imagePath;
         vector< vector< sf::Texture* >> textureGrid;
     };

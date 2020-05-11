@@ -13,14 +13,14 @@ namespace SG::Primitive
         Animation() {}
         Animation( vector< sf::Texture* > frames ){ this->frames = frames; }
 
-        int index = 0;
+        uint16_t index = 0;
         vector< sf::Texture* > frames;
 
         int frameCount(){ return this->frames.size(); }
         void setFrames( vector< sf::Texture* > frames ){ this->frames = frames; }
         void addFrame( sf::Texture* frame ){ this->frames.push_back( frame ); }
 
-        sf::Texture* getFrameByIndex( int index = 0 )
+        sf::Texture* getFrameByIndex( uint16_t index = 0 )
         {
             if(this->frames.size() <= index ){ return this->frames[ index ]; }
         }
