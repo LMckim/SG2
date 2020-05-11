@@ -1,6 +1,7 @@
 #ifndef SG_MANAGER_EVENT
 #define SG_MANAGER_EVENT
 
+#include <map>
 #include <SFML/Graphics.hpp>
 
 #include <src/Manager/Screen.hpp>
@@ -9,14 +10,22 @@
 
 namespace SG::Manager
 {
+    using std::map;
     using SG::Primitive::Active;
     using SG::Manager::Screen;
     using SG::Manager::Object;
     class Event
     {
         public:
-        Event( Screen* screenM ) : screenM{ screenM } {}
-        Event( Screen* screenM, Object* objectM ) : screenM{ screenM}, objectM{ objectM } {}
+        Event( Screen* screenM, Object* objectM ) : screenM{ screenM }, objectM{ objectM } 
+        {
+            this->selectionbox.setOutlineThickness( 1.f );
+            this->selectionbox.setOutlineColor( sf::Color::Green );
+            this->selectionbox.setFillColor( sf::Color::Transparent );
+
+            // register keys
+            this->keyDelays[ sf::Keyboard::Space ] = 0;
+        }
         void handleEvents()
         {
             sf::RenderWindow* window = this->screenM->window;
@@ -63,9 +72,6 @@ namespace SG::Manager
                         leftHeld = true;
                         this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
                         this->selectionbox.setPosition( selectionOrigin );
-                        this->selectionbox.setOutlineThickness( 1.f );
-                        this->selectionbox.setOutlineColor( sf::Color::Green );
-                        this->selectionbox.setFillColor( sf::Color::Transparent );
 
                         this->screenM->addVisible( &this->selectionbox );
                     }else{
@@ -101,16 +107,21 @@ namespace SG::Manager
                     sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
                     this->objectM->rightClicked( mPos );
                 }
-
-                if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ))
+                // SPACE KEY PRESSED
+                if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) && this->keyDelays[ sf::Keyboard::Space] == 0)
                 {
+                    this->keyDelays[ sf::Keyboard::Space ] = KEY_DELAY_FRAMES;
+                    
+                    std::cout << "pause\n";
                     this->objectM->togglePause();
                 }
 
             }
             this->prevMousePos = sf::Mouse::getPosition( *window );
+            this->decrementKeyDelays();
         }
         private:
+        const uint8_t KEY_DELAY_FRAMES = 15;
         const float SELECTION_THRESHOLD = 1.f;
         bool leftHeld = true;
         sf::Vector2f selectionOrigin;
@@ -126,6 +137,17 @@ namespace SG::Manager
         Screen* screenM;
         Object* objectM;
         Active* active;
+
+        map < sf::Keyboard::Key, uint8_t > keyDelays;
+
+        void decrementKeyDelays()
+        {
+            for( auto &itr : this->keyDelays )
+            {
+                if(itr.second > 0) itr.second--;
+            }
+        }
+
     };
 }
 
