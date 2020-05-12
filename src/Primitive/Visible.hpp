@@ -33,6 +33,7 @@ namespace SG::Primitive
         friend class SG::Manager::Screen;
         public:
         uint8_t zLevel = 0;
+        bool reactive = false;
         virtual ~Visible() {}
         protected:
         sf::Sprite sprite;
@@ -40,6 +41,11 @@ namespace SG::Primitive
         {
             target.draw( this->sprite );
         }
+        void toggleReactive()
+        {
+            this->reactive ? this->reactive = false : this->reactive = true;
+        }
+        virtual void reactiveScale(float zoomFactor) {};
     };
 }
 

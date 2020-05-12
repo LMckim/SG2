@@ -54,7 +54,7 @@ int main()
     SG::Window::BaseWindow window( windowTS, nullptr, &font,"FUCK YEAH", 8, 6);
     window.buildWindow();
 
-    objectM.addVisible( &window );
+    objectM.addVariable( &window );
 
 
     // HERES THE HEART

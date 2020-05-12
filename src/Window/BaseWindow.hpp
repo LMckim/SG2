@@ -37,6 +37,7 @@ namespace SG::Window
         {
             this->zLevel = Z_LAYERS::WINDOW_BASE;
             this->draggable = true;
+            this->reactive = true;
         } 
 
         void buildWindow()
@@ -150,6 +151,7 @@ namespace SG::Window
             this->sprite.setScale( SCALE_ADJ, SCALE_ADJ);
 
             // position our click boxes
+            // TODO: better click box positioning
             header.setPosition(
                 sf::Vector2f(
                     this->sprite.getPosition().x + (SECTION_SIZE * 2 * 2) + (SECTION_SIZE / 2),
@@ -163,7 +165,7 @@ namespace SG::Window
         const sf::Color CLICK_BOX_COLOR = sf::Color::Cyan;
         const float CLICK_BOX_OUTLINE_THICKNESS = 0.75;
         const uint8_t SECTION_SIZE = 16;
-        const int SCALE_ADJ = 3;
+        float SCALE_ADJ = 2;
         TextureSheet* sheet;
 
         bool buildHeader = false;
@@ -183,6 +185,39 @@ namespace SG::Window
         vector< Button > buttons;
         virtual void update() {};
         virtual void handleInput() {};
+        virtual void reactiveScale( float zoomFactor )
+        {
+            // TODO: implement better scaling
+            this->sprite.setScale(
+                this->sprite.getScale().x * zoomFactor,
+                this->sprite.getScale().y * zoomFactor
+            );
+            for( auto &itr : this->clickBoxes )
+            {
+                itr.setScale(
+                    itr.getScale().x * zoomFactor,
+                    itr.getScale().y * zoomFactor
+                );
+            }
+        }
+        virtual void drag( sf::Vector2f mPos )
+        {
+            // TODO: better drag positioning
+            if(this->clickBoxes[0].getGlobalBounds().contains( mPos ) || this->beingDragged)
+            {
+                this->beingDragged = true;
+                this->clickBoxes[0].setPosition(
+                    mPos.x - this->clickBoxes[0].getSize().x / 2,
+                    mPos.y - this->clickBoxes[0].getSize().y / 2
+                );
+                this->sprite.setPosition( 
+                    sf::Vector2f(
+                        this->clickBoxes[0].getPosition().x - (SECTION_SIZE * SCALE_ADJ),
+                        this->clickBoxes[0].getPosition().y
+                    ) 
+                );
+            }
+        }
         virtual void draw(sf::RenderTarget& target)
         {
             target.draw( this->sprite );

@@ -36,17 +36,17 @@ namespace SG::Manager
             {
                 if( event.type == sf::Event::Closed ) window->close();
                 // handles zooming in and out
-                else if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1 && this->scrolls < 30 )
+                if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1 && this->scrolls < 30 )
                 {
                     this->scrolls++;
-                    view->zoom( this->zoomInPerc );
+                    this->screenM->zoom( this->zoomInPerc );
                 }else if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1 && this->scrolls > -10 )
                 {
                     this->scrolls--;
-                    view->zoom( this->zoomOutPerc );
-
+                    this->screenM->zoom( this->zoomOutPerc );
+                }
                 // handles shifting around the ship map using the middle mouse button
-                }else if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ){
+                if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ){
                     
                     if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 200 ){
                         view->move( this->shiftAmount, 0);
@@ -64,17 +64,18 @@ namespace SG::Manager
                         this->shiftedAmount.y--;
                     }
                 }
+
                 // left click actions
                 if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
                     // handle drawing of the selection box
-                    if(leftHeld == false)
+                    if(leftHeld == false && this->objectM->dragging == false)
                     {
                         leftHeld = true;
                         this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
                         this->selectionbox.setPosition( selectionOrigin );
 
                         this->screenM->addVisible( &this->selectionbox );
-                    }else{
+                    }else if( this->objectM->dragging == false){
                         this->selectionbox.setSize(
                             sf::Vector2f(
                                 window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,
@@ -94,6 +95,7 @@ namespace SG::Manager
 
                 }else{
                     leftHeld = false;
+                    this->objectM->dragging = false;
                     if(this->selectionbox.getSize().x > SELECTION_THRESHOLD && this->selectionbox.getSize().y > SELECTION_THRESHOLD)
                     {
                         this->objectM->processSelectionBox( &this->selectionbox );

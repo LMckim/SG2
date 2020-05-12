@@ -143,6 +143,25 @@ namespace SG::Manager
             }
         }
 
+        void zoom( float zoomFactor )
+        {
+            this->view->zoom( zoomFactor );
+            auto itrZ = this->visible.begin();
+            while( itrZ != this->visible.end() )
+            {
+                auto itrV = itrZ->second.begin();
+                while( itrV != itrZ->second.end() )
+                {
+                    if((*itrV)->reactive)
+                    {
+                        (*itrV)->reactiveScale( zoomFactor );
+                    }
+                    itrV++;
+                }
+                itrZ++;
+            }
+        }
+
         private:
         sf::Clock clock;
         sf::Time time;

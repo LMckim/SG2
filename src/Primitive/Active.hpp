@@ -24,7 +24,9 @@ namespace SG::Primitive
         bool selected = false;
         bool groupselect = false;
         bool draggable = false;
+        bool beingDragged = false;
         virtual void select() {};
+        virtual void drag(sf::Vector2f mPos) {};
         // for non-context sensitive right-click actions
         virtual void rightClick() {};
         // for destination or context sensitive right-click actions

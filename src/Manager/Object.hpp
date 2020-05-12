@@ -26,6 +26,8 @@ namespace SG::Manager
     class Object
     {
         public:
+        bool dragging = false;
+
         Object(Screen* screenM) : screenM{ screenM } {}
 
         void update()
@@ -98,16 +100,33 @@ namespace SG::Manager
 
         void quickClick(sf::Vector2f mPos)
         {
-            // TODO: Problems with selection WILL occur HERE, fix when ready
-            this->selected.clear();
-            for(auto &itr : this->actives)
+            // TODO: Problems with selection WILL occur HERE, fix when ready... i dont know what this is referencing anymore :(
+            if(this->dragging == true)
             {
-                if( itr->sprite.getGlobalBounds().contains( mPos ) )
+                this->DraggedObj->drag( mPos );
+            }else{
+
+                this->selected.clear();
+                for(auto &itr : this->actives)
                 {
-                    itr->select();
-                    this->selected.push_back( itr );
-                }else{
-                    itr->selected = false;
+                    if( itr->sprite.getGlobalBounds().contains( mPos ) )
+                    {
+                        itr->select();
+                        this->selected.push_back( itr );
+                        if( itr->draggable )
+                        {
+                            itr->drag( mPos );
+                            this->dragging = true;
+                            this->DraggedObj = itr;
+                            break;
+                        }
+                    }else{
+                        itr->selected = false;
+                        if(itr->draggable){
+                            itr->beingDragged = false;
+                        }
+                    }
+                    this->dragging = false;
                 }
             }
         }
@@ -155,8 +174,6 @@ namespace SG::Manager
         private:
         bool paused = false;
 
-        bool clickedThisCycle = false;
-        bool stillClicked = false;
         const sf::Color SELECTION_BOX_COLOR = sf::Color::Green;
         const float SELECTION_BOX_THICKNESS = 1.f;
 
@@ -165,6 +182,7 @@ namespace SG::Manager
         vector< Variable* > variables;
         vector< Active* > actives;
         vector< Active* > selected;
+        Active* DraggedObj;
         
     };
 }
