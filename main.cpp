@@ -51,10 +51,10 @@ int main()
     // WINDOW TEST
     sf::Image windowImg;
     SG::Tool::TextureSheet* windowTS = new SG::Tool::TextureSheet("assets\\graphics\\window_1.png");
-    SG::Window::BaseWindow window( windowTS, nullptr, &font,"TEST WINDOW", 8, 6);
+    SG::Window::BaseWindow window( windowTS, nullptr, &font,"FUCK YEAH", 8, 6);
     window.buildWindow();
 
-    objectM.addUI( &window );
+    objectM.addVisible( &window );
 
 
     // HERES THE HEART

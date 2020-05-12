@@ -56,10 +56,10 @@ namespace SG::Manager
                         this->shiftedAmount.x--;
                     }
                     
-                    if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.x < 100 ){
+                    if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.y < 100 ){
                         view->move( 0, this->shiftAmount);
                         this->shiftedAmount.y++;
-                    }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.x > -100 ){
+                    }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.y > -100 ){
                         view->move( 0, -this->shiftAmount);
                         this->shiftedAmount.y--;
                     }

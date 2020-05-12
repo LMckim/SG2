@@ -58,7 +58,7 @@ namespace SG::Window
                 {
                     section = this->sheet->getTexture(2,1);
                     // right header
-                }else if(headerX == ( this->width - 1)){
+                }else if(headerX == (uint16_t)( this->width - 1)){
                     section = this->sheet->getTexture(2,2);
                     // middle header
                 }else{
@@ -165,11 +165,11 @@ namespace SG::Window
         const uint8_t SECTION_SIZE = 16;
         const int SCALE_ADJ = 3;
         TextureSheet* sheet;
-        sf::Font* font;
 
         bool buildHeader = false;
         bool showBoxes = true;
         Active* reference;
+        sf::Font* font;
         string title;
         uint8_t width;
         uint8_t height;
