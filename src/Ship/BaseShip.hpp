@@ -4,12 +4,11 @@
 #include <string>
 #include <vector>
 #include <src/Manager/Object.hpp>
-#include <src/Crew/Base/BaseCrew.hpp>
+#include <src/Crew/BaseCrew.hpp>
 #include <src/Ship/Layout.hpp>
 #include <src/Primitive/Node.hpp>
 #include <src/Primitive/Variable.hpp>
 #include <src/Primitive/Visible.hpp>
-#include <src/Crew/Base/BaseCrew.hpp>
 
 namespace SG::Ship
 {
@@ -19,6 +18,7 @@ namespace SG::Ship
     using SG::Crew::Base;
     using SG::Ship::Layout;
     using SG::Primitive::Node;
+    using SG::Primitive::Z_LAYERS;
     using SG::Primitive::Visible;
     using SG::Primitive::Variable;
 
@@ -31,6 +31,7 @@ namespace SG::Ship
         public:
         BaseShip( Object* objectM, sf::Texture* shipSprite, Layout layout ) : objectM{ objectM }, layout{ layout }
         {
+            this->zLevel = Z_LAYERS::SHIP_GRAPHIC;
             this->sprite.setTexture( *shipSprite );
             this->sprite.setOrigin(
                 sf::Vector2f(
@@ -55,8 +56,8 @@ namespace SG::Ship
             for(size_t crew = 0; crew < count; crew++)
             {
                 Node* spawn = this->layout.getRandomFloorNode();
-                if(spawn->isOccupied()) continue;
-                BaseCrew* guy = new BaseCrew(cTex, spawn);
+                if( spawn->isOccupied() ) continue;
+                BaseCrew* guy = new BaseCrew( cTex, spawn );
                 this->objectM->addVariable( guy );
                 this->crew.push_back( guy );
             }

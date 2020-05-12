@@ -7,6 +7,7 @@
 namespace SG::Node::Base
 {
     using SG::Primitive::Node;
+    using SG::Primitive::Z_LAYERS;
     using SG::Primitive::Visible;
 
     class VisibleNode :  
@@ -16,7 +17,7 @@ namespace SG::Node::Base
         public:
         VisibleNode(sf::Texture* texture)
         {           
-            this->zLevel = 5;
+            this->zLevel = Z_LAYERS::SHIP_FLOOR;
             this->sprite.setTexture( *texture );
             this->createBox( texture );
         }

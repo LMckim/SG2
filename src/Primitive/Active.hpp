@@ -23,6 +23,7 @@ namespace SG::Primitive
         protected:
         bool selected = false;
         bool groupselect = false;
+        bool draggable = false;
         virtual void select() {};
         // for non-context sensitive right-click actions
         virtual void rightClick() {};

@@ -9,10 +9,11 @@
 #include <src/Manager/Event.hpp>
 #include <src/Tool/TextureSheet.hpp>
 
-
+// temp for testing
 #include <src/Generator/Layout.hpp>
 #include <src/Ship/BaseShip.hpp>
 #include <src/Ship/Layout.hpp>
+#include <src/Window/BaseWindow.hpp>
 // TESTS (remove before PROD)
 int main()
 {
@@ -23,7 +24,8 @@ int main()
     SG::Manager::Object objectM( &screenM );
     SG::Manager::Event eventM( &screenM, &objectM );
 
-
+    sf::Font font;
+    font.loadFromFile("assets\\font\\munro.ttf");
     // EVERYTHING UNDER HERE IS TEMPORARY, BASED ON IN-GAME
     SG::Tool::TextureSheet* floorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\floor_sheet.png");
     SG::Tool::TextureSheet* interiorWallSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\interior_wall.png");
@@ -45,6 +47,15 @@ int main()
     SG::Ship::BaseShip shipBase( &objectM, ship, layout);
     objectM.addVisible( &shipBase );
     shipBase.generateCrew(5);
+
+    // WINDOW TEST
+    sf::Image windowImg;
+    SG::Tool::TextureSheet* windowTS = new SG::Tool::TextureSheet("assets\\graphics\\window_1.png");
+    SG::Window::BaseWindow window( windowTS, nullptr, &font,"TEST WINDOW", 8, 6);
+    window.buildWindow();
+
+    objectM.addUI( &window );
+
 
     // HERES THE HEART
     while(screenM.window->isOpen())

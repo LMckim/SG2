@@ -1,30 +1,31 @@
-Date : 2020-05-08 22:49:40
+Date : 2020-05-11 21:08:33
 Directory : f:\Development\repos\SG2
-Total : 23 files,  1416 codes, 56 comments, 209 blanks, all 1681 lines
+Total : 27 files,  1889 codes, 121 comments, 310 blanks, all 2320 lines
 
 Languages
 +----------+------------+------------+------------+------------+------------+
 | language | files      | code       | comment    | blank      | total      |
 +----------+------------+------------+------------+------------+------------+
-| C++      |         23 |      1,416 |         56 |        209 |      1,681 |
+| C++      |         27 |      1,889 |        121 |        310 |      2,320 |
 +----------+------------+------------+------------+------------+------------+
 
 Directories
 +--------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                   | files      | code       | comment    | blank      | total      |
 +--------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                      |         23 |      1,416 |         56 |        209 |      1,681 |
-| src                                                    |         21 |      1,347 |         53 |        199 |      1,599 |
-| src\Algo                                               |          1 |        151 |         18 |         13 |        182 |
-| src\Crew                                               |          1 |        123 |          3 |         25 |        151 |
-| src\Crew\Base                                          |          1 |        123 |          3 |         25 |        151 |
-| src\Generator                                          |          1 |         93 |          8 |         14 |        115 |
-| src\Manager                                            |          4 |        397 |         11 |         64 |        472 |
-| src\Node                                               |          5 |        154 |          1 |         18 |        173 |
-| src\Node\Base                                          |          1 |         70 |          1 |          4 |         75 |
-| src\Primitive                                          |          6 |        255 |          7 |         42 |        304 |
-| src\Ship                                               |          2 |        161 |          5 |         19 |        185 |
-| src\Tool                                               |          1 |         13 |          0 |          4 |         17 |
+| .                                                      |         27 |      1,889 |        121 |        310 |      2,320 |
+| src                                                    |         25 |      1,815 |        116 |        295 |      2,226 |
+| src\Algo                                               |          1 |        152 |         17 |         13 |        182 |
+| src\Crew                                               |          1 |        119 |          5 |         25 |        149 |
+| src\Generator                                          |          1 |        273 |         40 |         50 |        363 |
+| src\Manager                                            |          4 |        426 |         17 |         72 |        515 |
+| src\Node                                               |          5 |        168 |          1 |         18 |        187 |
+| src\Node\Base                                          |          1 |         71 |          1 |          4 |         76 |
+| src\Object                                             |          1 |          0 |          0 |          1 |          1 |
+| src\Primitive                                          |          6 |        224 |          4 |         52 |        280 |
+| src\Ship                                               |          2 |        162 |          5 |         19 |        186 |
+| src\Tool                                               |          2 |         95 |          1 |         18 |        114 |
+| src\Window                                             |          2 |        196 |         26 |         27 |        249 |
 | test                                                   |          1 |         25 |          0 |          2 |         27 |
 +--------------------------------------------------------+------------+------------+------------+------------+------------+
 
@@ -32,28 +33,32 @@ Files
 +--------------------------------------------------------+----------+------------+------------+------------+------------+
 | filename                                               | language | code       | comment    | blank      | total      |
 +--------------------------------------------------------+----------+------------+------------+------------+------------+
-| f:\Development\repos\SG2\main.cpp                      | C++      |         44 |          3 |          8 |         55 |
-| f:\Development\repos\SG2\src\Algo\AStar.hpp            | C++      |        151 |         18 |         13 |        182 |
-| f:\Development\repos\SG2\src\Crew\Base\BaseCrew.hpp    | C++      |        123 |          3 |         25 |        151 |
-| f:\Development\repos\SG2\src\Generator\Layout.hpp      | C++      |         93 |          8 |         14 |        115 |
-| f:\Development\repos\SG2\src\Manager\Event.hpp         | C++      |        108 |          5 |         19 |        132 |
-| f:\Development\repos\SG2\src\Manager\Object.hpp        | C++      |        139 |          1 |         23 |        163 |
+| f:\Development\repos\SG2\main.cpp                      | C++      |         49 |          5 |         13 |         67 |
+| f:\Development\repos\SG2\src\Algo\AStar.hpp            | C++      |        152 |         17 |         13 |        182 |
+| f:\Development\repos\SG2\src\Crew\BaseCrew.hpp         | C++      |        119 |          5 |         25 |        149 |
+| f:\Development\repos\SG2\src\Generator\Layout.hpp      | C++      |        273 |         40 |         50 |        363 |
+| f:\Development\repos\SG2\src\Manager\Event.hpp         | C++      |        124 |          7 |         24 |        155 |
+| f:\Development\repos\SG2\src\Manager\Object.hpp        | C++      |        142 |          4 |         23 |        169 |
 | f:\Development\repos\SG2\src\Manager\Resource.hpp      | C++      |         31 |          0 |          6 |         37 |
-| f:\Development\repos\SG2\src\Manager\Screen.hpp        | C++      |        119 |          5 |         16 |        140 |
-| f:\Development\repos\SG2\src\Node\Base\VisibleNode.hpp | C++      |         70 |          1 |          4 |         75 |
-| f:\Development\repos\SG2\src\Node\Door.hpp             | C++      |         26 |          0 |          4 |         30 |
+| f:\Development\repos\SG2\src\Manager\Screen.hpp        | C++      |        129 |          6 |         19 |        154 |
+| f:\Development\repos\SG2\src\Node\Base\VisibleNode.hpp | C++      |         71 |          1 |          4 |         76 |
+| f:\Development\repos\SG2\src\Node\Door.hpp             | C++      |         39 |          0 |          4 |         43 |
 | f:\Development\repos\SG2\src\Node\Floor.hpp            | C++      |         21 |          0 |          3 |         24 |
 | f:\Development\repos\SG2\src\Node\Space.hpp            | C++      |         21 |          0 |          4 |         25 |
 | f:\Development\repos\SG2\src\Node\Wall.hpp             | C++      |         16 |          0 |          3 |         19 |
-| f:\Development\repos\SG2\src\Primitive\Active.hpp      | C++      |         28 |          2 |          6 |         36 |
-| f:\Development\repos\SG2\src\Primitive\Animation.hpp   | C++      |         79 |          3 |          4 |         86 |
+| f:\Development\repos\SG2\src\Object\Console.hpp        | C++      |          0 |          0 |          1 |          1 |
+| f:\Development\repos\SG2\src\Primitive\Active.hpp      | C++      |         29 |          2 |          6 |         37 |
+| f:\Development\repos\SG2\src\Primitive\Animation.hpp   | C++      |         33 |          0 |         10 |         43 |
 | f:\Development\repos\SG2\src\Primitive\Generator.hpp   | C++      |         17 |          0 |          7 |         24 |
 | f:\Development\repos\SG2\src\Primitive\Node.hpp        | C++      |         89 |          0 |         14 |        103 |
 | f:\Development\repos\SG2\src\Primitive\Variable.hpp    | C++      |         19 |          1 |          6 |         26 |
-| f:\Development\repos\SG2\src\Primitive\Visible.hpp     | C++      |         23 |          1 |          5 |         29 |
-| f:\Development\repos\SG2\src\Ship\BaseShip.hpp         | C++      |         74 |          2 |         10 |         86 |
+| f:\Development\repos\SG2\src\Primitive\Visible.hpp     | C++      |         37 |          1 |          9 |         47 |
+| f:\Development\repos\SG2\src\Ship\BaseShip.hpp         | C++      |         75 |          2 |         10 |         87 |
 | f:\Development\repos\SG2\src\Ship\Layout.hpp           | C++      |         87 |          3 |          9 |         99 |
 | f:\Development\repos\SG2\src\Tool\Debug.hpp            | C++      |         13 |          0 |          4 |         17 |
+| f:\Development\repos\SG2\src\Tool\TextureSheet.hpp     | C++      |         82 |          1 |         14 |         97 |
+| f:\Development\repos\SG2\src\Window\BaseWindow.hpp     | C++      |        159 |         25 |         20 |        204 |
+| f:\Development\repos\SG2\src\Window\Button.hpp         | C++      |         37 |          1 |          7 |         45 |
 | f:\Development\repos\SG2\test\layout.hpp               | C++      |         25 |          0 |          2 |         27 |
-| Total                                                  |          |      1,416 |         56 |        209 |      1,681 |
+| Total                                                  |          |      1,889 |        121 |        310 |      2,320 |
 +--------------------------------------------------------+----------+------------+------------+------------+------------+

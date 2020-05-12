@@ -3,8 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <map>
-#include <queue>
 
 #include <src/Primitive/Visible.hpp>
 #include <src/Primitive/Variable.hpp>
@@ -21,12 +19,11 @@ namespace SG::Manager{
 
 namespace SG::Crew
 {
-    using std::multimap;
-    using std::priority_queue;
     using std::vector;
     using std::string;
     using SG::Primitive::Node;
     using SG::Primitive::Variable;
+    using SG::Primitive::Z_LAYERS;
     using SG::Primitive::Visible;
     using SG::Primitive::Active;
 
@@ -45,7 +42,7 @@ namespace SG::Crew
         string name = "Dave";
         Base(sf::Texture* spriteSheet, Node* spawn)
         {
-            this->zLevel = 10;
+            this->zLevel = Z_LAYERS::CREW;
             this->currentNode = spawn;
 
             this->groupselect = true;
@@ -111,11 +108,11 @@ namespace SG::Crew
         virtual void select()
         {
             this->selected = true;
-            std::cout << "My name is: " << this->name << std::endl;
         }
 
         virtual void rightClick(Node* dest)
         {
+            // TODO: do a check to find other crew's destinations and adjust accordingly
             this->destination = dest;
             if(this->currentNode == dest)
             {

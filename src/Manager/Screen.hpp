@@ -73,6 +73,7 @@ namespace SG::Manager
                 while( itrZ != itr->second.end() )
                 {
                     (*itrZ)->draw( *this->window );
+                    itrZ++;
                 }
                 itr++;
             }
@@ -98,6 +99,17 @@ namespace SG::Manager
             }else{
                 this->visible[ visible->zLevel ] = vector< Visible* >();
                 this->visible[ visible->zLevel ].push_back( visible );
+            }
+        }
+        
+        void addUI(Visible* visible)
+        {
+            if( this->ui.find( visible->zLevel ) != this->ui.end())
+            {
+                this->ui[ visible->zLevel ].push_back( visible );
+            }else{
+                this->ui[ visible->zLevel ] = vector< Visible* >();
+                this->ui[ visible->zLevel ].push_back( visible );
             }
         }
 

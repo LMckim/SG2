@@ -49,6 +49,10 @@ namespace SG::Manager
         {
             this->screenM->addVisible( visible );
         }
+        void addUI( Visible* visible )
+        {
+            this->screenM->addUI( visible );
+        }
 
         void addVariable(Variable* variable)
         {
@@ -122,23 +126,29 @@ namespace SG::Manager
 
         void processSelectionBox( sf::RectangleShape* selectionBox)
         {
+            // clear our selected
+            for(size_t i=0; i < this->selected.size(); i++)
+            {
+                this->selected[i]->selected = false;   
+            }
+            this->selected.clear();
+            // select new within the selection box
             for( auto &itr : this->actives )
             {
                 if( selectionBox->getGlobalBounds().contains( itr->sprite.getPosition() ) )
                 {
                     itr->selected = true;
                     this->selected.push_back( itr );
-                }else{
-                    itr->selected = false;
-                    for(size_t i=0; i < this->selected.size(); i++)
-                    {
-                        if( itr == this->selected[i] )
-                        {
-                            this->selected.erase( this->selected.begin() + i );   
-                        }
-                        break;
-                    }
                 }
+            }
+            // cleanup to eliminate any non-group selectable 
+            auto itr = this->selected.begin();
+            while( itr != this->selected.end())
+            {
+                if((*itr)->groupselect == false)
+                {
+                    itr = this->selected.erase( itr );
+                }else itr++;
             }
         }
 
