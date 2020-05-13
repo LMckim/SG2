@@ -41,6 +41,7 @@ namespace SG::Primitive
         {
             target.draw( this->sprite );
         }
+        // TODO: Seperate the reactive bit into a sub-class
         void toggleReactive()
         {
             this->reactive ? this->reactive = false : this->reactive = true;

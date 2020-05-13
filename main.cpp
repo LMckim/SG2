@@ -50,10 +50,14 @@ int main()
 
     // WINDOW TEST
     sf::Image windowImg;
-    SG::Tool::TextureSheet* windowTS = new SG::Tool::TextureSheet("assets\\graphics\\window_1.png");
+    SG::Tool::TextureSheet* windowTS = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\window_1.png");
     SG::Window::BaseWindow window( windowTS, nullptr, &font,"FUCK YEAH", 8, 6);
     window.buildWindow();
 
+    // BUTTON TEST
+    sf::Texture* icon = new sf::Texture();
+    icon->loadFromFile("assets\\graphics\\objects\\build_console_abl.png");
+    window.addButton( icon );
     objectM.addVariable( &window );
 
 

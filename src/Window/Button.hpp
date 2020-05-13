@@ -20,10 +20,10 @@ namespace SG::Window
         friend class BaseWindow;
 
         public:
-        Button(uint8_t zLevel, sf::Texture* buttonTexture, sf::Font* font, string text) : font{ font }
+        Button(sf::Texture *buttonTexture, sf::Font* font, string text) : btnTex{ buttonTexture }, font{ font }
         {
             this->zLevel = Z_LAYERS::WINDOW_BUTTON;
-            this->sprite.setTexture( *buttonTexture );
+            this->sprite.setTexture( *this->btnTex );
             this->text.setString( text );
             this->text.setPosition( 
                 this->sprite.getTexture()->getSize().x / 2,
@@ -31,6 +31,7 @@ namespace SG::Window
             );
         }
         protected:
+        sf::Texture *btnTex;
         sf::Font* font;
         sf::Text text;
         virtual void draw(sf::RenderTarget& target)

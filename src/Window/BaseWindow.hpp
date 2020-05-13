@@ -25,6 +25,7 @@ namespace SG::Window
     using SG::Primitive::Variable;
     using SG::Primitive::Active;
     using SG::Tool::TextureSheet;
+    using SG::Window::Button;
 
     class BaseWindow :
         virtual public Visible,
@@ -159,6 +160,70 @@ namespace SG::Window
                 )
             );
             this->clickBoxes.push_back( header );
+
+            this->originalHeight = this->sprite.getGlobalBounds().height;
+            this->originalWidth = this->sprite.getGlobalBounds().width;
+        }
+
+        void addButton(sf::Texture *icon, uint16_t sectionsX = 2, uint16_t sectionsY = 2, string text = "")
+        {
+            sf::RenderTexture newTex;
+            newTex.create( 64, 64 );
+            newTex.clear( sf::Color::Transparent );
+            
+            vector< sf::Sprite > sections;
+            for(size_t y = 0; y < sectionsY; y++)
+            {
+                for(size_t x = 0; x < sectionsX; x++)
+                {
+                    sf::Sprite section;
+                    sf::Texture* sectionTex;
+                    if( y == 0 && x == 0 )
+                    {
+                        sectionTex = this->sheet->getTexture(3,0);
+                    }else if( y == 0 && x == sectionsX - 1 ){
+                        sectionTex = this->sheet->getTexture(3,1);
+                    }else if( y == sectionsY - 1 && x == 0 ){
+                        sectionTex = this->sheet->getTexture(3,3);
+                    }else if( y == sectionsY - 1 && x == sectionsX - 1 ){
+                        sectionTex = this->sheet->getTexture(3,2);
+                    }
+                    section.setTexture( *sectionTex );
+                    section.setPosition(
+                        x * SECTION_SIZE,
+                        y * SECTION_SIZE
+                    );
+                    sections.push_back( section );
+                }
+            }
+
+            for( auto &itr : sections )
+            {
+                newTex.draw( itr );
+            }
+
+            sf::Sprite icon_S;
+            icon_S.setTexture( *icon );
+            icon_S.setOrigin(
+                sf::Vector2f(
+                    icon->getSize().x / 2,
+                    icon->getSize().y / 2
+                )
+            );
+            icon_S.setPosition(
+                sf::Vector2f(
+                    icon_S.getTexture()->getSize().x / 2,
+                    icon_S.getTexture()->getSize().y / 2
+                )
+            );
+            newTex.draw( icon_S );
+            newTex.display();
+
+            sf::Texture* buttonTex = new sf::Texture();
+            *buttonTex = newTex.getTexture();
+            Button newBtn(buttonTex, this->font, text);
+            this->buttons.push_back( newBtn );
+
         }
 
         protected:
@@ -177,6 +242,10 @@ namespace SG::Window
         uint8_t height;
         sf::Texture texture;
 
+        // used to reference reactive window buttons
+        uint16_t originalWidth;
+        uint16_t originalHeight;
+
         // click boxes are divided into
         //  0 == header (for dragging)
         //  1 == body for w/e
@@ -192,6 +261,7 @@ namespace SG::Window
                 this->sprite.getScale().x * zoomFactor,
                 this->sprite.getScale().y * zoomFactor
             );
+            // clickbox scaling
             for( auto &itr : this->clickBoxes )
             {
                 itr.setScale(
@@ -199,10 +269,21 @@ namespace SG::Window
                     itr.getScale().y * zoomFactor
                 );
             }
+            // button scaling
+            for( auto &itr : this->buttons )
+            {
+                itr.sprite.setScale(
+                    itr.sprite.getScale().x * zoomFactor,
+                    itr.sprite.getScale().y * zoomFactor
+                );
+            }
+            this->positionButtons();
         }
         virtual void drag( sf::Vector2f mPos )
         {
+            // TODO: fix out-of-bounds oddness (buttons dissapear once we go negative)
             // TODO: better drag positioning
+            // TODO: better header clicked sensing
             if(this->clickBoxes[0].getGlobalBounds().contains( mPos ) || this->beingDragged)
             {
                 this->beingDragged = true;
@@ -217,6 +298,7 @@ namespace SG::Window
                     ) 
                 );
             }
+            this->positionButtons();
         }
         virtual void draw(sf::RenderTarget& target)
         {
@@ -231,6 +313,27 @@ namespace SG::Window
                 {
                     target.draw( itr );
                 }
+            }
+        }
+        void positionButtons()
+        {
+            auto btns = this->buttons.begin();
+            // get ratios
+            float ratioX = this->sprite.getGlobalBounds().height / this->originalHeight;
+            float ratioY = this->sprite.getGlobalBounds().width / this->originalWidth;
+            
+            int refX = this->sprite.getPosition().x;
+            int refY = this->sprite.getPosition().y;
+
+            while( btns != this->buttons.end() )
+            {
+                (*btns).sprite.setPosition(
+                    sf::Vector2f(
+                        refX + ( 100  * ratioX),
+                        refY + ( 100  * ratioY)
+                    )
+                );
+                btns++;
             }
         }
     };
