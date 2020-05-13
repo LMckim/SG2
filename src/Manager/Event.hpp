@@ -50,7 +50,6 @@ namespace SG::Manager
                     this->keyDelays[ sf::Keyboard::Space ] = KEY_DELAY_FRAMES;
                     this->objectM->togglePause();
                 }
-                event == sf::Event::MouseButtonPressed
                 
 
             }
