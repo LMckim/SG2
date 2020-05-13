@@ -8,6 +8,7 @@
 #include <src/Manager/Object.hpp>
 #include <src/Primitive/Active.hpp>
 
+// sub modules
 namespace SG::Manager
 {
     using std::map;
@@ -24,7 +25,8 @@ namespace SG::Manager
             this->selectionbox.setFillColor( sf::Color::Transparent );
 
             // register keys
-            this->keyDelays[ sf::Keyboard::Space ] = 0;
+            this->keyDelays[ sf::Keyboard::Space ] = 0; // pausing
+            this->keyDelays[ sf::Keyboard::Tab ] = 0; // changing between map and in-game
         }
         void handleEvents()
         {
@@ -36,87 +38,20 @@ namespace SG::Manager
             {
                 if( event.type == sf::Event::Closed ) window->close();
                 // handles zooming in and out
-                if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == 1 && this->scrolls < 30 )
-                {
-                    this->scrolls++;
-                    this->screenM->zoom( this->zoomInPerc );
-                }else if( event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta == -1 && this->scrolls > -10 )
-                {
-                    this->scrolls--;
-                    this->screenM->zoom( this->zoomOutPerc );
-                }
+                if( event.type == sf::Event::MouseWheelMoved) { this->mouseWheel( &event ); }
                 // handles shifting around the ship map using the middle mouse button
-                if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ){
-                    
-                    if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 200 ){
-                        view->move( this->shiftAmount, 0);
-                        this->shiftedAmount.x++;
-                    }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -200 ){
-                        view->move( -this->shiftAmount, 0);
-                        this->shiftedAmount.x--;
-                    }
-                    
-                    if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.y < 100 ){
-                        view->move( 0, this->shiftAmount);
-                        this->shiftedAmount.y++;
-                    }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.y > -100 ){
-                        view->move( 0, -this->shiftAmount);
-                        this->shiftedAmount.y--;
-                    }
-                }
-
+                if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ) { this->middleClick( window, view ); }
                 // left click actions
-                if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
-                    // handle drawing of the selection box
-                    if( leftHeld == false && this->objectM->dragging == false )
-                    {
-                        leftHeld = true;
-                        this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-                        this->selectionbox.setPosition( selectionOrigin );
-
-                        this->screenM->addVisible( &this->selectionbox );
-                    }else if( this->objectM->dragging == false ){
-                        this->selectionbox.setSize(
-                            sf::Vector2f(
-                                window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,
-                                window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).y - selectionOrigin.y
-                            )
-                        );
-                    }
-
-                    sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-
-                    // hmmmm
-                    if(this->selectionbox.getSize().x < SELECTION_THRESHOLD && this->selectionbox.getSize().y < SELECTION_THRESHOLD)
-                    {
-                        this->objectM->quickClick( mPos );
-                    }
-                    
-
-                }else{
-                    leftHeld = false;
-                    this->objectM->dragging = false;
-                    if(this->selectionbox.getSize().x > SELECTION_THRESHOLD && this->selectionbox.getSize().y > SELECTION_THRESHOLD)
-                    {
-                        this->objectM->processSelectionBox( &this->selectionbox );
-                    }
-        
-                    this->selectionbox.setSize( sf::Vector2f(0,0) );
-                    this->screenM->removeVisible( &this->selectionbox );
-                }
-
-                if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) ){
-                    sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-                    this->objectM->rightClicked( mPos );
-                }
+                this->leftClick( window );
+                if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) ){ this->rightclick( window ); }
                 // SPACE KEY PRESSED
                 if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) && this->keyDelays[ sf::Keyboard::Space] == 0)
                 {
                     this->keyDelays[ sf::Keyboard::Space ] = KEY_DELAY_FRAMES;
-                    
-                    std::cout << "pause\n";
                     this->objectM->togglePause();
                 }
+                event == sf::Event::MouseButtonPressed
+                
 
             }
             this->prevMousePos = sf::Mouse::getPosition( *window );
@@ -129,9 +64,9 @@ namespace SG::Manager
         sf::Vector2f selectionOrigin;
         sf::RectangleShape selectionbox;
 
-        const float shiftAmount = 5;
-        const float zoomInPerc = 0.95f;
-        const float zoomOutPerc = 1.05f;
+        const float SHIFT_AMOUNT = 5;
+        const float ZOOM_IN_PERCENT = 0.95f;
+        const float ZOOM_OUT_PERCENT = 1.05f;
 
         int8_t scrolls = 0;
         sf::Vector2i prevMousePos;
@@ -149,7 +84,83 @@ namespace SG::Manager
                 if(itr.second > 0) itr.second--;
             }
         }
+        void mouseWheel(sf::Event* event)
+        {
+                if(event->mouseWheel.delta == 1 && this->scrolls < 30 )
+                {
+                    this->scrolls++;
+                    this->screenM->zoom( ZOOM_IN_PERCENT );
+                }else if(event->mouseWheel.delta == -1 && this->scrolls > -10 )
+                {
+                    this->scrolls--;
+                    this->screenM->zoom( ZOOM_OUT_PERCENT );
+                }
+        }
+        void middleClick( sf::RenderWindow* window, sf::View* view)
+        {
+            if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 200 ){
+                view->move( SHIFT_AMOUNT, 0);
+                this->shiftedAmount.x++;
+            }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -200 ){
+                // negative shift
+                view->move( -SHIFT_AMOUNT, 0);
+                this->shiftedAmount.x--;
+            }
+            
+            if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.y < 100 ){
+                view->move( 0, this->SHIFT_AMOUNT);
+                this->shiftedAmount.y++;
+            }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.y > -100 ){
+                view->move( 0, -this->SHIFT_AMOUNT);
+                this->shiftedAmount.y--;
+            }
+        }
+        void leftClick( sf::RenderWindow* window )
+        {
+            if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
+                // handle drawing of the selection box
+                if( leftHeld == false && this->objectM->dragging == false )
+                {
+                    leftHeld = true;
+                    this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+                    this->selectionbox.setPosition( selectionOrigin );
 
+                    this->screenM->addVisible( &this->selectionbox );
+                }else if( this->objectM->dragging == false ){
+                    this->selectionbox.setSize(
+                        sf::Vector2f(
+                            window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,
+                            window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).y - selectionOrigin.y
+                        )
+                    );
+                }
+
+                sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+
+                // hmmmm
+                if(this->selectionbox.getSize().x < SELECTION_THRESHOLD && this->selectionbox.getSize().y < SELECTION_THRESHOLD)
+                {
+                    this->objectM->quickClick( mPos );
+                }
+                
+
+            }else{
+                leftHeld = false;
+                this->objectM->dragging = false;
+                if(this->selectionbox.getSize().x > SELECTION_THRESHOLD && this->selectionbox.getSize().y > SELECTION_THRESHOLD)
+                {
+                    this->objectM->processSelectionBox( &this->selectionbox );
+                }
+    
+                this->selectionbox.setSize( sf::Vector2f(0,0) );
+                this->screenM->removeVisible( &this->selectionbox );
+            }
+        }
+        void rightclick( sf::RenderWindow* window )
+        {
+            sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+            this->objectM->rightClicked( mPos );
+        }
     };
 }
 
