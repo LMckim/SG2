@@ -9,13 +9,15 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <src/Primitive/Visible.hpp>
-
-using std::map;
-using std::vector;
-using SG::Primitive::Visible;
+#include <src/Primitive/Visible/Reactive.hpp>
 
 namespace SG::Manager
 {
+    using std::map;
+    using std::vector;
+    using SG::Primitive::Visible;
+    using SG::Primitive::Reactive;
+
     class Screen
     {
         public:
@@ -152,9 +154,9 @@ namespace SG::Manager
                 auto itrV = itrZ->second.begin();
                 while( itrV != itrZ->second.end() )
                 {
-                    if((*itrV)->reactive)
+                    if(Reactive* reactElement = dynamic_cast< Reactive* >((*itrV)))
                     {
-                        (*itrV)->reactiveScale( zoomFactor );
+                        reactElement->reactiveScale( zoomFactor );
                     }
                     itrV++;
                 }

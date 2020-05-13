@@ -57,7 +57,9 @@ namespace SG::Crew
         virtual void setDestination( Node* destination ) { this->destination = destination; }
         virtual void update() 
         {
-            // TODO: some cleanup here to deal with 2 guys vying for the same node
+            // TODO: some cleanup here to deal with 2 guys vying for the same node, one will stop dead and no longer update
+            // we could fix this by having them wait if their only node forward is blocked
+            // however well need to have one take precedence or else theyll lock into a standoff
             if(this->path.size() > 0 && this->currDelay == 0)
             {
                 this->currDelay = 2;

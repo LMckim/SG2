@@ -1,0 +1,27 @@
+DONE :: refactor reactive elements into sub-class
+
+refactor any collidable objects into sub-class 
+
+refactor Event class
+
+placeable objects
+    - objects class 
+    - placeable gird logic
+    - placeable rotation logic
+
+normal mapping and affective lighting
+
+space mapping
+    - generate solar system
+    - track ship location
+    - enable ship movement around map at fuel cost
+    - allow interaction with map objects
+    - other entities on map
+
+crew
+    - fix issue with crew stopping when blocked
+
+large crew
+    - 2x2 grid spacing
+    - 3x3 grid spacing 
+    - A* implementations for above

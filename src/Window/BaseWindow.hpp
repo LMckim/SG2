@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include <src/Primitive/Visible.hpp>
+#include <src/Primitive/Visible/Reactive.hpp>
 #include <src/Primitive/Variable.hpp>
 #include <src/Primitive/Active.hpp>
 
@@ -21,14 +21,14 @@ namespace SG::Window
     using std::string;
     using SG::Manager::Object;
     using SG::Primitive::Z_LAYERS;
-    using SG::Primitive::Visible;
+    using SG::Primitive::Reactive;
     using SG::Primitive::Variable;
     using SG::Primitive::Active;
     using SG::Tool::TextureSheet;
     using SG::Window::Button;
 
     class BaseWindow :
-        virtual public Visible,
+        virtual public Reactive,
         virtual public Variable,
         virtual public Active
     {
@@ -38,7 +38,6 @@ namespace SG::Window
         {
             this->zLevel = Z_LAYERS::WINDOW_BASE;
             this->draggable = true;
-            this->reactive = true;
         } 
 
         void buildWindow()
@@ -181,11 +180,11 @@ namespace SG::Window
                     if( y == 0 && x == 0 )
                     {
                         sectionTex = this->sheet->getTexture(3,0);
-                    }else if( y == 0 && x == sectionsX - 1 ){
+                    }else if( y == 0 && x == (uint16_t)(sectionsX - 1) ){
                         sectionTex = this->sheet->getTexture(3,1);
-                    }else if( y == sectionsY - 1 && x == 0 ){
+                    }else if( y == (uint16_t)(sectionsY - 1) && x == 0 ){
                         sectionTex = this->sheet->getTexture(3,3);
-                    }else if( y == sectionsY - 1 && x == sectionsX - 1 ){
+                    }else if( y == (uint16_t)(sectionsY - 1) && x == (uint16_t)(sectionsX - 1) ){
                         sectionTex = this->sheet->getTexture(3,2);
                     }
                     section.setTexture( *sectionTex );
@@ -279,21 +278,23 @@ namespace SG::Window
             }
             this->positionButtons();
         }
+
         virtual void drag( sf::Vector2f mPos )
         {
-            // TODO: fix out-of-bounds oddness (buttons dissapear once we go negative)
             // TODO: better drag positioning
             // TODO: better header clicked sensing
             if(this->clickBoxes[0].getGlobalBounds().contains( mPos ) || this->beingDragged)
             {
                 this->beingDragged = true;
                 this->clickBoxes[0].setPosition(
-                    mPos.x - this->clickBoxes[0].getSize().x / 2,
-                    mPos.y - this->clickBoxes[0].getSize().y / 2
+                    // position the box at the mouse position minus half its width
+                    mPos.x - this->clickBoxes[0].getGlobalBounds().width / 2,
+                    mPos.y - this->clickBoxes[0].getGlobalBounds().height / 2
                 );
                 this->sprite.setPosition( 
                     sf::Vector2f(
-                        this->clickBoxes[0].getPosition().x - (SECTION_SIZE * SCALE_ADJ),
+                        // get the position of the header, minus a section ( header should always be in the middle ), multiply by the scaled ratio
+                        this->clickBoxes[0].getPosition().x - ((SECTION_SIZE * SCALE_ADJ) * (this->sprite.getGlobalBounds().width / this->originalWidth)),
                         this->clickBoxes[0].getPosition().y
                     ) 
                 );
@@ -317,6 +318,7 @@ namespace SG::Window
         }
         void positionButtons()
         {
+            // TODO: setup grid placement within the window
             auto btns = this->buttons.begin();
             // get ratios
             float ratioX = this->sprite.getGlobalBounds().height / this->originalHeight;
@@ -329,8 +331,8 @@ namespace SG::Window
             {
                 (*btns).sprite.setPosition(
                     sf::Vector2f(
-                        refX + ( 100  * ratioX),
-                        refY + ( 100  * ratioY)
+                        refX + ( 100  * ratioX ),
+                        refY + ( 100  * ratioY )
                     )
                 );
                 btns++;

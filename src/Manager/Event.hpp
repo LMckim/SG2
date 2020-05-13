@@ -68,14 +68,14 @@ namespace SG::Manager
                 // left click actions
                 if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
                     // handle drawing of the selection box
-                    if(leftHeld == false && this->objectM->dragging == false)
+                    if( leftHeld == false && this->objectM->dragging == false )
                     {
                         leftHeld = true;
                         this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
                         this->selectionbox.setPosition( selectionOrigin );
 
                         this->screenM->addVisible( &this->selectionbox );
-                    }else if( this->objectM->dragging == false){
+                    }else if( this->objectM->dragging == false ){
                         this->selectionbox.setSize(
                             sf::Vector2f(
                                 window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,

@@ -5,6 +5,7 @@
 #include <src/Primitive/Generator.hpp>
 #include <src/Ship/Layout.hpp>
 #include <src/Tool/TextureSheet.hpp>
+#include <src/Primitive/Visible.hpp>
 
 #include <src/Node/Wall.hpp>
 #include <src/Node/Floor.hpp>
@@ -20,6 +21,7 @@ namespace SG::Generator
     using SG::Manager::Object;
     using SG::Primitive::Node;
     using SG::Primitive::Generator;
+    using SG::Primitive::Visible;
 
     using SG::Node::Floor;
     using SG::Node::Wall;
