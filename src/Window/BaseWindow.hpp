@@ -55,7 +55,7 @@ namespace SG::Window
             // ************ HEADER **************
             // build the reactive lock button
             sf::Sprite lock;
-            lock.setTexture( *this->sheet->getTexture(3,0) );
+            lock.setTexture( *this->sheet->getTexture(3,1) );
             lock.setPosition(0,0);
             texture.draw( lock );
             // build the lock click box
@@ -321,6 +321,7 @@ namespace SG::Window
             // reactive lock toggle
             }else if(this->clickBoxes[0].getGlobalBounds().contains( mPos )){ 
                 this->currentlyReactive ? this->currentlyReactive = false : this->currentlyReactive = true;
+                this->swapLockIcon();
             // content box clicked
             }else if(this->clickBoxes[3].getGlobalBounds().contains( mPos )){
                 this->checkButtonClicked( mPos );
@@ -355,6 +356,7 @@ namespace SG::Window
                 }
             }
         }
+        // mainly for re-scaling
         void positionClickBoxes()
         {
 
@@ -379,6 +381,7 @@ namespace SG::Window
                 this->clickBoxes[0].getGlobalBounds().top + this->clickBoxes[0].getGlobalBounds().height
             );
         }
+        // for drag positioning
         void positionClickBoxes(sf::Vector2f mPos)
         {
             // header
@@ -485,6 +488,29 @@ namespace SG::Window
                     break; // found the button, we can break
                 }
             }
+        }
+        void swapLockIcon()
+        {
+            sf::Sprite newSprite;
+            sf::Sprite oldSprite;
+            sf::Texture* newIcon;
+            if(this->currentlyReactive)
+            {
+                newIcon = this->sheet->getTexture(3,1);
+            }else newIcon = this->sheet->getTexture(3,0);
+            newSprite.setTexture( *newIcon );
+            newSprite.setPosition(0,0);
+            oldSprite.setTexture( this->texture );
+            oldSprite.setPosition(0,0);
+            sf::RenderTexture swap;
+            swap.create( this->texture.getSize().x, this->texture.getSize().y );
+            swap.clear( sf::Color::Transparent );
+            swap.draw( oldSprite );
+            swap.draw( newSprite );
+            swap.display();
+
+            this->texture = swap.getTexture();
+
         }
     };
 }
