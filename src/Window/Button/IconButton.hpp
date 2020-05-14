@@ -20,6 +20,9 @@ namespace SG::Window
         IconButton(sf::Texture *buttonTexture) : Button{ buttonTexture }
         {
         }
+        virtual ~IconButton()
+        {
+        }
         protected:
     };
 }

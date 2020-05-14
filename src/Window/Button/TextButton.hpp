@@ -30,6 +30,9 @@ namespace SG::Window
             );
             this->positionText();
         }
+        virtual ~TextButton()
+        {
+        }
         protected:
         sf::Font* font;
         sf::Text text;
@@ -53,7 +56,7 @@ namespace SG::Window
         }
         virtual void draw(sf::RenderTarget& target)
         {
-            target.draw( this->sprite );
+            Button::draw( target );
             target.draw( this->text );
         }
     };

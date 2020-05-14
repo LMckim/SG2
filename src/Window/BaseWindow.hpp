@@ -168,7 +168,17 @@ namespace SG::Window
             {
                 texture.draw( itr );
             }
-
+            sf::RectangleShape contentBox;
+            contentBox.setFillColor( sf::Color::Transparent );
+            contentBox.setOutlineColor( CLICK_BOX_COLOR );
+            contentBox.setOutlineThickness( CLICK_BOX_OUTLINE_THICKNESS );
+            contentBox.setSize(
+                sf::Vector2f(
+                    (this->width + 1) * (SECTION_SIZE * SCALE_ADJ), // why +1? :S 
+                    this->height * (SECTION_SIZE * SCALE_ADJ) 
+                )
+            );
+            this->clickBoxes.push_back( contentBox );
             // ************ TEXT **************
             // add in our window title
             sf::Text titleText;
@@ -194,6 +204,8 @@ namespace SG::Window
 
             this->originalHeight = this->sprite.getGlobalBounds().height;
             this->originalWidth = this->sprite.getGlobalBounds().width;
+            this->positionButtons();
+            this->positionClickBoxes();
         }
 
         void addIconButton(sf::Texture *icon, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
@@ -309,6 +321,9 @@ namespace SG::Window
             // reactive lock toggle
             }else if(this->clickBoxes[0].getGlobalBounds().contains( mPos )){ 
                 this->currentlyReactive ? this->currentlyReactive = false : this->currentlyReactive = true;
+            // content box clicked
+            }else if(this->clickBoxes[3].getGlobalBounds().contains( mPos )){
+                this->checkButtonClicked( mPos );
             }else if(this->clickBoxes[1].getGlobalBounds().contains( mPos ) || this->beingDragged)
             {
                 // TODO: better header clicked sensing, AKA fix extra clicking
@@ -358,6 +373,11 @@ namespace SG::Window
                 this->clickBoxes[1].getGlobalBounds().left + this->clickBoxes[1].getGlobalBounds().width,
                 this->clickBoxes[1].getGlobalBounds().top
             );
+            // body
+            this->clickBoxes[3].setPosition(
+                this->clickBoxes[0].getGlobalBounds().left,
+                this->clickBoxes[0].getGlobalBounds().top + this->clickBoxes[0].getGlobalBounds().height
+            );
         }
         void positionClickBoxes(sf::Vector2f mPos)
         {
@@ -376,6 +396,11 @@ namespace SG::Window
             this->clickBoxes[2].setPosition(
                 this->clickBoxes[1].getGlobalBounds().left + this->clickBoxes[1].getGlobalBounds().width,
                 this->clickBoxes[1].getGlobalBounds().top
+            );
+            // body
+            this->clickBoxes[3].setPosition(
+                this->clickBoxes[0].getGlobalBounds().left,
+                this->clickBoxes[0].getGlobalBounds().top + this->clickBoxes[0].getGlobalBounds().height
             );
         }
         void positionButtons()
@@ -449,6 +474,17 @@ namespace SG::Window
                 newTex.draw( itr );
             }
 
+        }
+        void checkButtonClicked(sf::Vector2f mPos)
+        {
+            for( auto &itr : this->buttons )
+            {
+                if( itr->sprite.getGlobalBounds().contains( mPos ) )
+                {
+                    itr->onClick();
+                    break; // found the button, we can break
+                }
+            }
         }
     };
 }

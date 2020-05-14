@@ -29,6 +29,7 @@ namespace SG::Primitive
         // TODO: seperate out drag functionality
         virtual void drag(sf::Vector2f mPos) {};
         // for non-context sensitive right-click actions
+        virtual void leftClick() {};
         virtual void rightClick() {};
         // for destination or context sensitive right-click actions
         virtual void rightClick(Node* node) {};
