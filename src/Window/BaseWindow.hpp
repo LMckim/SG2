@@ -491,17 +491,21 @@ namespace SG::Window
         }
         void swapLockIcon()
         {
+            // TODO: fix the layering bug
             sf::Sprite newSprite;
             sf::Sprite oldSprite;
             sf::Texture* newIcon;
+
             if(this->currentlyReactive)
             {
                 newIcon = this->sheet->getTexture(3,1);
             }else newIcon = this->sheet->getTexture(3,0);
+
             newSprite.setTexture( *newIcon );
             newSprite.setPosition(0,0);
             oldSprite.setTexture( this->texture );
             oldSprite.setPosition(0,0);
+            
             sf::RenderTexture swap;
             swap.create( this->texture.getSize().x, this->texture.getSize().y );
             swap.clear( sf::Color::Transparent );

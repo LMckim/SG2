@@ -114,7 +114,9 @@ namespace SG::Algo
                     if( AStar::inVector( closed, itr ) ){
                         delete itr;
                         continue;
-                    // if its already in the open vecotr.... do. something?
+                    // if its already in the open vector
+                    // check if its a better match for the path than the current itr
+                    // if so then delete the stored node and add the better candidate to the open vector
                     }else if(PathNode* nP = AStar::inVector( open, itr ) ){
                         // if the existing open node is worse than the current one then replace it
                         if(nP->getTotalHeuristicCost() > itr->getTotalHeuristicCost())
