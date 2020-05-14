@@ -8,7 +8,8 @@
 #include <src/Primitive/Variable.hpp>
 #include <src/Primitive/Active.hpp>
 
-#include <src/Window/Button.hpp>
+#include <src/Window/Button/IconButton.hpp>
+#include <src/Window/Button/TextButton.hpp>
 #include <src/Tool/TextureSheet.hpp>
 
 namespace SG::Manager{
@@ -39,7 +40,10 @@ namespace SG::Window
             this->zLevel = Z_LAYERS::WINDOW_BASE;
             this->draggable = true;
         } 
-
+        virtual ~BaseWindow()
+        {
+            while(!this->buttons.empty()) delete this->buttons.back(), this->buttons.pop_back();
+        }
         void buildWindow()
         {
             sf::RenderTexture texture;
@@ -49,7 +53,24 @@ namespace SG::Window
 
             vector< sf::Sprite > sections;
             // ************ HEADER **************
-            // build the header
+            // build the reactive lock button
+            sf::Sprite lock;
+            lock.setTexture( *this->sheet->getTexture(3,0) );
+            lock.setPosition(0,0);
+            texture.draw( lock );
+            // build the lock click box
+            sf::RectangleShape lockBox;
+            lockBox.setFillColor( sf::Color::Transparent );
+            lockBox.setOutlineColor( CLICK_BOX_COLOR );
+            lockBox.setOutlineThickness( CLICK_BOX_OUTLINE_THICKNESS );
+            lockBox.setSize(
+                sf::Vector2f(
+                    SECTION_SIZE * SCALE_ADJ, 
+                    SECTION_SIZE * SCALE_ADJ
+                )
+            );
+            this->clickBoxes.push_back( lockBox );
+            // build the header title section
             for(size_t headerX = 1; headerX < this->width; headerX++)
             {
                 sf::Sprite sprite;
@@ -77,11 +98,29 @@ namespace SG::Window
             header.setOutlineThickness( CLICK_BOX_OUTLINE_THICKNESS );
             header.setSize(
                 sf::Vector2f(
-                    (this->width * SECTION_SIZE * SCALE_ADJ) - (SECTION_SIZE * 2 * SCALE_ADJ),
+                    // the width of the box minus 2 sections
+                    ((this->width * SECTION_SIZE) * SCALE_ADJ) - (SECTION_SIZE * SCALE_ADJ),
                     SECTION_SIZE * SCALE_ADJ
                 )
             );
-
+            this->clickBoxes.push_back( header );
+            // build the exit button
+            sf::Sprite exit;
+            exit.setTexture( *this->sheet->getTexture(3,2) );
+            exit.setPosition( this->width * SECTION_SIZE, 0 );
+            texture.draw( exit );
+            // build the lock click box
+            sf::RectangleShape exitBox;
+            exitBox.setFillColor( sf::Color::Transparent );
+            exitBox.setOutlineColor( CLICK_BOX_COLOR );
+            exitBox.setOutlineThickness( CLICK_BOX_OUTLINE_THICKNESS );
+            exitBox.setSize(
+                sf::Vector2f(
+                    SECTION_SIZE * SCALE_ADJ, 
+                    SECTION_SIZE * SCALE_ADJ
+                )
+            );
+            this->clickBoxes.push_back( exitBox );
 
             // ************ BODY **************
             // build the main window section
@@ -152,55 +191,15 @@ namespace SG::Window
 
             // position our click boxes
             // TODO: better click box positioning
-            header.setPosition(
-                sf::Vector2f(
-                    this->sprite.getPosition().x + (SECTION_SIZE * 2 * 2) + (SECTION_SIZE / 2),
-                    this->sprite.getPosition().y
-                )
-            );
-            this->clickBoxes.push_back( header );
 
             this->originalHeight = this->sprite.getGlobalBounds().height;
             this->originalWidth = this->sprite.getGlobalBounds().width;
         }
 
-        void addButton(sf::Texture *icon, uint16_t sectionsX = 2, uint16_t sectionsY = 2, string text = "")
+        void addIconButton(sf::Texture *icon, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
         {
             sf::RenderTexture newTex;
-            newTex.create( 64, 64 );
-            newTex.clear( sf::Color::Transparent );
-            
-            vector< sf::Sprite > sections;
-            for(size_t y = 0; y < sectionsY; y++)
-            {
-                for(size_t x = 0; x < sectionsX; x++)
-                {
-                    sf::Sprite section;
-                    sf::Texture* sectionTex;
-                    if( y == 0 && x == 0 )
-                    {
-                        sectionTex = this->sheet->getTexture(3,0);
-                    }else if( y == 0 && x == (uint16_t)(sectionsX - 1) ){
-                        sectionTex = this->sheet->getTexture(3,1);
-                    }else if( y == (uint16_t)(sectionsY - 1) && x == 0 ){
-                        sectionTex = this->sheet->getTexture(3,3);
-                    }else if( y == (uint16_t)(sectionsY - 1) && x == (uint16_t)(sectionsX - 1) ){
-                        sectionTex = this->sheet->getTexture(3,2);
-                    }
-                    section.setTexture( *sectionTex );
-                    section.setPosition(
-                        x * SECTION_SIZE,
-                        y * SECTION_SIZE
-                    );
-                    sections.push_back( section );
-                }
-            }
-
-            for( auto &itr : sections )
-            {
-                newTex.draw( itr );
-            }
-
+            this->buildButtonBackground(newTex, sectionsX, sectionsY );
             sf::Sprite icon_S;
             icon_S.setTexture( *icon );
             icon_S.setOrigin(
@@ -217,11 +216,26 @@ namespace SG::Window
             );
             newTex.draw( icon_S );
             newTex.display();
-
+            // TODO: keep an eye out here for a leak
             sf::Texture* buttonTex = new sf::Texture();
             *buttonTex = newTex.getTexture();
-            Button newBtn(buttonTex, this->font, text);
+            Button* newBtn = new IconButton(buttonTex);
             this->buttons.push_back( newBtn );
+            this->positionButtons();
+
+        }
+        
+        void addTextButton(string text, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
+        {
+            sf::RenderTexture newTex;
+            this->buildButtonBackground(newTex, sectionsX, sectionsY );
+            newTex.display();
+            // TODO: keep an eye out here for a leak
+            sf::Texture* buttonTex = new sf::Texture();
+            *buttonTex = newTex.getTexture();
+            Button* newBtn = new TextButton(buttonTex, this->font, text);
+            this->buttons.push_back( newBtn );
+            this->positionButtons();
 
         }
 
@@ -246,55 +260,65 @@ namespace SG::Window
         uint16_t originalHeight;
 
         // click boxes are divided into
-        //  0 == header (for dragging)
-        //  1 == body for w/e
-        //  3 == exit button
+        //  0 == reactive lock
+        //  1 == header (for dragging)
+        //  2 == exit button
+        //  3 == body click area
         vector< sf::RectangleShape > clickBoxes;
-        vector< Button > buttons;
-        virtual void update() {};
+        vector< Button* > buttons;
+        virtual void update() 
+        {
+            // if(this->beingDragged == true) this->beingDragged = false;
+        };
         virtual void handleInput() {};
         virtual void reactiveScale( float zoomFactor )
         {
-            // TODO: implement better scaling
-            this->sprite.setScale(
-                this->sprite.getScale().x * zoomFactor,
-                this->sprite.getScale().y * zoomFactor
-            );
-            // clickbox scaling
-            for( auto &itr : this->clickBoxes )
+            if(this->currentlyReactive)
             {
-                itr.setScale(
-                    itr.getScale().x * zoomFactor,
-                    itr.getScale().y * zoomFactor
+                // TODO: implement better scaling
+                this->sprite.setScale(
+                    this->sprite.getScale().x * zoomFactor,
+                    this->sprite.getScale().y * zoomFactor
                 );
+                // clickbox scaling
+                for( auto &itr : this->clickBoxes )
+                {
+                    itr.setScale(
+                        itr.getScale().x * zoomFactor,
+                        itr.getScale().y * zoomFactor
+                    );
+                }
+                // button scaling
+                for( auto &itr : this->buttons )
+                {
+                    itr->scale( zoomFactor );
+                }
+                // hacky fo sho
+                this->positionClickBoxes();
+                this->positionButtons();
             }
-            // button scaling
-            for( auto &itr : this->buttons )
-            {
-                itr.sprite.setScale(
-                    itr.sprite.getScale().x * zoomFactor,
-                    itr.sprite.getScale().y * zoomFactor
-                );
-            }
-            this->positionButtons();
         }
 
         virtual void drag( sf::Vector2f mPos )
         {
-            // TODO: better drag positioning
-            // TODO: better header clicked sensing
-            if(this->clickBoxes[0].getGlobalBounds().contains( mPos ) || this->beingDragged)
+            // clicked on the exit button
+            if(this->clickBoxes[2].getGlobalBounds().contains( mPos ))
             {
+                this->destroy = true;
+            
+            // reactive lock toggle
+            }else if(this->clickBoxes[0].getGlobalBounds().contains( mPos )){ 
+                this->currentlyReactive ? this->currentlyReactive = false : this->currentlyReactive = true;
+            }else if(this->clickBoxes[1].getGlobalBounds().contains( mPos ) || this->beingDragged)
+            {
+                // TODO: better header clicked sensing, AKA fix extra clicking
+                // check the title click box
                 this->beingDragged = true;
-                this->clickBoxes[0].setPosition(
-                    // position the box at the mouse position minus half its width
-                    mPos.x - this->clickBoxes[0].getGlobalBounds().width / 2,
-                    mPos.y - this->clickBoxes[0].getGlobalBounds().height / 2
-                );
+                this->positionClickBoxes( mPos );
                 this->sprite.setPosition( 
                     sf::Vector2f(
                         // get the position of the header, minus a section ( header should always be in the middle ), multiply by the scaled ratio
-                        this->clickBoxes[0].getPosition().x - ((SECTION_SIZE * SCALE_ADJ) * (this->sprite.getGlobalBounds().width / this->originalWidth)),
+                        this->clickBoxes[0].getPosition().x,
                         this->clickBoxes[0].getPosition().y
                     ) 
                 );
@@ -306,7 +330,7 @@ namespace SG::Window
             target.draw( this->sprite );
             for( auto &itr : this->buttons )
             {
-                itr.draw( target );
+                itr->draw( target );
             }
             if(this->showBoxes)
             {
@@ -315,6 +339,44 @@ namespace SG::Window
                     target.draw( itr );
                 }
             }
+        }
+        void positionClickBoxes()
+        {
+
+            // lock
+            this->clickBoxes[0].setPosition(
+                this->sprite.getPosition().x,
+                this->sprite.getPosition().y
+            );
+            // title
+            this->clickBoxes[1].setPosition(
+                this->clickBoxes[0].getGlobalBounds().left + this->clickBoxes[0].getGlobalBounds().width,
+                this->clickBoxes[0].getGlobalBounds().top
+            );
+            // exit
+            this->clickBoxes[2].setPosition(
+                this->clickBoxes[1].getGlobalBounds().left + this->clickBoxes[1].getGlobalBounds().width,
+                this->clickBoxes[1].getGlobalBounds().top
+            );
+        }
+        void positionClickBoxes(sf::Vector2f mPos)
+        {
+            // header
+            this->clickBoxes[1].setPosition(
+                // position the box at the mouse position minus half its width
+                mPos.x - this->clickBoxes[1].getGlobalBounds().width / 2,
+                mPos.y - this->clickBoxes[1].getGlobalBounds().height / 2
+            );
+            // lock
+            this->clickBoxes[0].setPosition(
+                this->clickBoxes[1].getGlobalBounds().left - this->clickBoxes[0].getGlobalBounds().width,
+                this->clickBoxes[1].getGlobalBounds().top
+            );
+            // exit
+            this->clickBoxes[2].setPosition(
+                this->clickBoxes[1].getGlobalBounds().left + this->clickBoxes[1].getGlobalBounds().width,
+                this->clickBoxes[1].getGlobalBounds().top
+            );
         }
         void positionButtons()
         {
@@ -327,16 +389,66 @@ namespace SG::Window
             int refX = this->sprite.getPosition().x;
             int refY = this->sprite.getPosition().y;
 
+            int offsetX = SECTION_SIZE * 2;
+            int offsetY = SECTION_SIZE * 4;
+
             while( btns != this->buttons.end() )
             {
-                (*btns).sprite.setPosition(
-                    sf::Vector2f(
-                        refX + ( 100  * ratioX ),
-                        refY + ( 100  * ratioY )
-                    )
+                sf::Vector2f pos = sf::Vector2f(                        
+                    refX + (ratioX * offsetX),
+                    refY + (ratioY * offsetY)
                 );
+                (*btns)->setPosition(pos);
+                // TODO: more corrections of offsets to deal with window boundries
+                offsetX += (*btns)->sprite.getTexture()->getSize().x + SECTION_SIZE;
+
                 btns++;
             }
+        }
+        void buildButtonBackground(sf::RenderTexture& newTex, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
+        {
+            newTex.create( SECTION_SIZE * sectionsX, SECTION_SIZE * sectionsY );
+            newTex.clear( sf::Color::Transparent );
+            
+            vector< sf::Sprite > sections;
+            for(size_t y = 0; y < sectionsY; y++)
+            {
+                for(size_t x = 0; x < sectionsX; x++)
+                {
+                    sf::Sprite section;
+                    sf::Texture* sectionTex;
+                    if( y == 0 && x == 0 )
+                    {
+                        sectionTex = this->sheet->getTexture(4,0);
+                    }else if( y == 0 && x == (uint16_t)(sectionsX - 1) ){
+                        sectionTex = this->sheet->getTexture(4,1);
+                    }else if( y == (uint16_t)(sectionsY - 1) && x == 0 ){
+                        sectionTex = this->sheet->getTexture(4,3);
+                    }else if( y == (uint16_t)(sectionsY - 1) && x == (uint16_t)(sectionsX - 1) ){
+                        sectionTex = this->sheet->getTexture(4,2);
+                    }else if(x == 0){
+                        sectionTex = this->sheet->getTexture(5,0);
+                    }else if(x == (uint16_t)(sectionsX - 1)){
+                        sectionTex = this->sheet->getTexture(5,1);
+                    }else if(y == 0){
+                        sectionTex = this->sheet->getTexture(5,3);
+                    }else if(y == (uint16_t)(sectionsY - 1)){
+                        sectionTex = this->sheet->getTexture(5,2);
+                    }
+                    section.setTexture( *sectionTex );
+                    section.setPosition(
+                        x * SECTION_SIZE,
+                        y * SECTION_SIZE
+                    );
+                    sections.push_back( section );
+                }
+            }
+
+            for( auto &itr : sections )
+            {
+                newTex.draw( itr );
+            }
+
         }
     };
 }

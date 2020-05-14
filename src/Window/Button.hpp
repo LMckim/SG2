@@ -20,24 +20,31 @@ namespace SG::Window
         friend class BaseWindow;
 
         public:
-        Button(sf::Texture *buttonTexture, sf::Font* font, string text) : btnTex{ buttonTexture }, font{ font }
+        Button(sf::Texture *buttonTexture) : btnTex{ buttonTexture }
         {
             this->zLevel = Z_LAYERS::WINDOW_BUTTON;
             this->sprite.setTexture( *this->btnTex );
-            this->text.setString( text );
-            this->text.setPosition( 
-                this->sprite.getTexture()->getSize().x / 2,
-                this->sprite.getTexture()->getSize().y / 2
-            );
+        }
+        virtual ~Button()
+        {
+            delete btnTex;
         }
         protected:
         sf::Texture *btnTex;
-        sf::Font* font;
-        sf::Text text;
+        virtual void scale(float scaleFactor)
+        {
+            this->sprite.setScale(
+                    this->sprite.getScale().x * scaleFactor,
+                    this->sprite.getScale().y * scaleFactor
+                );
+        }
+        virtual void setPosition(sf::Vector2f pos)
+        {
+            this->sprite.setPosition(pos);
+        }
         virtual void draw(sf::RenderTarget& target)
         {
             target.draw( this->sprite );
-            target.draw( this->text );
         }
     };
 }

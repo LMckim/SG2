@@ -57,7 +57,8 @@ int main()
     // BUTTON TEST
     sf::Texture* icon = new sf::Texture();
     icon->loadFromFile("assets\\graphics\\objects\\build_console_abl.png");
-    window.addButton( icon );
+    window.addIconButton( icon );
+    window.addTextButton( "FUCK", 3 );
     objectM.addVariable( &window );
 
 

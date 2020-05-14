@@ -18,6 +18,7 @@ namespace SG::Algo{
 }
 namespace SG::Primitive
 {
+    enum NODE_TYPE { FLOOR, WALL, DOOR, SPACE };
     class Node
     {
         friend class SG::Generator::Layout;
