@@ -18,13 +18,21 @@ namespace SG::Manager
     class Event
     {
         public:
-        Event( Screen* screenM, Object* objectM ) : screenM{ screenM }, objectM{ objectM } 
+        Event(Screen* screenM, Object* objectM ) : screenM{ screenM }, objectM{ objectM } 
         {
             this->selectionbox.setOutlineThickness( 1.f );
             this->selectionbox.setOutlineColor( sf::Color::Green );
             this->selectionbox.setFillColor( sf::Color::Transparent );
 
+            // register mouse buttons
+            this->m_held[ sf::Mouse::Left ] = false;
+            this->m_held[ sf::Mouse::Right ] = false;
+            this->m_held[ sf::Mouse::Middle ] = false;
+
             // register keys
+            // held 
+            this->k_held[ sf::Keyboard::Space ] = false;
+            //
             this->keyDelays[ sf::Keyboard::Space ] = 0; // pausing
             this->keyDelays[ sf::Keyboard::Tab ] = 0; // changing between map and in-game
         }
@@ -36,16 +44,68 @@ namespace SG::Manager
             sf::Event event;
             while( window->pollEvent(event) )
             {
+                // ********* MAJOR EVENTS ************
+                // TODO: implement proper shutdown procedure
                 if( event.type == sf::Event::Closed ) window->close();
-                // handles zooming in and out
+
+                // ********* MOUSE ACTIONS ***********
+                // mouse wheel
                 if( event.type == sf::Event::MouseWheelMoved) { this->mouseWheel( &event ); }
-                // handles shifting around the ship map using the middle mouse button
-                if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) ) { this->middleClick( window, view ); }
-                // left click actions
-                this->leftClick( window );
-                if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) ){ this->rightclick( window ); }
+                // first click
+                if(event.type == sf::Event::MouseButtonPressed){
+                    // left
+                    if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) && this->m_held[ sf::Mouse::Left ] == false ){
+                        this->m_held[ sf::Mouse::Left ] = true;
+                        this->leftClick( window );
+                        std::cout << "click\n";
+                    }
+                    // right
+                    if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) && this->m_held[ sf::Mouse::Right ] == false ){
+                        this->m_held[ sf::Mouse::Right ] = true;
+                        this->rightClick( window );
+                    }
+                    // middle
+                    if( sf::Mouse::isButtonPressed( sf::Mouse::Middle ) && this->m_held[ sf::Mouse::Middle ] == false ){
+                        this->m_held[ sf::Mouse::Middle ] = true;
+                        this->middleClick( window, view );
+                    }
+
+                // released
+                }else if(event.type == sf::Event::MouseButtonReleased){
+                    // left
+                    if( !sf::Mouse::isButtonPressed( sf::Mouse::Left )  && this->m_held[ sf::Mouse::Left ] == true){
+                        this->m_held[ sf::Mouse::Left ] = false;
+                        std::cout << "released\n";
+                    }
+                    // right
+                    if( !sf::Mouse::isButtonPressed( sf::Mouse::Right )  && this->m_held[ sf::Mouse::Right ] == true){
+                        this->m_held[ sf::Mouse::Right ] = false;
+                        std::cout << "released\n";
+                    }
+                    // middle
+                    if( !sf::Mouse::isButtonPressed( sf::Mouse::Middle )  && this->m_held[ sf::Mouse::Middle ] == true){
+                        this->m_held[ sf::Mouse::Middle ] = false;
+                        std::cout << "released\n";
+                    }
+
+
+                // held
+                }else{
+                    // left
+                    if( this->m_held[ sf::Mouse::Left ] == true){
+                        this->leftClick( window );
+                    }
+                    // right
+                    if( this->m_held[ sf::Mouse::Right ] == true){
+                    }
+                    // middle
+                    if( this->m_held[ sf::Mouse::Middle ] == true){
+                        this->middleClick( window, view );
+                    }
+                }
+                
                 // SPACE KEY PRESSED
-                if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) && this->keyDelays[ sf::Keyboard::Space] == 0)
+                if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) && this->keyDelays[ sf::Keyboard::Space ] == 0)
                 {
                     this->keyDelays[ sf::Keyboard::Space ] = KEY_DELAY_FRAMES;
                     this->objectM->togglePause();
@@ -74,6 +134,8 @@ namespace SG::Manager
         Object* objectM;
         Active* active;
 
+        map < sf::Mouse::Button, bool > m_held;
+        map <sf::Keyboard::Key, bool > k_held;
         map < sf::Keyboard::Key, uint8_t > keyDelays;
 
         void decrementKeyDelays()
@@ -83,7 +145,7 @@ namespace SG::Manager
                 if(itr.second > 0) itr.second--;
             }
         }
-        void mouseWheel(sf::Event* event)
+        void mouseWheel(const sf::Event* event)
         {
                 if(event->mouseWheel.delta == 1 && this->scrolls < 30 )
                 {
@@ -95,7 +157,7 @@ namespace SG::Manager
                     this->screenM->zoom( ZOOM_OUT_PERCENT );
                 }
         }
-        void middleClick( sf::RenderWindow* window, sf::View* view)
+        void middleClick(const sf::RenderWindow* window, sf::View* view)
         {
             if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 200 ){
                 view->move( SHIFT_AMOUNT, 0);
@@ -114,7 +176,11 @@ namespace SG::Manager
                 this->shiftedAmount.y--;
             }
         }
-        void leftClick( sf::RenderWindow* window )
+        void leftDown()
+        {
+            
+        }
+        void leftClick(const sf::RenderWindow* window )
         {
             if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
                 // handle drawing of the selection box
@@ -155,7 +221,7 @@ namespace SG::Manager
                 this->screenM->removeVisible( &this->selectionbox );
             }
         }
-        void rightclick( sf::RenderWindow* window )
+        void rightClick(const sf::RenderWindow* window )
         {
             sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
             this->objectM->rightClicked( mPos );

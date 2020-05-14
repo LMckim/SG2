@@ -93,11 +93,6 @@ namespace SG::Manager
             }
         }
 
-        void checkClicked(sf::Vector2f mPos)
-        {
-            this->quickClick(mPos);
-        }
-
         void quickClick(sf::Vector2f mPos)
         {
             // TODO: Problems with selection WILL occur HERE, fix when ready... i dont know what this is referencing anymore :(
