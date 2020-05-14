@@ -9,6 +9,7 @@
 #include <src/Primitive/Visible.hpp>
 #include <src/Primitive/Variable.hpp>
 #include <src/Primitive/Active.hpp>
+#include <src/Primitive/Active/Draggable.hpp>
 #include <src/Ship/Layout.hpp>
 #include <src/Primitive/Node.hpp>
 
@@ -20,6 +21,7 @@ namespace SG::Manager
     using SG::Primitive::Visible;
     using SG::Primitive::Variable;
     using SG::Primitive::Active;
+    using SG::Primitive::Draggable;
     using SG::Ship::Layout;
     using SG::Primitive::Node;
 
@@ -93,39 +95,48 @@ namespace SG::Manager
             }
         }
 
-        void quickClick(sf::Vector2f mPos)
+        void leftClick(sf::Vector2f mPos)
         {
-            // TODO: Problems with selection WILL occur HERE, fix when ready... i dont know what this is referencing anymore :(
-            if(this->dragging == true)
+            // clear our selection
+            this->selected.clear();
+            // check if any objects are within the clicked area
+            for(auto &itr : this->actives)
             {
-                this->DraggedObj->drag( mPos );
-            }else{
-
-                this->selected.clear();
-                for(auto &itr : this->actives)
+                if( itr->sprite.getGlobalBounds().contains( mPos ) )
                 {
-                    if( itr->sprite.getGlobalBounds().contains( mPos ) )
+                    if(Draggable* draggable = dynamic_cast< Draggable* >( itr ))
                     {
-                        itr->select();
-                        this->selected.push_back( itr );
-                        if( itr->draggable )
+                        if(draggable->drag( mPos ))
                         {
-                            itr->drag( mPos );
                             this->dragging = true;
-                            this->DraggedObj = itr;
-                            break;
+                            this->DraggedObj = draggable;
+                            this->DraggedObj->forceDrag( mPos );
+                        }else{
+                            itr->select( mPos );
+                            this->selected.push_back( itr );
                         }
+                        break;
                     }else{
-                        itr->selected = false;
-                        if(itr->draggable){
-                            itr->beingDragged = false;
-                        }
+                        itr->select( mPos );
+                        this->selected.push_back( itr );
+                        break;
                     }
-                    this->dragging = false;
+                }else{
+                    // everything NOT within the clicked area should be de-selected
+                    itr->selected = false;
                 }
             }
         }
-
+        void leftDrag(sf::Vector2f mPos)
+        {
+            this->DraggedObj->forceDrag( mPos );
+        }
+        void clearDrag()
+        {
+            std::cout  << "clear\n";
+            this->dragging = false;
+            this->DraggedObj = nullptr;
+        }
         void rightClicked(sf::Vector2f mPos)
         {
             this->layout->clearPathing();
@@ -177,7 +188,7 @@ namespace SG::Manager
         vector< Variable* > variables;
         vector< Active* > actives;
         vector< Active* > selected;
-        Active* DraggedObj;
+        Draggable* DraggedObj;
         
     };
 }

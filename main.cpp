@@ -26,7 +26,10 @@ int main()
 
     sf::Font font;
     font.loadFromFile("assets\\font\\munro.ttf");
+
+
     // EVERYTHING UNDER HERE IS TEMPORARY, BASED ON IN-GAME
+    // LAYOUT AND SHIP TEST
     SG::Tool::TextureSheet* floorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\floor_sheet.png");
     SG::Tool::TextureSheet* interiorWallSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\interior_wall.png");
     SG::Tool::TextureSheet* doorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\doors.png");

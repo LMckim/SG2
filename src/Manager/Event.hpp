@@ -49,6 +49,9 @@ namespace SG::Manager
                 if( event.type == sf::Event::Closed ) window->close();
 
                 // ********* MOUSE ACTIONS ***********
+                // get the mouse position
+                sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+
                 // mouse wheel
                 if( event.type == sf::Event::MouseWheelMoved) { this->mouseWheel( &event ); }
                 // first click
@@ -56,8 +59,7 @@ namespace SG::Manager
                     // left
                     if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) && this->m_held[ sf::Mouse::Left ] == false ){
                         this->m_held[ sf::Mouse::Left ] = true;
-                        this->leftClick( window );
-                        std::cout << "click\n";
+                        this->leftClick( window, mPos );
                     }
                     // right
                     if( sf::Mouse::isButtonPressed( sf::Mouse::Right ) && this->m_held[ sf::Mouse::Right ] == false ){
@@ -75,17 +77,15 @@ namespace SG::Manager
                     // left
                     if( !sf::Mouse::isButtonPressed( sf::Mouse::Left )  && this->m_held[ sf::Mouse::Left ] == true){
                         this->m_held[ sf::Mouse::Left ] = false;
-                        std::cout << "released\n";
+                        this->leftUp();
                     }
                     // right
                     if( !sf::Mouse::isButtonPressed( sf::Mouse::Right )  && this->m_held[ sf::Mouse::Right ] == true){
                         this->m_held[ sf::Mouse::Right ] = false;
-                        std::cout << "released\n";
                     }
                     // middle
                     if( !sf::Mouse::isButtonPressed( sf::Mouse::Middle )  && this->m_held[ sf::Mouse::Middle ] == true){
                         this->m_held[ sf::Mouse::Middle ] = false;
-                        std::cout << "released\n";
                     }
 
 
@@ -93,7 +93,7 @@ namespace SG::Manager
                 }else{
                     // left
                     if( this->m_held[ sf::Mouse::Left ] == true){
-                        this->leftClick( window );
+                        this->leftHeld( window, mPos );
                     }
                     // right
                     if( this->m_held[ sf::Mouse::Right ] == true){
@@ -119,11 +119,12 @@ namespace SG::Manager
         private:
         const uint8_t KEY_DELAY_FRAMES = 15;
         const float SELECTION_THRESHOLD = 1.f;
-        bool leftHeld = true;
         sf::Vector2f selectionOrigin;
         sf::RectangleShape selectionbox;
 
         const float SHIFT_AMOUNT = 5;
+        const float SHIFT_X_MAX = 200;
+        const float SHIFT_Y_MAX = 100;
         const float ZOOM_IN_PERCENT = 0.95f;
         const float ZOOM_OUT_PERCENT = 1.05f;
 
@@ -159,67 +160,63 @@ namespace SG::Manager
         }
         void middleClick(const sf::RenderWindow* window, sf::View* view)
         {
-            if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < 200 ){
+            if( sf::Mouse::getPosition( *window ).x > this->prevMousePos.x && this->shiftedAmount.x < SHIFT_X_MAX ){
                 view->move( SHIFT_AMOUNT, 0);
                 this->shiftedAmount.x++;
-            }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x > -200 ){
+            }else if( sf::Mouse::getPosition( *window ).x < this->prevMousePos.x && this->shiftedAmount.x >  -SHIFT_X_MAX ){
                 // negative shift
                 view->move( -SHIFT_AMOUNT, 0);
                 this->shiftedAmount.x--;
             }
             
-            if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.y < 100 ){
+            if( sf::Mouse::getPosition( *window ).y > this->prevMousePos.y && this->shiftedAmount.y < SHIFT_Y_MAX ){
                 view->move( 0, this->SHIFT_AMOUNT);
                 this->shiftedAmount.y++;
-            }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.y > -100 ){
+            }else if( sf::Mouse::getPosition( *window ).y < this->prevMousePos.y && this->shiftedAmount.y > -SHIFT_Y_MAX ){
                 view->move( 0, -this->SHIFT_AMOUNT);
                 this->shiftedAmount.y--;
             }
         }
-        void leftDown()
+
+        void leftClick(const sf::RenderWindow* window, const sf::Vector2f mPos )
         {
-            
+            this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
+            this->objectM->leftClick( mPos );
         }
-        void leftClick(const sf::RenderWindow* window )
+        void leftHeld( const sf::RenderWindow* window, const sf::Vector2f mPos )
         {
-            if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) ){
-                // handle drawing of the selection box
-                if( leftHeld == false && this->objectM->dragging == false )
-                {
-                    leftHeld = true;
-                    this->selectionOrigin = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-                    this->selectionbox.setPosition( selectionOrigin );
+            // if the objectM confirms we are not currently dragging an object
+            if(this->objectM->dragging == false)
+            {
+                // draw, set and expand the selection box
+                this->screenM->addVisible( &this->selectionbox );
+                this->selectionbox.setPosition( selectionOrigin );
 
-                    this->screenM->addVisible( &this->selectionbox );
-                }else if( this->objectM->dragging == false ){
-                    this->selectionbox.setSize(
-                        sf::Vector2f(
-                            window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,
-                            window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).y - selectionOrigin.y
-                        )
-                    );
-                }
-
-                sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
-
-                // hmmmm
-                if(this->selectionbox.getSize().x < SELECTION_THRESHOLD && this->selectionbox.getSize().y < SELECTION_THRESHOLD)
-                {
-                    this->objectM->quickClick( mPos );
-                }
-                
-
-            }else{
-                leftHeld = false;
-                this->objectM->dragging = false;
-                if(this->selectionbox.getSize().x > SELECTION_THRESHOLD && this->selectionbox.getSize().y > SELECTION_THRESHOLD)
-                {
-                    this->objectM->processSelectionBox( &this->selectionbox );
-                }
-    
-                this->selectionbox.setSize( sf::Vector2f(0,0) );
-                this->screenM->removeVisible( &this->selectionbox );
+                this->selectionbox.setSize(
+                    sf::Vector2f(
+                        window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).x - selectionOrigin.x,
+                        window->mapPixelToCoords( sf::Mouse::getPosition( *window ) ).y - selectionOrigin.y
+                    )
+                );
+            // if were actively engaged in draggin then update
+            }else if(this->objectM->dragging == true){
+                this->objectM->leftDrag( mPos );
             }
+        }
+        void leftUp()
+        {
+            // tell the object Manager were not dragging anymore
+            if(this->objectM->dragging)
+            { 
+                this->objectM->clearDrag();
+            // if the selection box is big enough then process it
+            }else if(this->selectionbox.getSize().x > SELECTION_THRESHOLD && this->selectionbox.getSize().y > SELECTION_THRESHOLD)
+            {
+                this->objectM->processSelectionBox( &this->selectionbox );
+            }
+            // either way reset the selection box
+            this->selectionbox.setSize( sf::Vector2f(0,0) );
+            this->screenM->removeVisible( &this->selectionbox );
         }
         void rightClick(const sf::RenderWindow* window )
         {

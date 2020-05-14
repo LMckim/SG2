@@ -6,7 +6,7 @@
 
 #include <src/Primitive/Visible/Reactive.hpp>
 #include <src/Primitive/Variable.hpp>
-#include <src/Primitive/Active.hpp>
+#include <src/Primitive/Active/Draggable.hpp>
 
 #include <src/Window/Button/IconButton.hpp>
 #include <src/Window/Button/TextButton.hpp>
@@ -24,6 +24,7 @@ namespace SG::Window
     using SG::Primitive::Z_LAYERS;
     using SG::Primitive::Reactive;
     using SG::Primitive::Variable;
+    using SG::Primitive::Draggable;
     using SG::Primitive::Active;
     using SG::Tool::TextureSheet;
     using SG::Window::Button;
@@ -31,14 +32,13 @@ namespace SG::Window
     class BaseWindow :
         virtual public Reactive,
         virtual public Variable,
-        virtual public Active
+        virtual public Draggable
     {
         public:
         BaseWindow(TextureSheet* windowSheet, Active* reference, sf::Font* font, string title, uint8_t width, uint8_t height, bool buildHeader = true ) :
              sheet{ windowSheet }, reference{ reference }, font{ font }, title{ title }, width{ width }, height{ height }
         {
             this->zLevel = Z_LAYERS::WINDOW_BASE;
-            this->draggable = true;
         } 
         virtual ~BaseWindow()
         {
@@ -310,8 +310,24 @@ namespace SG::Window
                 this->positionButtons();
             }
         }
-
-        virtual void drag( sf::Vector2f mPos )
+        virtual bool drag(sf::Vector2f mPos )
+        {
+            if(this->clickBoxes[1].getGlobalBounds().contains( mPos )) return true;
+            else return false;
+        }
+        virtual void forceDrag( sf::Vector2f mPos )
+        {
+            this->positionClickBoxes( mPos );
+            this->sprite.setPosition( 
+                sf::Vector2f(
+                    // get the position of the header, minus a section ( header should always be in the middle ), multiply by the scaled ratio
+                    this->clickBoxes[0].getPosition().x,
+                    this->clickBoxes[0].getPosition().y
+                ) 
+            );
+            this->positionButtons();
+        }
+        virtual void select( sf::Vector2f mPos )
         {
             // clicked on the exit button
             if(this->clickBoxes[2].getGlobalBounds().contains( mPos ))
@@ -325,21 +341,8 @@ namespace SG::Window
             // content box clicked
             }else if(this->clickBoxes[3].getGlobalBounds().contains( mPos )){
                 this->checkButtonClicked( mPos );
-            }else if(this->clickBoxes[1].getGlobalBounds().contains( mPos ) || this->beingDragged)
-            {
-                // TODO: better header clicked sensing, AKA fix extra clicking
-                // check the title click box
-                this->beingDragged = true;
-                this->positionClickBoxes( mPos );
-                this->sprite.setPosition( 
-                    sf::Vector2f(
-                        // get the position of the header, minus a section ( header should always be in the middle ), multiply by the scaled ratio
-                        this->clickBoxes[0].getPosition().x,
-                        this->clickBoxes[0].getPosition().y
-                    ) 
-                );
             }
-            this->positionButtons();
+
         }
         virtual void draw(sf::RenderTarget& target)
         {

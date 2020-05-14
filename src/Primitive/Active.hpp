@@ -23,11 +23,7 @@ namespace SG::Primitive
         protected:
         bool selected = false;
         bool groupselect = false;
-        bool draggable = false;
-        bool beingDragged = false;
-        virtual void select() {};
-        // TODO: seperate out drag functionality
-        virtual void drag(sf::Vector2f mPos) {};
+        virtual void select( sf::Vector2f mpos ) {};
         // for non-context sensitive right-click actions
         virtual void leftClick() {};
         virtual void rightClick() {};
