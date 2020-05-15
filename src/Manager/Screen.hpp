@@ -23,7 +23,7 @@ namespace SG::Manager
         public:
         sf::RenderWindow *window;
         sf::View *view;
-        Screen()
+        Screen(sf::Clock* _clock) : clock{ _clock } 
         {
             this->window = new sf::RenderWindow( sf::VideoMode(1200,800), "SPACE GAME 2" );
             this->window->setFramerateLimit( 120 );
@@ -37,8 +37,6 @@ namespace SG::Manager
             );
             this->window->setView( *this->view );
 
-            this->clock = sf::Clock();
-            this->time = this->clock.getElapsedTime();
         }
 
         void render()
@@ -84,12 +82,12 @@ namespace SG::Manager
             this->window->setView( *this->view );
 
             // fps counter
-            this->time = this->clock.getElapsedTime();
+            this->time = this->clock->getElapsedTime();
             if(this->time.asSeconds() >= 1)
             {
-                this->window->setTitle("SG2 Render Time:"+std::to_string(this->fps));
+                this->window->setTitle( "SG2 Render Time:" + std::to_string(this->fps) );
                 this->fps = 0;
-                this->clock.restart();
+                this->clock->restart();
 
             }else this->fps++;
 
@@ -172,7 +170,7 @@ namespace SG::Manager
         }
 
         private:
-        sf::Clock clock;
+        sf::Clock* clock;
         sf::Time time;
         uint64_t fps = 0;
         vector< sf::Drawable* > sfPrimitives;

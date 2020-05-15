@@ -41,7 +41,7 @@ namespace SG::Manager
         public:
         bool dragging = false;
 
-        Object(Screen* _screenM) : screenM{ _screenM } {}
+        Object(Screen* _screenM, sf::Clock* _clock ) : screenM{ _screenM }, clock{ _clock } {}
 
         void update()
         {
@@ -238,6 +238,8 @@ namespace SG::Manager
         const float SELECTION_BOX_THICKNESS = 1.f;
 
         Screen* screenM;
+        sf::Clock* clock;
+
         Layout* layout;
         vector< Variable* > variables;
         vector< Active* > actives;

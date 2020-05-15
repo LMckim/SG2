@@ -22,10 +22,11 @@
 int main()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    
-    SG::Manager::Screen screenM;
+    sf::Clock clock;
+
+    SG::Manager::Screen screenM( &clock );
     SG::Manager::Resource resourceM;
-    SG::Manager::Object objectM( &screenM );
+    SG::Manager::Object objectM( &screenM, &clock );
     SG::Manager::Event eventM( &screenM, &objectM );
 
     sf::Font font;
