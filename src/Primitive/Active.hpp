@@ -13,6 +13,7 @@ namespace SG::Primitive
 {
     using SG::Primitive::Visible;
     using SG::Primitive::Node;
+    
     class Active :
         virtual public Visible
     {

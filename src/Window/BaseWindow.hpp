@@ -35,8 +35,8 @@ namespace SG::Window
         virtual public Draggable
     {
         public:
-        BaseWindow(TextureSheet* windowSheet, Active* reference, sf::Font* font, string title, uint8_t width, uint8_t height, bool buildHeader = true ) :
-             sheet{ windowSheet }, reference{ reference }, font{ font }, title{ title }, width{ width }, height{ height }
+        BaseWindow(TextureSheet* windowSheet, sf::Font* font, string title, uint8_t width, uint8_t height, bool buildHeader = true ) :
+             sheet{ windowSheet }, font{ font }, title{ title }, width{ width }, height{ height }
         {
             this->zLevel = Z_LAYERS::WINDOW_BASE;
         } 
@@ -260,7 +260,6 @@ namespace SG::Window
 
         bool buildHeader = false;
         bool showBoxes = true;
-        Active* reference;
         sf::Font* font;
         string title;
         uint8_t width;
@@ -494,7 +493,7 @@ namespace SG::Window
         }
         void swapLockIcon()
         {
-            // TODO: fix the layering bug
+            // TODO: fix the layering bug, transparent layers compound
             sf::Sprite newSprite;
             sf::Sprite oldSprite;
             sf::Texture* newIcon;

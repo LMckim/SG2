@@ -1,12 +1,12 @@
-Date : 2020-05-13 19:00:03
+Date : 2020-05-14 19:28:57
 Directory : f:\Development\repos\SG2
-Total : 35 files,  2249 codes, 141 comments, 352 blanks, all 2742 lines
+Total : 35 files,  2468 codes, 188 comments, 365 blanks, all 3021 lines
 
 Languages
 +------------+------------+------------+------------+------------+------------+
 | language   | files      | code       | comment    | blank      | total      |
 +------------+------------+------------+------------+------------+------------+
-| C++        |         31 |      2,198 |        141 |        345 |      2,684 |
+| C++        |         31 |      2,417 |        188 |        358 |      2,963 |
 | JSON       |          3 |         31 |          0 |          0 |         31 |
 | Django txt |          1 |         20 |          0 |          7 |         27 |
 +------------+------------+------------+------------+------------+------------+
@@ -15,23 +15,23 @@ Directories
 +-------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                        | files      | code       | comment    | blank      | total      |
 +-------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                           |         35 |      2,249 |        141 |        352 |      2,742 |
+| .                                                           |         35 |      2,468 |        188 |        365 |      3,021 |
 | .vs                                                         |          2 |         10 |          0 |          0 |         10 |
-| src                                                         |         29 |      2,120 |        135 |        330 |      2,585 |
-| src\Algo                                                    |          1 |        152 |         17 |         13 |        182 |
+| src                                                         |         30 |      2,364 |        181 |        343 |      2,888 |
+| src\Algo                                                    |          1 |        152 |         19 |         13 |        184 |
 | src\Crew                                                    |          1 |        119 |          7 |         25 |        151 |
 | src\Generator                                               |          1 |        275 |         40 |         50 |        365 |
-| src\Manager                                                 |          4 |        481 |         19 |         71 |        571 |
+| src\Manager                                                 |          4 |        527 |         42 |         71 |        640 |
 | src\Node                                                    |          5 |        168 |          1 |         18 |        187 |
 | src\Node\Base                                               |          1 |         71 |          1 |          4 |         76 |
-| src\Object                                                  |          2 |          0 |          0 |          2 |          2 |
-| src\Primitive                                               |          7 |        252 |          5 |         58 |        315 |
+| src\Object                                                  |          2 |         10 |          0 |          6 |         16 |
+| src\Primitive                                               |          8 |        273 |          5 |         63 |        341 |
+| src\Primitive\Active                                        |          1 |         22 |          0 |          5 |         27 |
 | src\Primitive\Visible                                       |          1 |         26 |          1 |          5 |         32 |
 | src\Ship                                                    |          2 |        162 |          5 |         19 |        186 |
 | src\Tool                                                    |          2 |         95 |          1 |         18 |        114 |
-| src\Window                                                  |          4 |        416 |         40 |         56 |        512 |
-| src\Window\Button                                           |          2 |         75 |          0 |         15 |         90 |
-| test                                                        |          1 |         25 |          0 |          2 |         27 |
+| src\Window                                                  |          4 |        583 |         61 |         60 |        704 |
+| src\Window\Button                                           |          2 |         81 |          1 |         15 |         97 |
 +-------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
@@ -42,12 +42,12 @@ Files
 | f:\Development\repos\SG2\.vs\VSWorkspaceState.json          | JSON       |          7 |          0 |          0 |          7 |
 | f:\Development\repos\SG2\CppProperties.json                 | JSON       |         21 |          0 |          0 |         21 |
 | f:\Development\repos\SG2\TODO.txt                           | Django txt |         20 |          0 |          7 |         27 |
-| f:\Development\repos\SG2\main.cpp                           | C++        |         53 |          6 |         13 |         72 |
-| f:\Development\repos\SG2\src\Algo\AStar.hpp                 | C++        |        152 |         17 |         13 |        182 |
+| f:\Development\repos\SG2\main.cpp                           | C++        |         53 |          7 |         15 |         75 |
+| f:\Development\repos\SG2\src\Algo\AStar.hpp                 | C++        |        152 |         19 |         13 |        184 |
 | f:\Development\repos\SG2\src\Crew\BaseCrew.hpp              | C++        |        119 |          7 |         25 |        151 |
 | f:\Development\repos\SG2\src\Generator\Layout.hpp           | C++        |        275 |         40 |         50 |        365 |
-| f:\Development\repos\SG2\src\Manager\Event.hpp              | C++        |        138 |          9 |         20 |        167 |
-| f:\Development\repos\SG2\src\Manager\Object.hpp             | C++        |        162 |          4 |         25 |        191 |
+| f:\Development\repos\SG2\src\Manager\Event.hpp              | C++        |        177 |         30 |         23 |        230 |
+| f:\Development\repos\SG2\src\Manager\Object.hpp             | C++        |        169 |          6 |         22 |        197 |
 | f:\Development\repos\SG2\src\Manager\Resource.hpp           | C++        |         31 |          0 |          6 |         37 |
 | f:\Development\repos\SG2\src\Manager\Screen.hpp             | C++        |        150 |          6 |         20 |        176 |
 | f:\Development\repos\SG2\src\Node\Base\VisibleNode.hpp      | C++        |         71 |          1 |          4 |         76 |
@@ -56,11 +56,12 @@ Files
 | f:\Development\repos\SG2\src\Node\Space.hpp                 | C++        |         21 |          0 |          4 |         25 |
 | f:\Development\repos\SG2\src\Node\Wall.hpp                  | C++        |         16 |          0 |          3 |         19 |
 | f:\Development\repos\SG2\src\Object\Console.hpp             | C++        |          0 |          0 |          1 |          1 |
-| f:\Development\repos\SG2\src\Object\Draggable.hpp           | C++        |          0 |          0 |          1 |          1 |
-| f:\Development\repos\SG2\src\Primitive\Active.hpp           | C++        |         31 |          2 |          6 |         39 |
+| f:\Development\repos\SG2\src\Object\Draggable.hpp           | C++        |         10 |          0 |          5 |         15 |
+| f:\Development\repos\SG2\src\Primitive\Active.hpp           | C++        |         29 |          2 |          6 |         37 |
+| f:\Development\repos\SG2\src\Primitive\Active\Draggable.hpp | C++        |         22 |          0 |          5 |         27 |
 | f:\Development\repos\SG2\src\Primitive\Animation.hpp        | C++        |         33 |          0 |         10 |         43 |
 | f:\Development\repos\SG2\src\Primitive\Generator.hpp        | C++        |         17 |          0 |          7 |         24 |
-| f:\Development\repos\SG2\src\Primitive\Node.hpp             | C++        |         89 |          0 |         14 |        103 |
+| f:\Development\repos\SG2\src\Primitive\Node.hpp             | C++        |         90 |          0 |         14 |        104 |
 | f:\Development\repos\SG2\src\Primitive\Variable.hpp         | C++        |         19 |          1 |          6 |         26 |
 | f:\Development\repos\SG2\src\Primitive\Visible.hpp          | C++        |         37 |          1 |         10 |         48 |
 | f:\Development\repos\SG2\src\Primitive\Visible\Reactive.hpp | C++        |         26 |          1 |          5 |         32 |
@@ -68,10 +69,9 @@ Files
 | f:\Development\repos\SG2\src\Ship\Layout.hpp                | C++        |         87 |          3 |          9 |         99 |
 | f:\Development\repos\SG2\src\Tool\Debug.hpp                 | C++        |         13 |          0 |          4 |         17 |
 | f:\Development\repos\SG2\src\Tool\TextureSheet.hpp          | C++        |         82 |          1 |         14 |         97 |
-| f:\Development\repos\SG2\src\Window\BaseWindow.hpp          | C++        |        300 |         39 |         34 |        373 |
-| f:\Development\repos\SG2\src\Window\Button.hpp              | C++        |         41 |          1 |          7 |         49 |
-| f:\Development\repos\SG2\src\Window\Button\IconButton.hpp   | C++        |         21 |          0 |          7 |         28 |
-| f:\Development\repos\SG2\src\Window\Button\TextButton.hpp   | C++        |         54 |          0 |          8 |         62 |
-| f:\Development\repos\SG2\test\layout.hpp                    | C++        |         25 |          0 |          2 |         27 |
-| Total                                                       |            |      2,249 |        141 |        352 |      2,742 |
+| f:\Development\repos\SG2\src\Window\BaseWindow.hpp          | C++        |        429 |         59 |         38 |        526 |
+| f:\Development\repos\SG2\src\Window\Button.hpp              | C++        |         73 |          1 |          7 |         81 |
+| f:\Development\repos\SG2\src\Window\Button\IconButton.hpp   | C++        |         24 |          0 |          7 |         31 |
+| f:\Development\repos\SG2\src\Window\Button\TextButton.hpp   | C++        |         57 |          1 |          8 |         66 |
+| Total                                                       |            |      2,468 |        188 |        365 |      3,021 |
 +-------------------------------------------------------------+------------+------------+------------+------------+------------+

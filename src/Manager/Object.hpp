@@ -85,10 +85,23 @@ namespace SG::Manager
                 {
                     Variable* temp = (*itr);
                     itr = this->variables.erase( itr );
-
+                    // if its a drawn object then erase it
                     if(Visible* visible = dynamic_cast< Visible* >( temp ))
                     {
                         this->screenM->removeVisible( visible );
+                    }
+                    // if its one of our registered active objects then delete it
+                    if(Active* active = dynamic_cast< Active* >( temp ))
+                    {
+                        auto itr = this->actives.begin();
+                        while( itr != this->actives.end() )
+                        {
+                            if( (*itr) == active )
+                            {
+                                this->actives.erase( itr );
+                                break;
+                            }
+                        }
                     }
                     delete temp;
                 }else itr++;

@@ -18,7 +18,7 @@ namespace SG::Primitive
         virtual ~Draggable() {}
         
         protected:
-        virtual bool drag(sf::Vector2f mPos) { return false; };
+        virtual bool drag(sf::Vector2f mPos) { return true; };
         virtual void forceDrag(sf::Vector2f mPos) {};
     };
 }

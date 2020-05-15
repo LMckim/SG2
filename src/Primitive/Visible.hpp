@@ -19,12 +19,16 @@ namespace SG::Primitive
         SHIP_GRAPHIC = 10,
         SHIP_FLOOR = 11,
         SHIP_WALL = 12,
+        
+        OBJECT = 15,
 
         CREW = 20,
 
         WINDOW_BASE = 50,
         WINDOW_BUTTON = 51,
         WINDOW_EXIT = 52,
+
+        PLACEMENT = 70,
 
         UI = 200
     };

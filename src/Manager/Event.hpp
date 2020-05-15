@@ -55,7 +55,8 @@ namespace SG::Manager
                 // mouse wheel
                 if( event.type == sf::Event::MouseWheelMoved) { this->mouseWheel( &event ); }
                 // first click
-                if(event.type == sf::Event::MouseButtonPressed){
+                if(event.type == sf::Event::MouseButtonPressed)
+                {
                     // left
                     if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) && this->m_held[ sf::Mouse::Left ] == false ){
                         this->m_held[ sf::Mouse::Left ] = true;
@@ -105,6 +106,7 @@ namespace SG::Manager
                 }
                 
                 // SPACE KEY PRESSED
+                // TODO: implement the same funcitonality as above
                 if( sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) && this->keyDelays[ sf::Keyboard::Space ] == 0)
                 {
                     this->keyDelays[ sf::Keyboard::Space ] = KEY_DELAY_FRAMES;
