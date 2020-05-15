@@ -61,9 +61,10 @@ namespace SG::Node::Base
         virtual void draw(sf::RenderTarget& target)
         {
             target.draw( this->sprite );
+            // TODO: MAJOR source of slowdown here
             // draw the box ON TOP OF the sprite
             if(this->showBox){
-                if(this->occupied) {
+                if(this->occupied){
                     this->box.setOutlineColor( OUTLINE_OCCUPIED );
                 }else if(this->pathed){ 
                     this->box.setOutlineColor( OUTLINE_PATHED );

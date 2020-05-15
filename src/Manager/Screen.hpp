@@ -82,10 +82,17 @@ namespace SG::Manager
             
             this->window->display();
             this->window->setView( *this->view );
-            this->time = this->clock.getElapsedTime();
 
-            // std::cout << this->time.asMicroseconds() << std::endl;
-            this->clock.restart();
+            // fps counter
+            this->time = this->clock.getElapsedTime();
+            if(this->time.asSeconds() >= 1)
+            {
+                this->window->setTitle("SG2 Render Time:"+std::to_string(this->fps));
+                this->fps = 0;
+                this->clock.restart();
+
+            }else this->fps++;
+
         }
         
         void addVisible( sf::Drawable* drawable)
@@ -167,6 +174,7 @@ namespace SG::Manager
         private:
         sf::Clock clock;
         sf::Time time;
+        uint64_t fps = 0;
         vector< sf::Drawable* > sfPrimitives;
         map< uint8_t, vector< Visible* > > visible;
         map< uint8_t, vector< Visible* > > ui;

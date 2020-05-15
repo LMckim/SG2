@@ -35,13 +35,14 @@ int main()
     // EVERYTHING UNDER HERE IS TEMPORARY, BASED ON IN-GAME
     // LAYOUT AND SHIP TEST
     SG::Tool::TextureSheet* floorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\floor_sheet.png");
-    SG::Tool::TextureSheet* interiorWallSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\interior_wall.png");
+    SG::Tool::TextureSheet* interiorWallSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\walls_1.png");
     SG::Tool::TextureSheet* doorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\doors.png");
 
     SG::Generator::GenLayout lay( &objectM );
     sf::Image test;
     sf::Texture* ship = new sf::Texture();
     ship->loadFromFile("assets\\graphics\\ships\\CARGO_01.png");
+    // test.loadFromFile("assets\\layouts\\Layout_test1.png");
     test.loadFromFile("assets\\layouts\\CARGO_01.png");
 
      
