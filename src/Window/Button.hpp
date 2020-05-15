@@ -31,6 +31,7 @@ namespace SG::Window
         virtual ~Button()
         {
             delete btnTex;
+            std::cout << "btn_del\n";
         }
         protected:
         const sf::Color CLICK_BOX_COLOR = sf::Color::Red;

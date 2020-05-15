@@ -29,15 +29,15 @@ namespace SG::Generator
 
     using SG::Tool::TextureSheet;
 
-    class Gen_Layout :
+    class GenLayout :
         protected Generator
     {
         public:
         const int TILE_SIZE = 16;
         enum TILE { SPACE, FLOOR, WALL, DOOR };
         
-        Gen_Layout( Object* _objectM ) : Generator::Generator( _objectM ) {}
-        ~Gen_Layout() {}
+        GenLayout( Object* _objectM ) : Generator::Generator( _objectM ) {}
+        ~GenLayout() {}
 
         void addAsset(TILE tile, TextureSheet* asset)
         {

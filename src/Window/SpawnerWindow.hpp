@@ -24,6 +24,13 @@ namespace SG::Window
             BaseWindow( _windowSheet, _font, _title, _width, _height, _buildHeader ), objectM{ _objectM }
         {
         }
+        virtual ~SpawnerWindow()
+        {
+            for(auto itr : this->objectLink )
+            {
+                delete itr.second;
+            }
+        }
         virtual void addObjectSpawnButton(sf::Texture* icon, BaseObject* spawnObj)
         {
             this->addIconButton(icon,

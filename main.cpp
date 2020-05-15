@@ -10,7 +10,7 @@
 #include <src/Tool/TextureSheet.hpp>
 
 // temp for testing
-#include <src/Generator/Gen_Layout.hpp>
+#include <src/Generator/GenLayout.hpp>
 #include <src/Ship/BaseShip.hpp>
 #include <src/Ship/Layout.hpp>
 #include <src/Window/BaseWindow.hpp>
@@ -38,17 +38,16 @@ int main()
     SG::Tool::TextureSheet* interiorWallSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\interior_wall.png");
     SG::Tool::TextureSheet* doorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\doors.png");
 
-    SG::Generator::Gen_Layout lay( &objectM );
+    SG::Generator::GenLayout lay( &objectM );
     sf::Image test;
     sf::Texture* ship = new sf::Texture();
     ship->loadFromFile("assets\\graphics\\ships\\CARGO_01.png");
     test.loadFromFile("assets\\layouts\\CARGO_01.png");
 
      
-    lay.addAsset(SG::Generator::Gen_Layout::TILE::FLOOR, floorSections );
-    lay.addAsset(SG::Generator::Gen_Layout::TILE::DOOR, doorSections );
-    lay.addAsset(SG::Generator::Gen_Layout::TILE::WALL, interiorWallSections );
-
+    lay.addAsset(SG::Generator::GenLayout::TILE::FLOOR, floorSections );
+    lay.addAsset(SG::Generator::GenLayout::TILE::DOOR, doorSections );
+    lay.addAsset(SG::Generator::GenLayout::TILE::WALL, interiorWallSections );
     SG::Ship::Layout layout = lay.generateLayout( &test );
     objectM.registerLayout( &layout );
     SG::Ship::BaseShip shipBase( &objectM, ship, layout);
@@ -69,10 +68,14 @@ int main()
     objectM.addVariable( &window );
 
     // SPAWNER WINDOW TEST
-    SG::Tool::TextureSheet* objSheet = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\build_console_abl.png",32,32);
-    SG::Object::BaseObject* obj = new SG::Object::BaseObject(objSheet);
+    SG::Tool::TextureSheet* objSheet_console = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\build_console_abl.png",32,32);
+    SG::Object::BaseObject* obj_console = new SG::Object::BaseObject(objSheet_console);
+    SG::Tool::TextureSheet* objSheet_tank = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\build_tank_diff.png",32,32);
+    SG::Object::BaseObject* obj_tank = new SG::Object::BaseObject(objSheet_tank);
+
     SG::Window::SpawnerWindow s_window(&objectM, windowTS, &font,"SPAWN", 6,6);
-    s_window.addObjectSpawnButton( objSheet->getTexture(0,0), obj);
+    s_window.addObjectSpawnButton( objSheet_console->getTexture(0,0), obj_console);
+    s_window.addObjectSpawnButton( objSheet_tank->getTexture(0,0), obj_tank);
     s_window.buildWindow();
     objectM.addVariable(&s_window);
 

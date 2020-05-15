@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 namespace SG::Generator{
-    class Gen_Layout;
+    class GenLayout;
 }
 namespace SG::Crew{
     class Base;
@@ -21,7 +21,7 @@ namespace SG::Primitive
     enum NODE_TYPE { FLOOR, WALL, DOOR, SPACE };
     class Node
     {
-        friend class SG::Generator::Gen_Layout;
+        friend class SG::Generator::GenLayout;
         friend class SG::Crew::Base;
         friend class SG::Ship::Layout;
         friend class SG::Algo::AStar;
@@ -45,6 +45,7 @@ namespace SG::Primitive
         Node* getBottomNode() { return this->bottom; }
         Position* getPosition() { return &this->position; }
         bool isOccupied() { return this->occupied; }
+        void setOccupied(bool _occupied = true){ this->occupied = _occupied; }
 
 
         protected:

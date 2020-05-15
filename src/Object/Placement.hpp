@@ -14,6 +14,7 @@ namespace SG::Window{
 
 namespace SG::Object
 {
+    using SG::Primitive::TILE_SIZE;
     using SG::Manager::Object;
     using SG::Primitive::Draggable;
     using SG::Primitive::Visible;
@@ -46,7 +47,7 @@ namespace SG::Object
         }
         virtual ~Placement()
         {
-            std::cout << "ded\n";
+            std::cout << "del_placement\n";
         }
         void rotate()
         {
@@ -70,9 +71,22 @@ namespace SG::Object
                     this->sprite.getGlobalBounds().top
                 ) 
              );
+             if(this->checkPlacement(closest)) this->canPlace = true;
+             else this->canPlace = false;
         }
         virtual void stopDrag()
         {
+            if(this->canPlace)
+            {
+                BaseObject* placedObj = new BaseObject( 
+                    this->spawnObject,
+                    this->layout->findClosestNode( this->sprite.getPosition() ),
+                    this->sprite.getRotation()
+                );
+                placedObj->sprite.setPosition( this->sprite.getPosition() );
+                // TODO: might need to change this to a variable
+                this->objectM->addVisible( dynamic_cast< Visible* >( placedObj ));
+            }
             this->objectM->clearMe( dynamic_cast< Visible* >( this ) );
         }
         protected:
@@ -91,9 +105,26 @@ namespace SG::Object
             this->rotate();
         };
 
-        void checkPlacement(Node* closest)
+        bool checkPlacement(Node* closest)
         {
-
+            uint16_t nodesX = this->spawnObject->sprite.getLocalBounds().width / TILE_SIZE;
+            uint16_t nodesY = this->spawnObject->sprite.getLocalBounds().height / TILE_SIZE;
+            Node* checkY = closest;
+            for(size_t y = 0; y < nodesX; y++)
+            {
+                Node* checkX = checkY;
+                for(size_t x = 0; x < nodesX; x++)
+                {
+                    // check right side nodes are convetable to floor
+                    if(!dynamic_cast< SG::Node::Floor* >(checkX) && checkX->isOccupied() == false)
+                    {
+                        return false;
+                    }else checkX = checkX->getLeftNode();
+                }
+                // move to the next row
+                checkY = checkY->getTopNode();
+            }
+            return true;
         }
         void createPlacementOverlays()
         {

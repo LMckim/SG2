@@ -10,8 +10,10 @@ namespace SG::Object
 {
     using SG::Primitive::Draggable;
     using SG::Primitive::Visible;
+    using SG::Primitive::Variable;
     using SG::Primitive::Z_LAYERS;
     using SG::Tool::TextureSheet;
+    using SG::Primitive::Node;
 
     class Placement;
 
@@ -20,15 +22,31 @@ namespace SG::Object
     {
         friend class Placement;
         public:
+        BaseObject( BaseObject* _base, Node* _parentNode, float _rotation = 0) : sheet{ _base->sheet }, parentNode{ _parentNode }
+        {
+            this->zLevel = Z_LAYERS::OBJECT;
+            this->sprite.setTexture( *sheet->getTexture(0,0) );
+            this->sprite.setOrigin(
+                this->sprite.getLocalBounds().width / 2,
+                this->sprite.getLocalBounds().height / 2
+            );
+            this->parentNode->setOccupied();
+            this->sprite.setRotation( _rotation );
+
+        }
         BaseObject(TextureSheet* _sheet) : sheet{ _sheet }
         {
             this->zLevel = Z_LAYERS::OBJECT;
             this->sprite.setTexture( *sheet->getTexture(0,0) );
         }
-        virtual ~BaseObject() {}
+        ~BaseObject()
+        {
+            std::cout << "del_b_obj\n";
+        }
 
         protected:
         TextureSheet* sheet;
+        Node* parentNode;
     };
 
 }

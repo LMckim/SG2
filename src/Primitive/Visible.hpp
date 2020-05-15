@@ -10,6 +10,7 @@ namespace SG::Manager{
 
 namespace SG::Primitive
 {
+    uint16_t TILE_SIZE = 16;
     enum Z_LAYERS {
         BACKGROUND_DEEP = 0,
         BACKGROUND_GALAXY = 1,
