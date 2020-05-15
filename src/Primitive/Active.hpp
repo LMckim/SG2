@@ -7,6 +7,7 @@
 
 namespace SG::Manager{
     class Object;
+    class Event;
 }
 
 namespace SG::Primitive
@@ -18,6 +19,7 @@ namespace SG::Primitive
         virtual public Visible
     {
         friend class SG::Manager::Object;
+        friend class SG::Manager::Event;
         public:
         virtual ~Active() {}
         
