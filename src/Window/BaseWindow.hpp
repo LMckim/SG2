@@ -35,8 +35,8 @@ namespace SG::Window
         virtual public Draggable
     {
         public:
-        BaseWindow(TextureSheet* windowSheet, sf::Font* font, string title, uint8_t width, uint8_t height, bool buildHeader = true ) :
-             sheet{ windowSheet }, font{ font }, title{ title }, width{ width }, height{ height }
+        BaseWindow(TextureSheet* _windowSheet, sf::Font* _font, string _title, uint8_t _width, uint8_t _height, bool _buildHeader = true ) :
+             sheet{ _windowSheet }, font{ _font }, title{ _title }, width{ _width }, height{ _height }
         {
             this->zLevel = Z_LAYERS::WINDOW_BASE;
         } 
@@ -46,10 +46,10 @@ namespace SG::Window
         }
         void buildWindow()
         {
-            sf::RenderTexture texture;
+            sf::RenderTexture win_texture;
             // create the window and an extra section for the header/ title
-            texture.create( this->width * SECTION_SIZE + SECTION_SIZE, this->height * SECTION_SIZE + SECTION_SIZE );
-            texture.clear( sf::Color::Transparent );
+            win_texture.create( this->width * SECTION_SIZE + SECTION_SIZE, this->height * SECTION_SIZE + SECTION_SIZE );
+            win_texture.clear( sf::Color::Transparent );
 
             vector< sf::Sprite > sections;
             // ************ HEADER **************
@@ -57,7 +57,7 @@ namespace SG::Window
             sf::Sprite lock;
             lock.setTexture( *this->sheet->getTexture(3,1) );
             lock.setPosition(0,0);
-            texture.draw( lock );
+            win_texture.draw( lock );
             // build the lock click box
             sf::RectangleShape lockBox;
             lockBox.setFillColor( sf::Color::Transparent );
@@ -73,23 +73,23 @@ namespace SG::Window
             // build the header title section
             for(size_t headerX = 1; headerX < this->width; headerX++)
             {
-                sf::Sprite sprite;
+                sf::Sprite h_sprite;
                 sf::Texture* section;
                 // left header
                 if(headerX == 1)
                 {
                     section = this->sheet->getTexture(2,1);
                     // right header
-                }else if(headerX == (uint16_t)( this->width - 1)){
+                }else if(headerX == static_cast<uint16_t>( this->width - 1)){
                     section = this->sheet->getTexture(2,2);
                     // middle header
                 }else{
                     section = this->sheet->getTexture(2,3);
                 }
 
-                sprite.setTexture( *section );
-                sprite.setPosition( headerX * SECTION_SIZE, 0 );
-                sections.push_back( sprite );
+                h_sprite.setTexture( *section );
+                h_sprite.setPosition( headerX * SECTION_SIZE, 0 );
+                sections.push_back( h_sprite );
             }
             // build the header click box
             sf::RectangleShape header;
@@ -108,7 +108,7 @@ namespace SG::Window
             sf::Sprite exit;
             exit.setTexture( *this->sheet->getTexture(3,2) );
             exit.setPosition( this->width * SECTION_SIZE, 0 );
-            texture.draw( exit );
+            win_texture.draw( exit );
             // build the lock click box
             sf::RectangleShape exitBox;
             exitBox.setFillColor( sf::Color::Transparent );
@@ -128,7 +128,7 @@ namespace SG::Window
             {
                 for(size_t x = 0; x < this->width + SECTION_SIZE; x++)
                 {   
-                    sf::Sprite sprite;
+                    sf::Sprite w_sprite;
                     sf::Texture* section;
                     // top-left corner
                     if(y == 1 && x == 0)
@@ -158,15 +158,15 @@ namespace SG::Window
                     }else{
                         section = this->sheet->getTexture(2,0);
                     }
-                    sprite.setTexture( *section );
-                    sprite.setPosition( x * SECTION_SIZE, y * SECTION_SIZE );
-                    sections.push_back( sprite );
+                    w_sprite.setTexture( *section );
+                    w_sprite.setPosition( x * SECTION_SIZE, y * SECTION_SIZE );
+                    sections.push_back( w_sprite );
                 }
             }
 
             for( auto &itr : sections )
             {
-                texture.draw( itr );
+                win_texture.draw( itr );
             }
             sf::RectangleShape contentBox;
             contentBox.setFillColor( sf::Color::Transparent );
@@ -191,11 +191,11 @@ namespace SG::Window
                 (this->width * SECTION_SIZE) / 2 - (SECTION_SIZE * 1.5),
                 0
             );
-            texture.draw( titleText );
+            win_texture.draw( titleText );
 
             // render out the texture
-            texture.display();
-            this->texture = texture.getTexture();
+            win_texture.display();
+            this->texture = win_texture.getTexture();
             this->sprite.setTexture( this->texture );
             this->sprite.setScale( SCALE_ADJ, SCALE_ADJ);
 
@@ -326,6 +326,7 @@ namespace SG::Window
             );
             this->positionButtons();
         }
+        using Active::select;
         virtual void select( sf::Vector2f mPos )
         {
             // clicked on the exit button
@@ -430,14 +431,16 @@ namespace SG::Window
                 );
                 (*btns)->setPosition(pos);
                 // TODO: more corrections of offsets to deal with window boundries
-                offsetX += (*btns)->sprite.getTexture()->getSize().x + SECTION_SIZE;
+                offsetX += (*btns)->sprite.getTexture()->getSize().x + static_cast<unsigned int>(SECTION_SIZE);
 
                 btns++;
             }
         }
         void buildButtonBackground(sf::RenderTexture& newTex, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
         {
-            newTex.create( SECTION_SIZE * sectionsX, SECTION_SIZE * sectionsY );
+            newTex.create(
+                static_cast<uint16_t>(SECTION_SIZE * sectionsX),
+                static_cast<uint16_t>(SECTION_SIZE * sectionsY ) );
             newTex.clear( sf::Color::Transparent );
             
             vector< sf::Sprite > sections;
@@ -450,20 +453,23 @@ namespace SG::Window
                     if( y == 0 && x == 0 )
                     {
                         sectionTex = this->sheet->getTexture(4,0);
-                    }else if( y == 0 && x == (uint16_t)(sectionsX - 1) ){
+                    }else if( y == 0 && x == static_cast<uint16_t>(sectionsX - 1) ){
                         sectionTex = this->sheet->getTexture(4,1);
-                    }else if( y == (uint16_t)(sectionsY - 1) && x == 0 ){
+                    }else if( y == static_cast<uint16_t>(sectionsY - 1) && x == 0 ){
                         sectionTex = this->sheet->getTexture(4,3);
-                    }else if( y == (uint16_t)(sectionsY - 1) && x == (uint16_t)(sectionsX - 1) ){
+                    }else if( y == static_cast<uint16_t>(sectionsY - 1) && x == static_cast<uint16_t>(sectionsX - 1) ){
                         sectionTex = this->sheet->getTexture(4,2);
                     }else if(x == 0){
                         sectionTex = this->sheet->getTexture(5,0);
-                    }else if(x == (uint16_t)(sectionsX - 1)){
+                    }else if(x == static_cast<uint16_t>(sectionsX - 1)){
                         sectionTex = this->sheet->getTexture(5,1);
                     }else if(y == 0){
                         sectionTex = this->sheet->getTexture(5,3);
-                    }else if(y == (uint16_t)(sectionsY - 1)){
+                    }else if(y == static_cast<uint16_t>(sectionsY - 1)){
                         sectionTex = this->sheet->getTexture(5,2);
+                    }else{
+                        // TODO: Correct this to use an acutal middle texture
+                        sectionTex = this->sheet->getTexture(0,0);
                     }
                     section.setTexture( *sectionTex );
                     section.setPosition(

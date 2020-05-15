@@ -18,12 +18,12 @@ namespace SG::Window
         friend class BaseWindow;
 
         public:
-        TextButton(sf::Texture* buttonTexture, sf::Font* font, string text) : Button( buttonTexture )
+        TextButton(sf::Texture* buttonTexture, sf::Font* _font, string _text) : Button( buttonTexture )
         {
-            this->font = font;
+            this->font = _font;
             this->text.setFont(*this->font);
             this->text.setScale(0.5, 0.5);
-            this->text.setString( text );
+            this->text.setString( _text );
             this->text.setOrigin(
                 this->text.getGlobalBounds().width / 2,
                 this->text.getGlobalBounds().height / 2

@@ -11,10 +11,10 @@ namespace SG::Node
         virtual public VisibleNode
     {
         public:
-        Door(sf::Texture* doorTexture, sf::Texture* floorTexture) : VisibleNode( doorTexture )
+        Door(sf::Texture* _doorTexture, sf::Texture* _floorTexture) : VisibleNode( _doorTexture )
         {
             this->allowMove = true;
-            this->floor.setTexture( *floorTexture );
+            this->floor.setTexture( *_floorTexture );
         }
         virtual ~Door() {}
         void toggleLocked()

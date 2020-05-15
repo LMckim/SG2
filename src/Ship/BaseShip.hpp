@@ -29,14 +29,14 @@ namespace SG::Ship
         virtual public Variable
     {
         public:
-        BaseShip( Object* objectM, sf::Texture* shipSprite, Layout layout ) : objectM{ objectM }, layout{ layout }
+        BaseShip( Object* _objectM, sf::Texture* _shipSprite, Layout _layout ) : objectM{ _objectM }, layout{ _layout }
         {
             this->zLevel = Z_LAYERS::SHIP_GRAPHIC;
-            this->sprite.setTexture( *shipSprite );
+            this->sprite.setTexture( *_shipSprite );
             this->sprite.setOrigin(
                 sf::Vector2f(
-                    shipSprite->getSize().x / 2,
-                    shipSprite->getSize().y / 2
+                    _shipSprite->getSize().x / 2,
+                    _shipSprite->getSize().y / 2
                 )
             );
             this->sprite.setPosition(
@@ -53,7 +53,7 @@ namespace SG::Ship
             cTex->loadFromImage(cImg, sf::IntRect(0,0,16,16));
 
             // this may stay
-            for(size_t crew = 0; crew < count; crew++)
+            for(size_t crewItr = 0; crewItr < count; crewItr++)
             {
                 Node* spawn = this->layout.getRandomFloorNode();
                 if( spawn->isOccupied() ) continue;

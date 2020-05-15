@@ -26,6 +26,7 @@ namespace SG::Primitive
         protected:
         bool selected = false;
         bool groupselect = false;
+        virtual void select() {};
         virtual void select( sf::Vector2f mpos ) {};
         // for non-context sensitive right-click actions
         virtual void leftClick() {};

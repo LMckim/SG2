@@ -40,21 +40,20 @@ namespace SG::Crew
 
         public:
         string name = "Dave";
-        Base(sf::Texture* spriteSheet, Node* spawn)
+        Base(sf::Texture* _spriteSheet, Node* _spawn) : currentNode{ _spawn }
         {
             this->zLevel = Z_LAYERS::CREW;
-            this->currentNode = spawn;
 
             this->groupselect = true;
-            this->sprite.setTexture(*spriteSheet);
-            this->sprite.setPosition(spawn->getPosition()->x, spawn->getPosition()->y );
-            spawn->occupied = true;
+            this->sprite.setTexture(*_spriteSheet);
+            this->sprite.setPosition(this->currentNode->getPosition()->x, this->currentNode->getPosition()->y );
+            this->currentNode->occupied = true;
 
-            this->createBox(spriteSheet);
+            this->createBox(_spriteSheet);
         }
         virtual ~Base() {}
 
-        virtual void setDestination( Node* destination ) { this->destination = destination; }
+        virtual void setDestination( Node* _destination ) { this->destination = _destination; }
         virtual void update() 
         {
             // TODO: some cleanup here to deal with 2 guys vying for the same node, one will stop dead and no longer update
@@ -107,11 +106,12 @@ namespace SG::Crew
 
         sf::RectangleShape box;
 
+        using Active::select;
         virtual void select()
         {
             this->selected = true;
         }
-
+        using Active::rightClick;
         virtual void rightClick(Node* dest)
         {
             // TODO: do a check to find other crew's destinations and adjust accordingly

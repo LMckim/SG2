@@ -10,7 +10,7 @@
 #include <src/Tool/TextureSheet.hpp>
 
 // temp for testing
-#include <src/Generator/Layout.hpp>
+#include <src/Generator/Gen_Layout.hpp>
 #include <src/Ship/BaseShip.hpp>
 #include <src/Ship/Layout.hpp>
 #include <src/Window/BaseWindow.hpp>
@@ -21,7 +21,7 @@
 // TESTS (remove before PROD)
 int main()
 {
-    std::srand(std::time(nullptr));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     
     SG::Manager::Screen screenM;
     SG::Manager::Resource resourceM;
@@ -38,16 +38,16 @@ int main()
     SG::Tool::TextureSheet* interiorWallSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\interior_wall.png");
     SG::Tool::TextureSheet* doorSections = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\doors.png");
 
-    SG::Generator::Layout lay( &objectM );
+    SG::Generator::Gen_Layout lay( &objectM );
     sf::Image test;
     sf::Texture* ship = new sf::Texture();
     ship->loadFromFile("assets\\graphics\\ships\\CARGO_01.png");
     test.loadFromFile("assets\\layouts\\CARGO_01.png");
 
      
-    lay.addAsset(SG::Generator::Layout::FLOOR, floorSections );
-    lay.addAsset(SG::Generator::Layout::DOOR, doorSections );
-    lay.addAsset(SG::Generator::Layout::WALL, interiorWallSections );
+    lay.addAsset(SG::Generator::Gen_Layout::TILE::FLOOR, floorSections );
+    lay.addAsset(SG::Generator::Gen_Layout::TILE::DOOR, doorSections );
+    lay.addAsset(SG::Generator::Gen_Layout::TILE::WALL, interiorWallSections );
 
     SG::Ship::Layout layout = lay.generateLayout( &test );
     objectM.registerLayout( &layout );

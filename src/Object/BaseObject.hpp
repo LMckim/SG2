@@ -20,7 +20,7 @@ namespace SG::Object
     {
         friend class Placement;
         public:
-        BaseObject(TextureSheet* sheet) : sheet{ sheet }
+        BaseObject(TextureSheet* _sheet) : sheet{ _sheet }
         {
             this->zLevel = Z_LAYERS::OBJECT;
             this->sprite.setTexture( *sheet->getTexture(0,0) );

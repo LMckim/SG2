@@ -61,9 +61,9 @@ namespace SG::Manager
             }
 
             // render any sf drawable primitives 
-            for(auto &itr: this->sfPrimitives)
+            for(auto &itr_p: this->sfPrimitives)
             {
-                this->window->draw( *itr );
+                this->window->draw( *itr_p );
             }
 
             // render the ui
@@ -93,25 +93,25 @@ namespace SG::Manager
             this->sfPrimitives.push_back( drawable );
         }
 
-        void addVisible(Visible* visible)
+        void addVisible(Visible* _visible)
         {
-            if( this->visible.find( visible->zLevel ) != this->visible.end())
+            if( this->visible.find( _visible->zLevel ) != this->visible.end())
             {
-                this->visible[ visible->zLevel ].push_back( visible );
+                this->visible[ _visible->zLevel ].push_back( _visible );
             }else{
-                this->visible[ visible->zLevel ] = vector< Visible* >();
-                this->visible[ visible->zLevel ].push_back( visible );
+                this->visible[ _visible->zLevel ] = vector< Visible* >();
+                this->visible[ _visible->zLevel ].push_back( _visible );
             }
         }
         
-        void addUI(Visible* visible)
+        void addUI(Visible* _visible)
         {
-            if( this->ui.find( visible->zLevel ) != this->ui.end())
+            if( this->ui.find( _visible->zLevel ) != this->ui.end())
             {
-                this->ui[ visible->zLevel ].push_back( visible );
+                this->ui[ _visible->zLevel ].push_back( _visible );
             }else{
-                this->ui[ visible->zLevel ] = vector< Visible* >();
-                this->ui[ visible->zLevel ].push_back( visible );
+                this->ui[ _visible->zLevel ] = vector< Visible* >();
+                this->ui[ _visible->zLevel ].push_back( _visible );
             }
         }
 
@@ -127,7 +127,7 @@ namespace SG::Manager
             }
         }
 
-        void removeVisible(Visible* visible)
+        void removeVisible(Visible* _visible)
         {
             // TODO: fix up here to use zlevel
             auto itr = this->visible.begin();
@@ -136,7 +136,7 @@ namespace SG::Manager
                 auto itrZ = itr->second.begin();
                 while( itrZ != itr->second.end() )
                 {
-                    if((*itrZ) == visible)
+                    if((*itrZ) == _visible)
                     {
                         itrZ = itr->second.erase( itrZ );
                     }else itrZ++;

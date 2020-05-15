@@ -11,7 +11,7 @@ namespace SG::Node
         virtual public VisibleNode
     {
         public:
-        Wall(sf::Texture* texture) : VisibleNode( texture ) {}
+        Wall(sf::Texture* _texture) : VisibleNode( _texture ) {}
         virtual ~Wall() {}
         protected:
     };

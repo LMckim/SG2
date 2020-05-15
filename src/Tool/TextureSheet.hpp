@@ -16,11 +16,11 @@ namespace SG::Tool
     class TextureSheet
     {
         public:
-        TextureSheet( string imagePath, uint16_t sectionWidth = 16, uint16_t sectionHeight = 16 )
+        TextureSheet( string _imagePath, uint16_t _sectionWidth = 16, uint16_t _sectionHeight = 16 )
         {
-            this->imagePath = imagePath;
-            this->sectionWidth = sectionWidth;
-            this->sectionHeight = sectionHeight;
+            this->imagePath = _imagePath;
+            this->sectionWidth = _sectionWidth;
+            this->sectionHeight = _sectionHeight;
         }
 
         void generateTextures()

@@ -11,18 +11,20 @@ namespace SG::Primitive
     struct Animation
     {
         Animation() {}
-        Animation( vector< sf::Texture* > frames ){ this->frames = frames; }
+        Animation( vector< sf::Texture* > _frames ) : frames{ _frames } {}
 
         uint16_t index = 0;
         vector< sf::Texture* > frames;
 
-        int frameCount(){ return this->frames.size(); }
-        void setFrames( vector< sf::Texture* > frames ){ this->frames = frames; }
-        void addFrame( sf::Texture* frame ){ this->frames.push_back( frame ); }
+        uint16_t frameCount(){ return this->frames.size(); }
+        void setIndex( uint16_t _index = 0){ this->index = _index; }
+        void setFrames( vector< sf::Texture* > _frames ){ this->frames = _frames; }
+        void addFrame( sf::Texture* _frame ){ this->frames.push_back( _frame ); }
 
-        sf::Texture* getFrameByIndex( uint16_t index = 0 )
+        sf::Texture* getFrameByIndex( uint16_t _index = 0 )
         {
-            if(this->frames.size() <= index ){ return this->frames[ index ]; }
+            if(this->frames.size() <= _index ){ return this->frames[ _index ]; }
+            else return this->frames[0];
         }
 
         sf::Texture* getRandomFrame()
@@ -32,7 +34,7 @@ namespace SG::Primitive
         
         sf::Texture* getNextFrame()
         {
-            sf::Texture* frame = this->frames[ index ];
+            sf::Texture* frame = this->frames[ this->index ];
             this->index >= this->frames.size() ? this->index = 0 : this->index++;
             return frame;
         }

@@ -20,10 +20,9 @@ namespace SG::Window
         public BaseWindow
     {
         public:
-        SpawnerWindow(Object* objectM, TextureSheet* windowSheet, sf::Font* font, string title, uint8_t width, uint8_t height, bool buildHeader = true ) :
-            BaseWindow( windowSheet, font, title, width, height, buildHeader ), objectM{ objectM }
+        SpawnerWindow(Object* _objectM, TextureSheet* _windowSheet, sf::Font* _font, string _title, uint8_t _width, uint8_t _height, bool _buildHeader = true ) :
+            BaseWindow( _windowSheet, _font, _title, _width, _height, _buildHeader ), objectM{ _objectM }
         {
-
         }
         virtual void addObjectSpawnButton(sf::Texture* icon, BaseObject* spawnObj)
         {
@@ -47,9 +46,10 @@ namespace SG::Window
                     this->objectM->DraggedObj = 
                         new Placement( 
                             this->objectM,
-                            this->objectLink[ itr ],
-                            this->objectM->layout
+                            this->objectM->layout,
+                            this->objectLink[ itr ]
                     );
+                    this->objectM->DraggedObj->forceDrag( mPos );
                     this->objectM->dragging = true;
                     this->objectM->addVisible( this->objectM->DraggedObj );
                     break; // found the button, we can break

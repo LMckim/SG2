@@ -41,7 +41,7 @@ namespace SG::Manager
         public:
         bool dragging = false;
 
-        Object(Screen* screenM) : screenM{ screenM } {}
+        Object(Screen* _screenM) : screenM{ _screenM } {}
 
         void update()
         {
@@ -82,10 +82,7 @@ namespace SG::Manager
             }
         }
 
-        void registerLayout(Layout* layout)
-        {
-            this->layout = layout;
-        }
+        void registerLayout(Layout* _layout) { this->layout = _layout; }
 
         void removeVariables()
         {
@@ -104,14 +101,14 @@ namespace SG::Manager
                     // if its one of our registered active objects then delete it
                     if(Active* active = dynamic_cast< Active* >( temp ))
                     {
-                        auto itr = this->actives.begin();
-                        while( itr != this->actives.end() )
+                        auto itr_a = this->actives.begin();
+                        while( itr_a != this->actives.end() )
                         {
-                            if( (*itr) == active )
+                            if( (*itr_a) == active )
                             {
-                                this->actives.erase( itr );
+                                this->actives.erase( itr_a );
                                 break;
-                            }else itr++;
+                            }else itr_a++;
                         }
                     }
                     delete temp;

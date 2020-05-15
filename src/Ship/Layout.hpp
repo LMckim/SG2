@@ -21,7 +21,7 @@ namespace SG::Ship
     class Layout
     {
         public:
-        Layout( vector< vector< Node* >> nodes ) : nodes{ nodes } {}
+        Layout( vector< vector< Node* >> _nodes ) : nodes{ _nodes } {}
         virtual ~Layout() {}
         Node* getCenterNode()
         {

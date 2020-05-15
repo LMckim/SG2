@@ -18,7 +18,7 @@ namespace SG::Manager
     class Event
     {
         public:
-        Event(Screen* screenM, Object* objectM ) : screenM{ screenM }, objectM{ objectM } 
+        Event(Screen* _screenM, Object* _objectM ) : screenM{ _screenM }, objectM{ _objectM } 
         {
             this->selectionbox.setOutlineThickness( 1.f );
             this->selectionbox.setOutlineColor( sf::Color::Green );

@@ -5,6 +5,11 @@
 #include <src/Primitive/Active.hpp>
 namespace SG::Manager{
     class Object;
+    class Event;
+}
+namespace SG::Window{
+    class BaseWindow;
+    class SpawnerWindow;
 }
 
 namespace SG::Primitive
@@ -14,6 +19,9 @@ namespace SG::Primitive
         virtual public Active
     {
         friend class SG::Manager::Object;
+        friend class SG::Manager::Event;
+        friend class SG::Window::SpawnerWindow;
+        friend class SG::Window::BaseWindow;
         public:
         virtual ~Draggable() {}
         

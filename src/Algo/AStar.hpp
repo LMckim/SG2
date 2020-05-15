@@ -24,17 +24,16 @@ namespace SG::Algo
             this->parent = orig.parent;
             this->destination = orig.destination;
         }
-        PathNode(Node* current, PathNode* parent, Node* destination) : current{ current }, parent{ parent }
+        PathNode(Node* _current, PathNode* _parent, Node* _destination) : current{ _current }, parent{ _parent }, destination{ _destination }
         {
-            int x = ( current->getPosition()->x - destination->getPosition()->x );
-            int y = ( current->getPosition()->y - destination->getPosition()->y );
+            int x = ( current->getPosition()->x - this->destination->getPosition()->x );
+            int y = ( current->getPosition()->y - this->destination->getPosition()->y );
 
             // normalize the results to always be positive
             if( x < 0 ) x *= -1;
             if( y < 0 ) y *= -1;
 
             this->h = x + y;
-            this->destination = destination;
         }
         ~PathNode()
         {

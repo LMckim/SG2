@@ -12,12 +12,11 @@
 #include <src/Node/Door.hpp>
 #include <src/Node/Space.hpp>
 
-#include <src/Tool/Debug.hpp>
-
 namespace SG::Generator
 {
     using std::vector;
-
+    using std::map;
+    
     using SG::Manager::Object;
     using SG::Primitive::Node;
     using SG::Primitive::Generator;
@@ -30,15 +29,15 @@ namespace SG::Generator
 
     using SG::Tool::TextureSheet;
 
-    class Layout :
+    class Gen_Layout :
         protected Generator
     {
         public:
         const int TILE_SIZE = 16;
         enum TILE { SPACE, FLOOR, WALL, DOOR };
         
-        Layout(Object* objectM) : Generator::Generator( objectM ) {}
-        ~Layout() {}
+        Gen_Layout( Object* _objectM ) : Generator::Generator( _objectM ) {}
+        ~Gen_Layout() {}
 
         void addAsset(TILE tile, TextureSheet* asset)
         {

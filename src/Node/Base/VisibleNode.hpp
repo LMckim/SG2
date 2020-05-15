@@ -15,11 +15,11 @@ namespace SG::Node::Base
         virtual public Visible
     {
         public:
-        VisibleNode(sf::Texture* texture)
+        VisibleNode(const sf::Texture* _texture)
         {           
             this->zLevel = Z_LAYERS::SHIP_FLOOR;
-            this->sprite.setTexture( *texture );
-            this->createBox( texture );
+            this->sprite.setTexture( *_texture );
+            this->createBox( _texture );
         }
         virtual void setPosition(int x, int y) override
         {
@@ -44,7 +44,7 @@ namespace SG::Node::Base
         const float OUTLINE_WIDTH = 0.75f;
         sf::RectangleShape box;
 
-        void createBox(sf::Texture* tex)
+        void createBox(const sf::Texture* tex)
         {
             this->box = sf::RectangleShape();
             this->box.setSize(

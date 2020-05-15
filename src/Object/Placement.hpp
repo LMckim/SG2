@@ -7,6 +7,11 @@
 #include <src/Object/BaseObject.hpp>
 #include <src/Ship/Layout.hpp>
 
+namespace SG::Window{
+    class BaseWindow;
+    class SpawnerWindow;
+}
+
 namespace SG::Object
 {
     using SG::Manager::Object;
@@ -23,10 +28,12 @@ namespace SG::Object
     {
         friend class SG::Manager::Object;
         friend class SG::Manager::Event;
+        friend class SG::Window::BaseWindow;
+        friend class SG::Window::SpawnerWindow;
 
         public:
-        Placement( Object* objectM, BaseObject* spawnObject, Layout* layout) 
-            : objectM{ objectM }, layout{ layout }, spawnObject{ spawnObject }
+        Placement( Object* _objectM, Layout* _layout, BaseObject* _spawnObject) 
+            : objectM{ _objectM }, layout{ _layout }, spawnObject{ _spawnObject }
         {
             this->zLevel = Z_LAYERS::PLACEMENT;
             this->sprite.setTexture( *spawnObject->sprite.getTexture() );
@@ -35,13 +42,6 @@ namespace SG::Object
                 this->sprite.getLocalBounds().height / 2
             );
             this->rotate();
-            this->createPlacementOverlays();
-        }
-        Placement( Object* objectM,Layout* layout, BaseObject* spawnObject ) 
-            : objectM{ objectM }, layout{ layout }, spawnObject{ spawnObject }
-        {
-            this->zLevel = Z_LAYERS::PLACEMENT;
-            this->sprite.setTexture( *spawnObject->sprite.getTexture() );
             this->createPlacementOverlays();
         }
         virtual ~Placement()
@@ -86,7 +86,10 @@ namespace SG::Object
 
         sf::RectangleShape goodPlacement;
         sf::RectangleShape badPlacement;
-        virtual void handleInput(sf::Event event) {};
+        virtual void handleInput(sf::Event event) 
+        {
+            this->rotate();
+        };
 
         void checkPlacement(Node* closest)
         {

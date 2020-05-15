@@ -11,7 +11,7 @@ namespace SG::Node
         virtual public VisibleNode
     {
         public:
-        Floor(sf::Texture* texture) : VisibleNode( texture )
+        Floor(sf::Texture* _texture) : VisibleNode( _texture )
         {
             this->showBox = true;
             this->allowMove = true;
