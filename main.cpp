@@ -14,6 +14,10 @@
 #include <src/Ship/BaseShip.hpp>
 #include <src/Ship/Layout.hpp>
 #include <src/Window/BaseWindow.hpp>
+
+#include <src/Object/BaseObject.hpp>
+#include <src/Window/SpawnerWindow.hpp>
+
 // TESTS (remove before PROD)
 int main()
 {
@@ -54,7 +58,7 @@ int main()
     // WINDOW TEST
     sf::Image windowImg;
     SG::Tool::TextureSheet* windowTS = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\window_1.png");
-    SG::Window::BaseWindow window( windowTS, nullptr, &font,"FUCK YEAH", 8, 6);
+    SG::Window::BaseWindow window( windowTS, &font,"FUCK YEAH", 8, 6);
     window.buildWindow();
 
     // BUTTON TEST
@@ -64,6 +68,13 @@ int main()
     window.addTextButton( "FUCK", 3 );
     objectM.addVariable( &window );
 
+    // SPAWNER WINDOW TEST
+    SG::Tool::TextureSheet* objSheet = new SG::Tool::TextureSheet("assets\\graphics\\sheets\\build_console_abl.png",32,32);
+    SG::Object::BaseObject* obj = new SG::Object::BaseObject(objSheet);
+    SG::Window::SpawnerWindow s_window(&objectM, windowTS, &font,"SPAWN", 6,6);
+    s_window.addObjectSpawnButton( objSheet->getTexture(0,0), obj);
+    s_window.buildWindow();
+    objectM.addVariable(&s_window);
 
     // HERES THE HEART
     while(screenM.window->isOpen())

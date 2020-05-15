@@ -30,7 +30,7 @@ namespace SG::Primitive
         virtual void rightClick() {};
         // for destination or context sensitive right-click actions
         virtual void rightClick(Node* node) {};
-        virtual void handleInput() = 0;
+        virtual void handleInput(sf::Event event) = 0;
     };
 }
 

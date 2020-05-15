@@ -20,6 +20,7 @@ namespace SG::Primitive
         protected:
         virtual bool drag(sf::Vector2f mPos) { return true; };
         virtual void forceDrag(sf::Vector2f mPos) {};
+        virtual void stopDrag() {};
     };
 }
 

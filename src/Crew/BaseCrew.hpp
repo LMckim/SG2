@@ -121,7 +121,7 @@ namespace SG::Crew
             }else this->path = AStar::findPath(this->currentNode, dest);
         }
 
-        virtual void handleInput() {}
+        virtual void handleInput(sf::Event event) {}
 
         void createBox(sf::Texture* tex)
         {

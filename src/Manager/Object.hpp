@@ -13,6 +13,10 @@
 #include <src/Ship/Layout.hpp>
 #include <src/Primitive/Node.hpp>
 
+namespace SG::Window{
+    class SpawnerWindow;
+}
+
 namespace SG::Manager
 {
     using std::vector;
@@ -25,8 +29,15 @@ namespace SG::Manager
     using SG::Ship::Layout;
     using SG::Primitive::Node;
 
+    class Event;
+
     class Object
     {
+        // so that the spawner may change the active draggable
+        friend class SG::Window::SpawnerWindow;
+        // so the event class can affect objects
+        friend class Event;
+        
         public:
         bool dragging = false;
 
@@ -100,14 +111,43 @@ namespace SG::Manager
                             {
                                 this->actives.erase( itr );
                                 break;
-                            }
+                            }else itr++;
                         }
                     }
                     delete temp;
                 }else itr++;
             }
         }
-
+        void clearMe(Visible* obj)
+        {
+            // TODO: keep an eye out for leaks here as well
+            this->screenM->removeVisible( obj );
+            if(Active* active = dynamic_cast< Active* >( obj ) )
+            {
+                auto itr = this->actives.begin();
+                while( itr != this->actives.end() )
+                {
+                    if( (*itr) == active)
+                    {
+                        this->actives.erase( itr );
+                        break;
+                    }else itr++;
+                }
+            }
+            if(Variable* variable = dynamic_cast< Variable* >( obj ) )
+            {
+                auto itr = this->variables.begin();
+                while( itr != this->variables.end() )
+                {
+                    if( (*itr) == variable)
+                    {
+                        this->variables.erase( itr );
+                        break;
+                    }else itr++;
+                }
+            }  
+            delete obj;
+        }
         void leftClick(sf::Vector2f mPos)
         {
             // clear our selection
@@ -146,8 +186,8 @@ namespace SG::Manager
         }
         void clearDrag()
         {
-            std::cout  << "clear\n";
             this->dragging = false;
+            this->DraggedObj->stopDrag();
             this->DraggedObj = nullptr;
         }
         void rightClicked(sf::Vector2f mPos)
@@ -190,6 +230,10 @@ namespace SG::Manager
             }
         }
 
+        protected:
+        Draggable* DraggedObj;
+
+
         private:
         bool paused = false;
 
@@ -201,10 +245,7 @@ namespace SG::Manager
         vector< Variable* > variables;
         vector< Active* > actives;
         vector< Active* > selected;
-        Draggable* DraggedObj;
         
     };
 }
-
-
 #endif

@@ -32,7 +32,9 @@ namespace SG::Manager
             // register keys
             // held 
             this->k_held[ sf::Keyboard::Space ] = false;
-            //
+            this->k_held[ sf::Keyboard::R ] = false;
+            // delays
+            this->keyDelays[ sf::Keyboard::R ] = 0;
             this->keyDelays[ sf::Keyboard::Space ] = 0; // pausing
             this->keyDelays[ sf::Keyboard::Tab ] = 0; // changing between map and in-game
         }
@@ -112,6 +114,13 @@ namespace SG::Manager
                     this->keyDelays[ sf::Keyboard::Space ] = KEY_DELAY_FRAMES;
                     this->objectM->togglePause();
                 }
+                if(event.type == sf::Event::KeyPressed)
+                {
+                    if(sf::Keyboard::isKeyPressed( sf::Keyboard::R ) && this->k_held[ sf::Keyboard::R ] == false)
+                    {
+                        this->pressed_R( event );
+                    }
+                }
                 
 
             }
@@ -148,6 +157,7 @@ namespace SG::Manager
                 if(itr.second > 0) itr.second--;
             }
         }
+        // ********** MOUSE ************
         void mouseWheel(const sf::Event* event)
         {
                 if(event->mouseWheel.delta == 1 && this->scrolls < 30 )
@@ -224,6 +234,14 @@ namespace SG::Manager
         {
             sf::Vector2f mPos = window->mapPixelToCoords( sf::Mouse::getPosition( *window ) );
             this->objectM->rightClicked( mPos );
+        }
+        // ********** KEYBOARD ************
+        void pressed_R(sf::Event event)
+        {
+            if(this->objectM->dragging == true)
+            {
+                this->objectM->DraggedObj->handleInput( event );
+            }
         }
     };
 }

@@ -208,7 +208,7 @@ namespace SG::Window
             this->positionClickBoxes();
         }
 
-        void addIconButton(sf::Texture *icon, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
+        void addIconButton(sf::Texture* icon, uint16_t sectionsX = 2, uint16_t sectionsY = 2)
         {
             sf::RenderTexture newTex;
             this->buildButtonBackground(newTex, sectionsX, sectionsY );
@@ -281,7 +281,7 @@ namespace SG::Window
         {
             // if(this->beingDragged == true) this->beingDragged = false;
         };
-        virtual void handleInput() {};
+        virtual void handleInput(sf::Event event) {};
         virtual void reactiveScale( float zoomFactor )
         {
             if(this->currentlyReactive)
@@ -480,7 +480,7 @@ namespace SG::Window
             }
 
         }
-        void checkButtonClicked(sf::Vector2f mPos)
+        virtual void checkButtonClicked(sf::Vector2f mPos)
         {
             for( auto &itr : this->buttons )
             {

@@ -2,6 +2,7 @@
 #define SG_OBJECT_PLACEMENT
 
 #include <src/Manager/Object.hpp>
+#include <src/Manager/Event.hpp>
 
 #include <src/Object/BaseObject.hpp>
 #include <src/Ship/Layout.hpp>
@@ -21,18 +22,58 @@ namespace SG::Object
         virtual public Visible
     {
         friend class SG::Manager::Object;
+        friend class SG::Manager::Event;
 
         public:
-        Placement( Object* objectM, sf::Texture* texture, Layout* layout ) : objectM{ objectM }, layout{ layout }
+        Placement( Object* objectM, BaseObject* spawnObject, Layout* layout) 
+            : objectM{ objectM }, layout{ layout }, spawnObject{ spawnObject }
         {
             this->zLevel = Z_LAYERS::PLACEMENT;
-            this->sprite.setTexture( *texture );
+            this->sprite.setTexture( *spawnObject->sprite.getTexture() );
+            this->sprite.setOrigin(
+                this->sprite.getLocalBounds().width / 2,
+                this->sprite.getLocalBounds().height / 2
+            );
+            this->rotate();
             this->createPlacementOverlays();
+        }
+        Placement( Object* objectM,Layout* layout, BaseObject* spawnObject ) 
+            : objectM{ objectM }, layout{ layout }, spawnObject{ spawnObject }
+        {
+            this->zLevel = Z_LAYERS::PLACEMENT;
+            this->sprite.setTexture( *spawnObject->sprite.getTexture() );
+            this->createPlacementOverlays();
+        }
+        virtual ~Placement()
+        {
+            std::cout << "ded\n";
+        }
+        void rotate()
+        {
+            // only allow 90 degree increments
+            this->sprite.rotate(90);
+
         }
         virtual void forceDrag( sf::Vector2f mPos )
         {
             Node* closest = this->layout->findClosestNode( mPos);
             this->sprite.setPosition( closest->getPosition()->x, closest->getPosition()->y );
+            this->badPlacement.setPosition( 
+                sf::Vector2f(
+                    this->sprite.getGlobalBounds().left,
+                    this->sprite.getGlobalBounds().top
+                ) 
+            );
+            this->goodPlacement.setPosition( 
+                sf::Vector2f(
+                    this->sprite.getGlobalBounds().left,
+                    this->sprite.getGlobalBounds().top
+                ) 
+             );
+        }
+        virtual void stopDrag()
+        {
+            this->objectM->clearMe( dynamic_cast< Visible* >( this ) );
         }
         protected:
         const sf::Color GOOD_OVERLAY = sf::Color(0,255,0,100);
@@ -41,10 +82,16 @@ namespace SG::Object
 
         Object* objectM;
         Layout* layout;
+        BaseObject* spawnObject;
 
         sf::RectangleShape goodPlacement;
         sf::RectangleShape badPlacement;
+        virtual void handleInput(sf::Event event) {};
 
+        void checkPlacement(Node* closest)
+        {
+
+        }
         void createPlacementOverlays()
         {
             sf::Vector2f spriteSize = sf::Vector2f(

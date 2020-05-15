@@ -13,11 +13,13 @@ namespace SG::Window
     using SG::Primitive::Visible;
     // forward declaration
     class BaseWindow;
+    class SpawnerWindow;
 
     class Button    :
         virtual protected Visible
     {
         friend class BaseWindow;
+        friend class SpawnerWindow;
 
         public:
         Button(sf::Texture *buttonTexture) : btnTex{ buttonTexture }
