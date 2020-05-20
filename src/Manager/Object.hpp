@@ -69,16 +69,16 @@ namespace SG::Manager
             this->screenM->addUI( visible );
         }
 
-        void addVariable(Variable* variable)
+        void addVariable(Variable* _variable, bool _visibleCheck = true, bool _activeCheck = true)
         {
-            this->variables.push_back( variable );
-            if(Visible* visible = dynamic_cast<Visible*>( variable ))
+            this->variables.push_back( _variable );
+            if(_visibleCheck)
             {
-                this->screenM->addVisible( visible );
+                if(Visible* visible = dynamic_cast<Visible*>( _variable )) this->screenM->addVisible( visible );
             }
-            if(Active* active = dynamic_cast<Active*>( variable ))
+            if(_activeCheck)
             {
-                this->actives.push_back( active );
+                if(Active* active = dynamic_cast<Active*>( _variable )) this->actives.push_back( active );
             }
         }
 

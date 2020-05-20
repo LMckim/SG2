@@ -8,20 +8,45 @@
 #include <src/Node/Door.hpp>
 #include <src/Node/Wall.hpp>
 
+namespace SG::Generator{
+    class GenPoly;
+}
 
 namespace SG::Ship
 {
     using std::vector;
     using SG::Primitive::Node;
+    using SG::Node::VisibleNode;
 
     using SG::Node::Floor;
     using SG::Node::Door;
     using SG::Node::Wall;
 
+    class BaseShip;
+
     class Layout
     {
+        friend class SG::Generator::GenPoly;
+        friend class SG::Ship::BaseShip;
+
         public:
-        Layout( vector< vector< Node* >> _nodes ) : nodes{ _nodes } {}
+        Layout( vector< vector< Node* >> _nodes ) : nodes{ _nodes } 
+        {
+            auto itrY = this->nodes.begin();
+            while( itrY != this->nodes.end() )
+            {
+                auto itrX = (*itrY).begin();
+                while( itrX != (*itrY).end() )
+                {
+                    if(VisibleNode* vN = dynamic_cast< VisibleNode* >( (*itrX) ) )
+                    {
+                        this->visible.push_back( vN );
+                    }
+                    itrX++;
+                }
+                itrY++;
+            }
+        }
         virtual ~Layout() {}
         Node* getCenterNode()
         {
@@ -90,7 +115,14 @@ namespace SG::Ship
         const int MAX_HEIGHT = 68;
         Node* centerNode;
         vector< vector< Node* >> nodes;
-
+        vector< VisibleNode* > visible; 
+        void draw( sf::RenderTarget& target )
+        {
+            for( auto &itr : this->visible )
+            {
+                itr->draw( target );
+            }
+        }
         private:
     };
 }

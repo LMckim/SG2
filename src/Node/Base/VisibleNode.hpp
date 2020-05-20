@@ -4,6 +4,9 @@
 #include <src/Primitive/Node.hpp>
 #include <src/Primitive/Visible.hpp>
 
+namespace SG::Ship{
+    class Layout;
+}
 namespace SG::Node::Base
 {
     using SG::Primitive::Node;
@@ -14,6 +17,8 @@ namespace SG::Node::Base
         virtual public Node,
         virtual public Visible
     {
+        friend class SG::Ship::Layout;
+        
         public:
         VisibleNode(const sf::Texture* _texture)
         {           

@@ -16,6 +16,9 @@
 namespace SG::Manager{
     class Object;
 }
+namespace SG::Ship{
+    class BaseShip;
+}
 
 namespace SG::Crew
 {
@@ -37,6 +40,7 @@ namespace SG::Crew
         virtual public Active
     {
         friend class SG::Manager::Object;
+        friend class SG::Ship::BaseShip;
 
         public:
         string name = "Dave";
@@ -146,6 +150,4 @@ namespace SG::Crew
         }
     };
 }
-
-
 #endif

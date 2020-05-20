@@ -1,5 +1,5 @@
-#ifndef SG_GENERATOR
-#define SG_GENERATOR
+#ifndef SG_GENERATOR_LAYOUT
+#define SG_GENERATOR_LAYOUT
 
 #include <map>
 #include <src/Primitive/Generator.hpp>
@@ -11,6 +11,10 @@
 #include <src/Node/Floor.hpp>
 #include <src/Node/Door.hpp>
 #include <src/Node/Space.hpp>
+
+namespace SG::Manager{
+    class Object;
+}
 
 namespace SG::Generator
 {
@@ -78,11 +82,7 @@ namespace SG::Generator
                         default:
                             newNode = new Space();
                     }
-                    // if its a visible node then add it to the screen
-                    if(Visible* visible = dynamic_cast< Visible* >(newNode))
-                    {
-                        this->objectM->addVisible( visible );
-                    }
+
                     newNode->setPosition( x * TILE_SIZE, y * TILE_SIZE );
                     this->nodes[y].push_back( newNode );
                     if(x > 0) newNode->link( Node::LINKS::LEFT, this->nodes[y][x-1] );

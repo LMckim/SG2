@@ -33,7 +33,7 @@ namespace SG::Object
         friend class SG::Window::SpawnerWindow;
 
         public:
-        Placement( Object* _objectM, Layout* _layout, BaseObject* _spawnObject) 
+        Placement( Object* _objectM, Layout* _layout, BaseObject* _spawnObject ) 
             : objectM{ _objectM }, layout{ _layout }, spawnObject{ _spawnObject }
         {
             this->zLevel = Z_LAYERS::PLACEMENT;
@@ -47,7 +47,7 @@ namespace SG::Object
         }
         virtual ~Placement()
         {
-            std::cout << "del_placement\n";
+            
         }
         void rotate()
         {
@@ -108,7 +108,7 @@ namespace SG::Object
         bool checkPlacement(Node* closest)
         {
             uint16_t nodesX = this->spawnObject->sprite.getLocalBounds().width / TILE_SIZE;
-            uint16_t nodesY = this->spawnObject->sprite.getLocalBounds().height / TILE_SIZE;
+            // uint16_t nodesY = this->spawnObject->sprite.getLocalBounds().height / TILE_SIZE;
             Node* checkY = closest;
             for(size_t y = 0; y < nodesX; y++)
             {
