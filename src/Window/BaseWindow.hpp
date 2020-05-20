@@ -517,8 +517,8 @@ namespace SG::Window
             sf::RenderTexture swap;
             swap.create( this->texture.getSize().x, this->texture.getSize().y );
             swap.clear( sf::Color::Transparent );
-            swap.draw( oldSprite );
-            swap.draw( newSprite );
+            swap.draw( oldSprite, sf::BlendNone );
+            swap.draw( newSprite, sf::BlendNone );
             swap.display();
 
             this->texture = swap.getTexture();
